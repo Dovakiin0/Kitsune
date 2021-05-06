@@ -1,0 +1,9 @@
+.navbar-brand {
+  padding: 18px 20px;
+  display: inline-block;
+}
+
+.body-nav {
+  letter-spacing: 0.2em;
+  color: white;
+}

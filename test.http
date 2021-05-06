@@ -1,0 +1,17 @@
+GET http://localhost:3030/api/v1/anime/test
+###
+GET http://localhost:3030/api/v1/anime/one
+###
+POST http://localhost:3030/api/v1/anime/
+Content-Type: application/json
+
+{
+    "uri": "https://gogoanime.io/category/oregairu"
+}
+###
+POST http://localhost:3030/api/v1/anime/episode/4
+Content-Type: application/json
+
+{
+    "uri": "https://gogoanime.io/category/oregairu"
+}

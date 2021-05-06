@@ -1,0 +1,19 @@
+{
+  "name": "anime",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "anime-scraper": "^3.1.3",
+    "axios": "^0.21.1",
+    "cheerio": "^1.0.0-rc.6",
+    "cors": "^2.8.5",
+    "express": "^4.17.1"
+  }
+}
