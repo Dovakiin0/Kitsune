@@ -1,14 +1,9 @@
-import React, { useState, useEffect, useContext } from "react";
+import React, { useState } from "react";
 import NavHeader from "../components/header";
-import { List, Icon, Loader, IconButton } from "rsuite";
-import axios from "axios";
-import AnimeContext, { SearchContext } from "../hooks/animecontext";
 import Search from "../components/Search";
 
-function Homepage() {
+function Homepage(props) {
   const [activeKey, setActiveKey] = useState();
-  const { animeContext, setAnimeContext } = useContext(AnimeContext);
-  const { keyword } = useContext(SearchContext);
 
   const handleSelect = (event) => {
     setActiveKey(event);
@@ -17,7 +12,8 @@ function Homepage() {
   return (
     <div>
       <NavHeader activekey={activeKey} onSelect={handleSelect} />
-      <Search />
+      <Search {...props} />
+      Search for anime to get started
     </div>
   );
 }

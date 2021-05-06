@@ -1,11 +1,15 @@
-import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
+import { BrowserRouter as Router, Switch } from "react-router-dom";
 import { useState } from "react";
+import Route from "./service/Route";
 
 import Homepage from "./pages/homepage";
 import AnimeInfo from "./pages/AnimeInfo";
 import WatchEpisode from "./pages/WatchEpisode";
 
-import AnimeContext, { SearchContext } from "./hooks/animecontext";
+import AnimeContext, {
+  SearchContext,
+  EpisodeContext,
+} from "./hooks/animecontext";
 
 import "rsuite/dist/styles/rsuite-default.css";
 import "./App.css";
@@ -14,10 +18,10 @@ function App() {
   const [animeContext, setAnimeContext] = useState({
     name: "",
     url: "",
-    image: "",
   });
 
   const [keyword, setKeyword] = useState("");
+  const [episodeUrl, setEpisodeUrl] = useState("");
 
   return (
     <div className="App">
@@ -25,9 +29,11 @@ function App() {
         <Switch>
           <AnimeContext.Provider value={{ animeContext, setAnimeContext }}>
             <SearchContext.Provider value={{ keyword, setKeyword }}>
-              <Route exact path="/" component={Homepage} />
-              {/* <Route exact path="/" component={Homepage} />
-            <Route exact path="/" component={Homepage} /> */}
+              <EpisodeContext.Provider value={{ episodeUrl, setEpisodeUrl }}>
+                <Route exact path="/" component={Homepage} />
+                <Route exact path="/:name" component={AnimeInfo} />
+                <Route exact path="/" component={WatchEpisode} />
+              </EpisodeContext.Provider>
             </SearchContext.Provider>
           </AnimeContext.Provider>
         </Switch>
