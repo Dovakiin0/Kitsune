@@ -1,6 +1,6 @@
 GET http://localhost:3030/api/v1/anime/test
 ###
-GET http://localhost:3030/api/v1/anime/one
+GET http://localhost:3030/api/v1/anime/oregairu
 ###
 POST http://localhost:3030/api/v1/anime/
 Content-Type: application/json

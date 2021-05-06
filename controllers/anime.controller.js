@@ -18,7 +18,7 @@ module.exports = {
     try {
       const animeName = req.params.name;
       Anime.search(animeName)
-        .then((anime) => {
+        .then(async (anime) => {
           res.status(200).send(anime);
         })
         .catch((err) => res.status(400).send(err));
