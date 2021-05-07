@@ -18,8 +18,6 @@ function WatchEpisode(props) {
     getEpisode();
   }, [animeContext.url]);
 
-  console.log(info);
-
   const getEpisode = () => {
     if (animeContext.url) {
       axios
