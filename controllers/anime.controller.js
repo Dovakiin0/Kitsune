@@ -14,6 +14,57 @@ const getImage = async (url) => {
 };
 
 module.exports = {
+  getPopular: async (req, res) => {
+    try {
+      let animes = [];
+      const { data } = await axios.get(
+        "https://www1.gogoanime.ai/popular.html"
+      );
+      const $ = cheerio.load(data);
+      $(".items")
+        .children("li")
+        .each(function (index, elem) {
+          let img = $(this)
+            .children(".img")
+            .children("a")
+            .children("img")
+            .attr("src");
+
+          let name = $(this).children(".name").text();
+          let rel = $(this).children(".released").text();
+          // console.log(img,nam)
+          animes.push({ img, name, rel });
+        });
+      res.status(200).send(animes);
+    } catch (err) {
+      res.status(400).send(err);
+    }
+  },
+  getRecent: async (req, res) => {
+    try {
+      let animes = [];
+      const { data } = await axios.get("https://www1.gogoanime.ai/");
+      const $ = cheerio.load(data);
+      $(".items")
+        .children("li")
+        .each(function (index, elem) {
+          let img = $(this)
+            .children(".img")
+            .children("a")
+            .children("img")
+            .attr("src");
+
+          let name = $(this).children(".name").text();
+          let ep = $(this).children(".episode").text();
+          // console.log(img,nam)
+          animes.push({ img, name, ep });
+        });
+      res.status(200).send(animes);
+    } catch (err) {
+      res.status(400).send(err);
+    }
+  },
+
   getAnime: (req, res) => {
     try {
       const animeName = req.params.name;
@@ -43,7 +94,7 @@ module.exports = {
     try {
       Anime.fromUrl(req.body.uri)
         .then((anime) =>
-          anime.episodes[req.params.id]
+          anime.episodes[req.params.id - 1]
             .fetch()
             .then((episode) => res.status(200).send(episode))
         )

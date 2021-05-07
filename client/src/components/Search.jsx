@@ -26,7 +26,7 @@ function Search(props) {
       return anim.name == val.value;
     });
     setAnimeContext({ name: value.name, url: value.url });
-    props.history.push(`/${value.name.replace(/\s/g, "-")}`);
+    props.history.push(`/anime/${value.name.replace(/\s/g, "-")}`);
   };
 
   useEffect(() => {
@@ -37,7 +37,7 @@ function Search(props) {
   const getAnime = () => {
     if (keyword)
       axios
-        .get(`http://localhost:3030/api/v1/anime/${keyword}`, {
+        .get(`${process.env.REACT_APP_API_URI}/anime/${keyword}`, {
           onDownloadProgress: setLoading(true),
         })
         .then((response) => {

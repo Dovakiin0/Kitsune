@@ -9,9 +9,13 @@ Content-Type: application/json
     "uri": "https://gogoanime.io/category/oregairu"
 }
 ###
-POST http://localhost:3030/api/v1/anime/episode/4
+POST http://localhost:3030/api/v1/anime/episode/1
 Content-Type: application/json
 
 {
     "uri": "https://gogoanime.io/category/oregairu"
 }
+###
+GET http://localhost:3030/api/v1/anime/
+###
+GET http://localhost:3030/api/v1/anime/popular/fetch

@@ -5,11 +5,10 @@ import Route from "./service/Route";
 import Homepage from "./pages/homepage";
 import AnimeInfo from "./pages/AnimeInfo";
 import WatchEpisode from "./pages/WatchEpisode";
+import Latest from "./pages/Latest";
+import Popular from "./pages/Popular";
 
-import AnimeContext, {
-  SearchContext,
-  EpisodeContext,
-} from "./hooks/animecontext";
+import AnimeContext, { SearchContext, InfoContext } from "./hooks/animecontext";
 
 import "rsuite/dist/styles/rsuite-default.css";
 import "./App.css";
@@ -21,7 +20,7 @@ function App() {
   });
 
   const [keyword, setKeyword] = useState("");
-  const [episodeUrl, setEpisodeUrl] = useState("");
+  const [info, setInfo] = useState();
 
   return (
     <div className="App">
@@ -29,11 +28,13 @@ function App() {
         <Switch>
           <AnimeContext.Provider value={{ animeContext, setAnimeContext }}>
             <SearchContext.Provider value={{ keyword, setKeyword }}>
-              <EpisodeContext.Provider value={{ episodeUrl, setEpisodeUrl }}>
+              <InfoContext.Provider value={{ info, setInfo }}>
                 <Route exact path="/" component={Homepage} />
-                <Route exact path="/:name" component={AnimeInfo} />
-                <Route exact path="/" component={WatchEpisode} />
-              </EpisodeContext.Provider>
+                <Route exact path="/latest" component={Latest} />
+                <Route exact path="/popular" component={Popular} />
+                <Route exact path="/anime/:name" component={AnimeInfo} />
+                <Route exact path="/anime/:name/:ep" component={WatchEpisode} />
+              </InfoContext.Provider>
             </SearchContext.Provider>
           </AnimeContext.Provider>
         </Switch>

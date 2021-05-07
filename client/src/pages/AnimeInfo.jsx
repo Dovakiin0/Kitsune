@@ -1,17 +1,16 @@
 import React, { useState, useEffect, useContext } from "react";
-import Search from "../components/Search";
 import NavHeader from "../components/header";
-import AnimeContext, { EpisodeContext } from "../hooks/animecontext";
+import AnimeContext, { InfoContext } from "../hooks/animecontext";
 import axios from "axios";
 import { Loader, List, IconButton, Icon } from "rsuite";
 
 function AnimeInfo(props) {
   const [activeKey, setActiveKey] = useState();
   const { animeContext } = useContext(AnimeContext);
-  const { setEpisodeUrl } = useContext(EpisodeContext);
   const [loading, setLoading] = useState(false);
   const [animeInfo, setAnimeinfo] = useState();
   const [episodes, setEpisodes] = useState();
+  const { setInfo } = useContext(InfoContext);
 
   const handleSelect = (event) => {
     setActiveKey(event);
@@ -25,7 +24,7 @@ function AnimeInfo(props) {
     if (animeContext.url !== "") {
       axios
         .post(
-          "http://localhost:3030/api/v1/anime",
+          `${process.env.REACT_APP_API_URI}/anime`,
           { uri: animeContext.url },
           { onDownloadProgress: setLoading(true) }
         )
@@ -40,15 +39,14 @@ function AnimeInfo(props) {
     }
   };
 
-  const handleClick = (url, ep) => {
-    setEpisodeUrl(url);
+  const handleClick = (ep) => {
+    setInfo(animeInfo);
     props.history.push(`${props.location.pathname}/${ep}`);
   };
 
   return (
-    <>
-      <NavHeader activekey={activeKey} onSelect={handleSelect} />
-      <Search {...props} />
+    <div style={{ padding: "10px" }}>
+      <NavHeader activekey={activeKey} onSelect={handleSelect} {...props} />
 
       {loading ? (
         <Loader center size="md" />
@@ -63,13 +61,13 @@ function AnimeInfo(props) {
           <List hover bordered>
             {episodes.map((eps, index) => (
               <>
-                <List.Item>
+                <List.Item style={{ display: "inline-block" }}>
                   {eps.name}
                   <IconButton
                     icon={
                       <Icon
                         icon="play"
-                        onClick={() => handleClick(eps.url, index + 1)}
+                        onClick={() => handleClick(index + 1)}
                       />
                     }
                   />
@@ -81,7 +79,7 @@ function AnimeInfo(props) {
       ) : (
         ""
       )}
-    </>
+    </div>
   );
 }
 

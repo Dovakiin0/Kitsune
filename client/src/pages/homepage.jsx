@@ -1,6 +1,5 @@
-import React, { useState } from "react";
+import React, { useState, useEffect, useContext } from "react";
 import NavHeader from "../components/header";
-import Search from "../components/Search";
 
 function Homepage(props) {
   const [activeKey, setActiveKey] = useState();
@@ -8,12 +7,10 @@ function Homepage(props) {
   const handleSelect = (event) => {
     setActiveKey(event);
   };
-
   return (
-    <div>
-      <NavHeader activekey={activeKey} onSelect={handleSelect} />
-      <Search {...props} />
-      Search for anime to get started
+    <div style={{ padding: "10px" }}>
+      <NavHeader activekey={activeKey} onSelect={handleSelect} {...props} />
+      Welcome to Anime Watch
     </div>
   );
 }
