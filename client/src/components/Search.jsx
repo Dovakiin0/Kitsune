@@ -1,7 +1,6 @@
 import React, { useContext, useEffect, useState } from "react";
 import AnimeContext, { SearchContext } from "../hooks/animecontext";
 import { InputGroup, AutoComplete, Loader, Icon } from "rsuite";
-import { Link } from "react-router-dom";
 import axios from "axios";
 import _ from "lodash";
 
@@ -15,7 +14,7 @@ function Search(props) {
   const { keyword, setKeyword } = useContext(SearchContext);
   const [anime, setAnime] = useState();
   const [loading, setLoading] = useState(false);
-  const { animeContext, setAnimeContext } = useContext(AnimeContext);
+  const { setAnimeContext } = useContext(AnimeContext);
 
   const handleClick = (e) => {
     setKeyword(e);
@@ -37,7 +36,7 @@ function Search(props) {
   const getAnime = () => {
     if (keyword)
       axios
-        .get(`${process.env.REACT_APP_API_URI}/anime/${keyword}`, {
+        .get(`api/v1/anime/${keyword}`, {
           onDownloadProgress: setLoading(true),
         })
         .then((response) => {

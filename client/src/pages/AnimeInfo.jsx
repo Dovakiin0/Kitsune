@@ -24,7 +24,7 @@ function AnimeInfo(props) {
     if (animeContext.url !== "") {
       axios
         .post(
-          `${process.env.REACT_APP_API_URI}/anime`,
+          `/api/v1/anime`,
           { uri: animeContext.url },
           { onDownloadProgress: setLoading(true) }
         )

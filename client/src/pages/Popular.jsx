@@ -16,7 +16,7 @@ function Popular(props) {
 
   const getPopularAnime = () => {
     axios
-      .get(`${process.env.REACT_APP_API_URI}/anime/popular/fetch`, {
+      .get(`/api/v1/anime/popular/fetch`, {
         onDownloadProgress: setLoading(true),
       })
       .then((response) => {
