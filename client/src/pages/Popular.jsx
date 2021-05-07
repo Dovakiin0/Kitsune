@@ -32,7 +32,7 @@ function Popular(props) {
 
   const handleClick = (name) => {
     axios
-      .get(`${process.env.REACT_APP_API_URI}/anime/${name}`)
+      .get(`/api/v1/anime/${name}`)
       .then((res) => {
         setAnimeContext({ name: res.data[0].name, url: res.data[0].url });
         props.history.push(`/anime/${res.data[0].name.replace(/\s/g, "-")}`);

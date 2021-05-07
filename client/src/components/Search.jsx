@@ -36,7 +36,7 @@ function Search(props) {
   const getAnime = () => {
     if (keyword)
       axios
-        .get(`api/v1/anime/${keyword}`, {
+        .get(`/api/v1/anime/${keyword}`, {
           onDownloadProgress: setLoading(true),
         })
         .then((response) => {
