@@ -22,7 +22,7 @@ function WatchEpisode(props) {
     if (animeContext.url) {
       axios
         .post(
-          `api/v1/anime/episode/${ep}`,
+          `/api/v1/anime/episode/${ep}`,
           { uri: animeContext.url },
           { onDownloadProgress: setLoading(true) }
         )
