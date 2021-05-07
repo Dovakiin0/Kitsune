@@ -10,4 +10,36 @@
 
 .anime-info {
   padding: 10px;
+  width: 100vh;
+  height: 100vh;
+  margin-left: auto;
+  margin-right: auto;
+  text-align: center;
+  text-justify: auto;
+}
+
+.popular,
+.latest,
+.homepage {
+  height: 100vh;
+  width: 100vh;
+  padding: 10px;
+  margin-left: auto;
+  margin-right: auto;
+  text-align: center;
+}
+
+.watch-episode {
+  background-color: white;
+  padding: 10px;
+  height: 100vh;
+  width: 100vh;
+  margin-left: auto;
+  margin-right: auto;
+  text-align: center;
+}
+
+.episode-video-player {
+  width: 90%;
+  height: 51%;
 }

@@ -7,7 +7,7 @@ import _ from "lodash";
 const styles = {
   width: 300,
   marginBottom: 10,
-  float: "right",
+  // position: "fixed",
 };
 
 function Search(props) {

@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useContext } from "react";
 import NavHeader from "../components/header";
-import { Panel, Loader, IconButton, Icon } from "rsuite";
+import { Panel, Loader, IconButton, Icon, Pagination } from "rsuite";
 import AnimeContext from "../hooks/animecontext";
 import axios from "axios";
 
@@ -9,14 +9,15 @@ function Popular(props) {
   const [popular, setPopular] = useState();
   const [loading, setLoading] = useState(false);
   const { setAnimeContext } = useContext(AnimeContext);
+  const [activePage, setActivePage] = useState(1);
 
   useEffect(() => {
     getPopularAnime();
-  }, []);
+  }, [activePage]);
 
   const getPopularAnime = () => {
     axios
-      .get(`/api/v1/anime/popular/fetch`, {
+      .get(`/api/v1/anime/popular/fetch/${activePage}`, {
         onDownloadProgress: setLoading(true),
       })
       .then((response) => {
@@ -40,37 +41,54 @@ function Popular(props) {
       .catch((err) => console.log(err));
   };
 
+  const handlechange = (val) => {
+    setActivePage(val);
+  };
+
   return (
-    <div style={{ padding: "10px" }}>
+    <div className="popular">
       <NavHeader activekey={activeKey} onSelect={handleSelect} {...props} />
-      <h4>Ongoing Popular Anime</h4>
-      {loading ? (
-        <Loader center size="md" />
-      ) : popular ? (
-        popular.map((datas) => (
-          <>
-            <Panel
-              shaded
-              bordered
-              bodyFill
-              style={{ display: "inline-block", width: 240 }}
-            >
-              <img src={datas.img} height="300" />
-              <Panel header={datas.name}>
-                <p>
-                  <small>{datas.rel}</small>
-                  <IconButton
-                    icon={<Icon icon="play" />}
-                    onClick={() => handleClick(datas.name)}
-                  />
-                </p>
+      <div>
+        <h4>Popular Anime</h4>
+        <Pagination
+          prev
+          last
+          next
+          first
+          size="md"
+          pages={10}
+          activePage={activePage}
+          onSelect={handlechange}
+        />
+        <br />
+        {loading ? (
+          <Loader center size="md" />
+        ) : popular ? (
+          popular.map((datas) => (
+            <>
+              <Panel
+                shaded
+                bordered
+                bodyFill
+                style={{ display: "inline-block", width: 240 }}
+              >
+                <img src={datas.img} height="300" />
+                <Panel header={datas.name}>
+                  <p>
+                    <small>{datas.rel}</small>
+                    <IconButton
+                      icon={<Icon icon="play" />}
+                      onClick={() => handleClick(datas.name)}
+                    />
+                  </p>
+                </Panel>
               </Panel>
-            </Panel>
-          </>
-        ))
-      ) : (
-        ""
-      )}
+            </>
+          ))
+        ) : (
+          ""
+        )}
+      </div>
     </div>
   );
 }

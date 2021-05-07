@@ -18,7 +18,7 @@ module.exports = {
     try {
       let animes = [];
       const { data } = await axios.get(
-        "https://www1.gogoanime.ai/popular.html"
+        `https://www1.gogoanime.ai/popular.html?page=${req.params.id}`
       );
       const $ = cheerio.load(data);
       $(".items")
@@ -43,7 +43,9 @@ module.exports = {
   getRecent: async (req, res) => {
     try {
       let animes = [];
-      const { data } = await axios.get("https://www1.gogoanime.ai/");
+      const { data } = await axios.get(
+        `https://www1.gogoanime.ai/?page=${req.params.id}`
+      );
       const $ = cheerio.load(data);
       $(".items")
         .children("li")
@@ -101,6 +103,17 @@ module.exports = {
         .catch((err) => console.log(err));
     } catch (err) {
       res.status(400).send(err);
+    }
+  },
+
+  random: (req, res) => {
+    try {
+      axios
+        .post(`https://api.waifu.pics/many/sfw/${req.params.key}`, {})
+        .then((resp) => res.send(resp.data))
+        .catch((err) => console.log(err));
+    } catch (err) {
+      return res.status(400).send(err);
     }
   },
 };

@@ -2,7 +2,7 @@ import React, { useState, useEffect, useContext } from "react";
 import NavHeader from "../components/header";
 import AnimeContext, { InfoContext } from "../hooks/animecontext";
 import axios from "axios";
-import { Loader, List, IconButton, Icon } from "rsuite";
+import { Loader, List, IconButton, Icon, Divider } from "rsuite";
 
 function AnimeInfo(props) {
   const [activeKey, setActiveKey] = useState();
@@ -45,18 +45,19 @@ function AnimeInfo(props) {
   };
 
   return (
-    <div style={{ padding: "10px" }}>
+    <div className="anime-info">
       <NavHeader activekey={activeKey} onSelect={handleSelect} {...props} />
 
       {loading ? (
         <Loader center size="md" />
       ) : animeInfo ? (
-        <div className="anime-info">
-          <img src={animeInfo.image} />
+        <div>
+          <img src={animeInfo.image} width="250" />
           <h3>{animeInfo.result.name}</h3>
           <p>{animeInfo.result.summary}</p>
           <p>Released: {animeInfo.result.released}</p>
           <p>Genre: {animeInfo.result.genres.map((data) => data + ", ")}</p>
+          <Divider />
           <h4>Episodes:</h4>
           <List hover bordered>
             {episodes.map((eps, index) => (
