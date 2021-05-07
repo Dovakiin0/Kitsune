@@ -12,7 +12,7 @@ function NavHeader({ onSelect, activeKey, ...props }) {
       {...props}
     >
       <Navbar.Header>
-        <span className="navbar-brand logo">A N I M E</span>
+        <span className="navbar-brand logo">A N I M E W O R L D Z</span>
       </Navbar.Header>
       <Navbar.Body className="body-nav">
         <Nav onSelect={onSelect} activeKey={activeKey}>
