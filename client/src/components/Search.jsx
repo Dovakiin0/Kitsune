@@ -15,7 +15,7 @@ function Search(props) {
   const { keyword, setKeyword } = useContext(SearchContext);
   const [anime, setAnime] = useState();
   const [loading, setLoading] = useState(false);
-  const { setAnimeContext } = useContext(AnimeContext);
+  const { animeContext, setAnimeContext } = useContext(AnimeContext);
 
   const handleClick = (e) => {
     setKeyword(e);

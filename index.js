@@ -1,7 +1,16 @@
-const app = require("express")();
+const express = require("express");
+const path = require("path");
+const app = express();
 
 require("./routes/router")(app);
 
-const PORT = 3030;
+app.use(express.static(path.join(__dirname, "build")));
 
+app.get("/*", (req, res) => {
+  res.sendFile(path.join(__dirname, "build", "index.html"));
+});
+
+console.log(process.env.NODE_ENV);
+
+const PORT = 3030;
 app.listen(PORT, console.log(`Listening on port ${PORT}`));
