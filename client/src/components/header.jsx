@@ -3,14 +3,11 @@ import { Navbar, Nav, Icon } from "rsuite";
 import "../styles/styles.css";
 import { Link } from "react-router-dom";
 import Search from "./Search";
+import Login from "./login";
 
 function NavHeader({ onSelect, activeKey, ...props }) {
   return (
-    <Navbar
-      appearance="subtle"
-      // style={{ backgroundColor: "#171717", color: "white" }}
-      {...props}
-    >
+    <Navbar appearance="sublte" {...props}>
       <Navbar.Header>
         <span className="navbar-brand logo">A N I M E W O R L D Z</span>
       </Navbar.Header>
@@ -28,6 +25,9 @@ function NavHeader({ onSelect, activeKey, ...props }) {
             <Nav.Item eventKey="3">Latest</Nav.Item>
           </Link>
           <Nav.Item eventKey="4">About</Nav.Item>
+        </Nav>
+        <Nav pullRight>
+          <Login />
         </Nav>
         <Nav pullRight>
           <Search {...props} />

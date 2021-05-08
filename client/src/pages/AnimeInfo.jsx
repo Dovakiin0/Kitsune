@@ -45,42 +45,45 @@ function AnimeInfo(props) {
   };
 
   return (
-    <div className="anime-info">
-      <NavHeader activekey={activeKey} onSelect={handleSelect} {...props} />
-
-      {loading ? (
-        <Loader center size="md" />
-      ) : animeInfo ? (
-        <div>
-          <img src={animeInfo.image} width="250" />
-          <h3>{animeInfo.result.name}</h3>
-          <p>{animeInfo.result.summary}</p>
-          <p>Released: {animeInfo.result.released}</p>
-          <p>Genre: {animeInfo.result.genres.map((data) => data + ", ")}</p>
-          <Divider />
-          <h4>Episodes:</h4>
-          <List hover bordered>
-            {episodes.map((eps, index) => (
-              <>
-                <List.Item style={{ display: "inline-block" }}>
-                  {eps.name}
-                  <IconButton
-                    icon={
-                      <Icon
-                        icon="play"
-                        onClick={() => handleClick(index + 1)}
-                      />
-                    }
-                  />
-                </List.Item>
-              </>
-            ))}
-          </List>
-        </div>
-      ) : (
-        ""
-      )}
-    </div>
+    <>
+      <div className="nav-header">
+        <NavHeader activekey={activeKey} onSelect={handleSelect} {...props} />
+      </div>
+      <div className="anime-info">
+        {loading ? (
+          <Loader center size="md" />
+        ) : animeInfo ? (
+          <div>
+            <img src={animeInfo.image} width="250" />
+            <h3>{animeInfo.result.name}</h3>
+            <p>{animeInfo.result.summary}</p>
+            <p>Released: {animeInfo.result.released}</p>
+            <p>Genre: {animeInfo.result.genres.map((data) => data + ", ")}</p>
+            <Divider />
+            <h4>Episodes:</h4>
+            <List hover bordered>
+              {episodes.map((eps, index) => (
+                <>
+                  <List.Item style={{ display: "inline-block" }}>
+                    {eps.name}
+                    <IconButton
+                      icon={
+                        <Icon
+                          icon="play"
+                          onClick={() => handleClick(index + 1)}
+                        />
+                      }
+                    />
+                  </List.Item>
+                </>
+              ))}
+            </List>
+          </div>
+        ) : (
+          ""
+        )}
+      </div>
+    </>
   );
 }
 

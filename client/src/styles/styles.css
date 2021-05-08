@@ -15,14 +15,21 @@
   margin-left: auto;
   margin-right: auto;
   text-align: center;
-  text-justify: auto;
+}
+
+.nav-header {
+  padding: 10px;
+  width: 130vh;
+  margin-left: auto;
+  margin-right: auto;
+  text-align: center;
 }
 
 .popular,
 .latest,
 .homepage {
   height: 100vh;
-  width: 100vh;
+  width: 130vh;
   padding: 10px;
   margin-left: auto;
   margin-right: auto;
