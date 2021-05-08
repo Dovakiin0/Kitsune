@@ -4,7 +4,6 @@ import { Carousel, Loader, SelectPicker } from "rsuite";
 import axios from "axios";
 
 function Homepage(props) {
-  const [activeKey, setActiveKey] = useState();
   const [images, setImages] = useState();
   const [loading, setLoading] = useState(false);
   const [keyword, setKeyword] = useState("waifu");
@@ -66,17 +65,13 @@ function Homepage(props) {
       .catch((err) => console.log(err));
   };
 
-  const handleSelect = (event) => {
-    setActiveKey(event);
-  };
-
   const handleChange = (val) => {
     setKeyword(val);
   };
 
   return (
     <div className="homepage">
-      <NavHeader activekey={activeKey} onSelect={handleSelect} {...props} />
+      <NavHeader activekey={1} {...props} />
       <h4>Welcome to Anime World-Z</h4>
       <br />
       <Carousel

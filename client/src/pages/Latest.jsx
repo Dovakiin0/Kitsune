@@ -5,7 +5,6 @@ import axios from "axios";
 import AnimeContext from "../hooks/animecontext";
 
 function Latest(props) {
-  const [activeKey, setActiveKey] = useState();
   const [latest, setLatest] = useState();
   const [loading, setLoading] = useState(false);
   const { setAnimeContext } = useContext(AnimeContext);
@@ -27,10 +26,6 @@ function Latest(props) {
       .catch((err) => console.log(err));
   };
 
-  const handleSelect = (event) => {
-    setActiveKey(event);
-  };
-
   const handlechange = (val) => {
     setActivePage(val);
   };
@@ -47,7 +42,7 @@ function Latest(props) {
 
   return (
     <div className="latest">
-      <NavHeader activekey={activeKey} onSelect={handleSelect} {...props} />
+      <NavHeader activekey={3} {...props} />
       <div>
         <h4>Latest Release</h4>
         <Pagination

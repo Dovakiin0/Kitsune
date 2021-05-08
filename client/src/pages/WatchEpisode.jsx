@@ -52,82 +52,86 @@ function WatchEpisode(props) {
   };
 
   return (
-    <div className="watch-episode">
-      <NavHeader activekey={activeKey} onSelect={handleSelect} />
-      {loading ? (
-        <Loader center size="md" />
-      ) : (
-        <>
-          <Divider />
-          <h4>
-            Watch Episode {ep} of {animeContext.name}
-          </h4>
-          <Divider />
-          {episodes ? (
-            <>
-              <iframe
-                className="episode-video-player"
-                allowFullScreen
-                frameBorder
-                src={
-                  videoIndex === 1
-                    ? `https://${episodes[videoIndex].url}`
-                    : episodes[videoIndex].url
-                }
-              />
-              <IconButton
-                icon={<Icon icon="arrow-left" />}
-                placement="left"
-                style={{ float: "left" }}
-                onClick={handlePrevious}
-                disabled={parseInt(ep) === 1 ? true : false}
-              >
-                Previous
-              </IconButton>
-              <IconButton
-                icon={<Icon icon="arrow-right" />}
-                placement="right"
-                style={{ float: "right" }}
-                onClick={handleNext}
-                disabled={
-                  info.result.episodes.length === parseInt(ep) ? true : false
-                }
-              >
-                Next
-              </IconButton>
-              <Divider />
+    <>
+      <div className="nav-header">
+        <NavHeader activekey={activeKey} onSelect={handleSelect} />
+      </div>
+      <div className="watch-episode">
+        {loading ? (
+          <Loader center size="md" />
+        ) : (
+          <>
+            <Divider />
+            <h4>
+              Watch Episode {ep} of {animeContext.name}
+            </h4>
+            <Divider />
+            {episodes ? (
+              <>
+                <iframe
+                  className="episode-video-player"
+                  allowFullScreen
+                  frameBorder
+                  src={
+                    videoIndex === 1
+                      ? `https://${episodes[videoIndex].url}`
+                      : episodes[videoIndex].url
+                  }
+                />
+                <IconButton
+                  icon={<Icon icon="arrow-left" />}
+                  placement="left"
+                  style={{ float: "left" }}
+                  onClick={handlePrevious}
+                  disabled={parseInt(ep) === 1 ? true : false}
+                >
+                  Previous
+                </IconButton>
+                <IconButton
+                  icon={<Icon icon="arrow-right" />}
+                  placement="right"
+                  style={{ float: "right" }}
+                  onClick={handleNext}
+                  disabled={
+                    info.result.episodes.length === parseInt(ep) ? true : false
+                  }
+                >
+                  Next
+                </IconButton>
+                <Divider />
 
-              <div>Select Server:</div>
-              <Button appearance="subtle" onClick={() => setVideoIndex(1)}>
-                MultiQuality
-              </Button>
-              <Button appearance="subtle" onClick={() => setVideoIndex(2)}>
-                StreamSB
-              </Button>
-              <Button appearance="subtle" onClick={() => setVideoIndex(3)}>
-                Doodstream
-              </Button>
-              <Button appearance="subtle" onClick={() => setVideoIndex(4)}>
-                Streamtape
-              </Button>
-              <Button appearance="subtle" onClick={() => setVideoIndex(5)}>
-                Mixdrop
-              </Button>
-              <Button appearance="subtle" onClick={() => setVideoIndex(6)}>
-                Xstreamcdn
-              </Button>
-              <Button appearance="subtle" onClick={() => setVideoIndex(7)}>
-                Mp4upload
-              </Button>
-              <br />
-            </>
-          ) : (
-            <Loader center size="md" />
-          )}
-          <Divider />
-        </>
-      )}
-    </div>
+                <div>Select Server:</div>
+                <Button appearance="subtle" onClick={() => setVideoIndex(1)}>
+                  MultiQuality
+                </Button>
+                <Button appearance="subtle" onClick={() => setVideoIndex(2)}>
+                  StreamSB
+                </Button>
+                <Button appearance="subtle" onClick={() => setVideoIndex(3)}>
+                  Doodstream
+                </Button>
+                <Button appearance="subtle" onClick={() => setVideoIndex(4)}>
+                  Streamtape
+                </Button>
+                <Button appearance="subtle" onClick={() => setVideoIndex(5)}>
+                  Mixdrop
+                </Button>
+                <Button appearance="subtle" onClick={() => setVideoIndex(6)}>
+                  Xstreamcdn
+                </Button>
+                <Button appearance="subtle" onClick={() => setVideoIndex(7)}>
+                  Mp4upload
+                </Button>
+                <br />
+              </>
+            ) : (
+              <Loader center size="md" />
+            )}
+            <Divider />
+          </>
+        )}
+      </div>
+    </>
   );
 }
 

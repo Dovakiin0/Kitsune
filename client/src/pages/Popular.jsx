@@ -5,7 +5,6 @@ import AnimeContext from "../hooks/animecontext";
 import axios from "axios";
 
 function Popular(props) {
-  const [activeKey, setActiveKey] = useState();
   const [popular, setPopular] = useState();
   const [loading, setLoading] = useState(false);
   const { setAnimeContext } = useContext(AnimeContext);
@@ -27,10 +26,6 @@ function Popular(props) {
       .catch((err) => console.log(err));
   };
 
-  const handleSelect = (event) => {
-    setActiveKey(event);
-  };
-
   const handleClick = (name) => {
     axios
       .get(`/api/v1/anime/${name}`)
@@ -47,7 +42,7 @@ function Popular(props) {
 
   return (
     <div className="popular">
-      <NavHeader activekey={activeKey} onSelect={handleSelect} {...props} />
+      <NavHeader activekey={2} {...props} />
       <div>
         <h4>Popular Anime</h4>
         <Pagination
