@@ -32,7 +32,6 @@ module.exports = {
 
           let name = $(this).children(".name").text();
           let rel = $(this).children(".released").text();
-          // console.log(img,nam)
           animes.push({ img, name, rel });
         });
       res.status(200).send(animes);
