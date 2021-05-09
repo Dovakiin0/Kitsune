@@ -11,6 +11,6 @@ app.get("/*", (req, res) => {
 });
 
 const PORT = process.env.PORT || 3030;
-app.listen(PORT, console.log(`Listening on port ${PORT}`));
+const server = app.listen(PORT, () => console.log(`Running on ${PORT}`));
 
-module.exports = app;
+module.exports = server;

@@ -109,7 +109,7 @@ module.exports = {
     try {
       axios
         .post(`https://api.waifu.pics/many/sfw/${req.params.key}`, {})
-        .then((resp) => res.send(resp.data))
+        .then((resp) => res.status(200).send(resp.data))
         .catch((err) => console.log(err));
     } catch (err) {
       return res.status(400).send(err);

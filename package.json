@@ -1,10 +1,10 @@
 {
-  "name": "anime",
+  "name": "animeworldz",
   "version": "1.0.0",
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "jest --detectOpenHandles --watchAll --verbose --forceExit --coverage --runInBand ./tests",
+    "test": "jest --detectOpenHandles --forceExit --runInBand ./tests",
     "start": "node index.js"
   },
   "jest": {
