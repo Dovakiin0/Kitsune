@@ -41,20 +41,19 @@ function WatchEpisode(props) {
   };
 
   const handleNext = () => {
-    props.history.push(
-      `/anime/${animeContext.name.replace(/\s/g, "-")}/${parseInt(ep) + 1}`
-    );
+    // props.history.push(
+    //   `/anime/${animeContext.name.replace(/\s/g, "-")}/${parseInt(ep) + 1}`
+    // );
+    props.history.push(`/anime/${props.match.params.name}/${parseInt(ep) + 1}`);
   };
   const handlePrevious = () => {
-    props.history.push(
-      `/anime/${animeContext.name.replace(/\s/g, "-")}/${parseInt(ep) - 1}`
-    );
+    props.history.push(`/anime/${props.match.params.name}/${parseInt(ep) - 1}`);
   };
 
   return (
     <>
       <div className="nav-header">
-        <NavHeader activekey={activeKey} onSelect={handleSelect} />
+        <NavHeader activekey={activeKey} onSelect={handleSelect} {...props} />
       </div>
       <div className="watch-episode">
         {loading ? (
@@ -70,6 +69,7 @@ function WatchEpisode(props) {
               <>
                 <iframe
                   className="episode-video-player"
+                  sandbox="allow-forms allow-pointer-lock allow-same-origin allow-scripts allow-top-navigation"
                   allowFullScreen
                   frameBorder
                   src={
