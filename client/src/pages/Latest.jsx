@@ -34,8 +34,8 @@ function Latest(props) {
     axios
       .get(`/api/v1/anime/${name}`)
       .then((res) => {
-        setAnimeContext({ name: res.data[0].name, url: res.data[0].url });
-        props.history.push(`/anime/${res.data[0].name.replace(/\s/g, "-")}`);
+        setAnimeContext({ name: res.data[0].title, url: res.data[0].link });
+        props.history.push(`/anime/${res.data[0].title.replace(/\s/g, "-")}`);
       })
       .catch((err) => console.log(err));
   };

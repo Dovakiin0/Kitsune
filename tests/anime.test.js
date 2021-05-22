@@ -15,7 +15,7 @@ describe("Anime", () => {
     try {
       const res = await request(server).get("/api/v1/anime/oregairu");
       expect(res.status).toBe(200);
-      expect(res.body[1]).toHaveProperty("name", "Oregairu OVA");
+      expect(res.body[1]).toHaveProperty("title", "Oregairu OVA");
     } catch (error) {
       return error;
     }
@@ -34,12 +34,9 @@ describe("Anime", () => {
 
   it("Should Get Anime Episodes", async () => {
     try {
-      const payload = { uri: "https://gogoanime.io/category/oregairu" };
-      const res = await request(server)
-        .post("/api/v1/anime/episode/1")
-        .send(payload);
+      const res = await request(server).post("/api/v1/anime/oregairu/1");
       expect(res.status).toBe(200);
-      expect(res.body.videoLinks[1]).toHaveProperty("name", "Multi quality");
+      expect(res.body.extraLink).toHaveProperty("quality", "Download StreamSB");
     } catch (error) {
       return error;
     }

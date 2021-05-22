@@ -9,7 +9,6 @@ function AnimeInfo(props) {
   const { animeContext } = useContext(AnimeContext);
   const [loading, setLoading] = useState(false);
   const [animeInfo, setAnimeinfo] = useState();
-  const [episodes, setEpisodes] = useState();
   const { setInfo } = useContext(InfoContext);
 
   const handleSelect = (event) => {
@@ -19,6 +18,8 @@ function AnimeInfo(props) {
   useEffect(() => {
     getAnimeDetails();
   }, [animeContext.url]);
+
+  console.log(animeContext);
 
   const getAnimeDetails = () => {
     if (animeContext.url !== "") {
@@ -30,7 +31,6 @@ function AnimeInfo(props) {
         )
         .then((response) => {
           setAnimeinfo(response.data);
-          setEpisodes(response.data.result.episodes);
           setLoading(false);
         })
         .catch((err) => console.log(err));
@@ -41,7 +41,24 @@ function AnimeInfo(props) {
 
   const handleClick = (ep) => {
     setInfo(animeInfo);
-    props.history.push(`${props.location.pathname}/${ep}`);
+    props.history.push({
+      pathname: `${props.location.pathname}/${ep}`,
+    });
+  };
+
+  const epCount = () => {
+    let list = [];
+    for (let i = 0; i < parseInt(animeInfo.result.episodeCount); i++) {
+      list.push(
+        <List.Item style={{ display: "inline-block" }}>
+          {`Episode ${i + 1}`}
+          <IconButton
+            icon={<Icon icon="play" onClick={() => handleClick(i + 1)} />}
+          />
+        </List.Item>
+      );
+    }
+    return list;
   };
 
   return (
@@ -54,29 +71,15 @@ function AnimeInfo(props) {
           <Loader center size="md" />
         ) : animeInfo ? (
           <div>
-            <img src={animeInfo.image} width="250" />
+            <img src={animeInfo.result.image} width="250" />
             <h3>{animeInfo.result.name}</h3>
-            <p>{animeInfo.result.summary}</p>
+            <p>{animeInfo.result.plot_summary}</p>
             <p>Released: {animeInfo.result.released}</p>
-            <p>Genre: {animeInfo.result.genres.map((data) => data + ", ")}</p>
+            <p>Genre: {animeInfo.result.genre}</p>
             <Divider />
             <h4>Episodes:</h4>
             <List hover bordered>
-              {episodes.map((eps, index) => (
-                <>
-                  <List.Item style={{ display: "inline-block" }}>
-                    {eps.name}
-                    <IconButton
-                      icon={
-                        <Icon
-                          icon="play"
-                          onClick={() => handleClick(index + 1)}
-                        />
-                      }
-                    />
-                  </List.Item>
-                </>
-              ))}
+              {epCount()}
             </List>
           </div>
         ) : (

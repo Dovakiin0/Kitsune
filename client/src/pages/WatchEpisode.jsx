@@ -12,7 +12,6 @@ function WatchEpisode(props) {
   const [episodes, setEpisodes] = useState();
   const [loading, setLoading] = useState(false);
   const { info } = useContext(InfoContext);
-  const [videoIndex, setVideoIndex] = useState(1);
 
   useEffect(() => {
     getEpisode();
@@ -23,11 +22,13 @@ function WatchEpisode(props) {
       axios
         .post(
           `/api/v1/anime/episode/${ep}`,
-          { uri: animeContext.url },
-          { onDownloadProgress: setLoading(true) }
+          { slug: info.result.slug },
+          {
+            onDownloadProgress: setLoading(true),
+          }
         )
         .then((response) => {
-          setEpisodes(response.data.videoLinks);
+          setEpisodes(response.data);
           setLoading(false);
         })
         .catch((err) => console.log(err));
@@ -40,10 +41,9 @@ function WatchEpisode(props) {
     setActiveKey(event);
   };
 
+  console.log(info);
+
   const handleNext = () => {
-    // props.history.push(
-    //   `/anime/${animeContext.name.replace(/\s/g, "-")}/${parseInt(ep) + 1}`
-    // );
     props.history.push(`/anime/${props.match.params.name}/${parseInt(ep) + 1}`);
   };
   const handlePrevious = () => {
@@ -60,24 +60,18 @@ function WatchEpisode(props) {
           <Loader center size="md" />
         ) : (
           <>
-            <Divider />
-            <h4>
-              Watch Episode {ep} of {animeContext.name}
-            </h4>
-            <Divider />
             {episodes ? (
               <>
-                <iframe
+                <Divider />
+                <h4>Watch {episodes.name}</h4>
+                <Divider />
+                <video
                   className="episode-video-player"
-                  sandbox="allow-forms allow-pointer-lock allow-same-origin allow-scripts allow-top-navigation"
-                  allowFullScreen
-                  frameBorder
-                  src={
-                    videoIndex === 1
-                      ? `https://${episodes[videoIndex].url}`
-                      : episodes[videoIndex].url
-                  }
-                />
+                  width="320"
+                  height="240"
+                  controls
+                  src={episodes.download[0].link}
+                ></video>
                 <IconButton
                   icon={<Icon icon="arrow-left" />}
                   placement="left"
@@ -93,36 +87,14 @@ function WatchEpisode(props) {
                   style={{ float: "right" }}
                   onClick={handleNext}
                   disabled={
-                    info.result.episodes.length === parseInt(ep) ? true : false
+                    parseInt(info.result.episodeCount) === parseInt(ep)
+                      ? true
+                      : false
                   }
                 >
                   Next
                 </IconButton>
                 <Divider />
-
-                <div>Select Server:</div>
-                <Button appearance="subtle" onClick={() => setVideoIndex(1)}>
-                  MultiQuality
-                </Button>
-                <Button appearance="subtle" onClick={() => setVideoIndex(2)}>
-                  StreamSB
-                </Button>
-                <Button appearance="subtle" onClick={() => setVideoIndex(3)}>
-                  Doodstream
-                </Button>
-                <Button appearance="subtle" onClick={() => setVideoIndex(4)}>
-                  Streamtape
-                </Button>
-                <Button appearance="subtle" onClick={() => setVideoIndex(5)}>
-                  Mixdrop
-                </Button>
-                <Button appearance="subtle" onClick={() => setVideoIndex(6)}>
-                  Xstreamcdn
-                </Button>
-                <Button appearance="subtle" onClick={() => setVideoIndex(7)}>
-                  Mp4upload
-                </Button>
-                <br />
               </>
             ) : (
               <Loader center size="md" />

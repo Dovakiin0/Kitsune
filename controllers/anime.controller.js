@@ -1,17 +1,7 @@
-const { Anime } = require("anime-scraper");
+const AnimeScraper = require("ctk-anime-scraper");
+const Anime = new AnimeScraper.Gogoanime();
 const cheerio = require("cheerio");
 const { default: axios } = require("axios");
-
-const getImage = async (url) => {
-  try {
-    const { data } = await axios.get(url);
-    const $ = cheerio.load(data);
-    const imagesrc = $(".anime_info_body_bg").children("img").attr("src");
-    return imagesrc;
-  } catch (err) {
-    console.log(err);
-  }
-};
 
 module.exports = {
   getPopular: async (req, res) => {
@@ -57,7 +47,6 @@ module.exports = {
 
           let name = $(this).children(".name").text();
           let ep = $(this).children(".episode").text();
-          // console.log(img,nam)
           animes.push({ img, name, ep });
         });
       res.status(200).send(animes);
@@ -70,7 +59,7 @@ module.exports = {
     try {
       const animeName = req.params.name;
       Anime.search(animeName)
-        .then(async (anime) => {
+        .then((anime) => {
           res.status(200).send(anime);
         })
         .catch((err) => res.status(400).send(err));
@@ -82,9 +71,8 @@ module.exports = {
   getAnimeDetails: async (req, res) => {
     try {
       const uri = req.body.uri;
-      const image = await getImage(uri);
-      Anime.fromUrl(uri)
-        .then((result) => res.status(200).send({ image, result }))
+      Anime.fetchAnime(uri)
+        .then((result) => res.status(200).send({ result }))
         .catch((err) => console.log(err));
     } catch (err) {
       res.status(400).send(err);
@@ -93,12 +81,8 @@ module.exports = {
 
   getAnimeEpisodes: (req, res) => {
     try {
-      Anime.fromUrl(req.body.uri)
-        .then((anime) =>
-          anime.episodes[req.params.id - 1]
-            .fetch()
-            .then((episode) => res.status(200).send(episode))
-        )
+      Anime.getEpisodes(req.body.slug, req.params.ep)
+        .then((episode) => res.status(200).send(episode))
         .catch((err) => console.log(err));
     } catch (err) {
       res.status(400).send(err);

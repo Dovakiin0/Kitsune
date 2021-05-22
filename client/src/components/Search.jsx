@@ -22,10 +22,10 @@ function Search(props) {
 
   const handleSelect = (val) => {
     const value = _.find(anime, function (anim) {
-      return anim.name == val.value;
+      return anim.title == val.value;
     });
-    setAnimeContext({ name: value.name, url: value.url });
-    props.history.push(`/anime/${value.name.replace(/\s/g, "-")}`);
+    setAnimeContext({ name: value.title, url: value.link });
+    props.history.push(`/anime/${value.title.replace(/\s/g, "-")}`);
   };
 
   useEffect(() => {
@@ -51,7 +51,7 @@ function Search(props) {
       <InputGroup style={styles}>
         <InputGroup.Addon>{loading ? <Loader /> : ""}</InputGroup.Addon>
         <AutoComplete
-          data={anime ? anime.map((data) => data.name) : ""}
+          data={anime ? anime.map((data) => data.title) : ""}
           onChange={handleClick}
           onSelect={handleSelect}
           filterBy={(value, item) => item}
