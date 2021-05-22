@@ -1,7 +1,7 @@
 {
   "name": "animeworldz",
-  "version": "1.0.0",
-  "description": "",
+  "version": "1.0",
+  "description": "Anime Streaming App made with node and react",
   "main": "index.js",
   "scripts": {
     "test": "jest --detectOpenHandles --forceExit --runInBand ./tests",
@@ -12,8 +12,8 @@
     "timers": "fake"
   },
   "keywords": [],
-  "author": "",
-  "license": "ISC",
+  "author": "Dovakiin0",
+  "license": "BSD-2-Clause License ",
   "dependencies": {
     "axios": "^0.21.1",
     "cheerio": "^1.0.0-rc.6",

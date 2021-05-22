@@ -1,6 +1,6 @@
 {
-  "name": "client",
-  "version": "0.1.0",
+  "name": "animeworldz",
+  "version": "1.0",
   "private": true,
   "dependencies": {
     "@testing-library/jest-dom": "^5.12.0",
