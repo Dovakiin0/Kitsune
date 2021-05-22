@@ -1,6 +1,6 @@
 {
   "name": "animeworldz",
-  "version": "1.0",
+  "version": "1.0.0",
   "description": "Anime Streaming App made with node and react",
   "main": "index.js",
   "scripts": {
