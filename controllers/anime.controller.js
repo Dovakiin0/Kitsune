@@ -14,6 +14,9 @@ module.exports = {
       $(".items")
         .children("li")
         .each(function (index, elem) {
+          let link =
+            "https://gogoanime.ai" +
+            $(this).children(".img").children("a").attr("href");
           let img = $(this)
             .children(".img")
             .children("a")
@@ -22,7 +25,7 @@ module.exports = {
 
           let name = $(this).children(".name").text();
           let rel = $(this).children(".released").text();
-          animes.push({ img, name, rel });
+          animes.push({ link, img, name, rel });
         });
       res.status(200).send(animes);
     } catch (err) {

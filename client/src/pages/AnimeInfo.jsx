@@ -2,9 +2,11 @@ import React, { useState, useEffect, useContext } from "react";
 import NavHeader from "../components/header";
 import AnimeContext, { InfoContext } from "../hooks/animecontext";
 import axios from "axios";
-import { Loader, List, IconButton, Icon, Divider } from "rsuite";
+import { Loader, List, IconButton, Icon, Divider, Button } from "rsuite";
+import { useParams } from "react-router";
 
 function AnimeInfo(props) {
+  const { name } = useParams();
   const [activeKey, setActiveKey] = useState();
   const { animeContext } = useContext(AnimeContext);
   const [loading, setLoading] = useState(false);
@@ -18,8 +20,6 @@ function AnimeInfo(props) {
   useEffect(() => {
     getAnimeDetails();
   }, [animeContext.url]);
-
-  console.log(animeContext);
 
   const getAnimeDetails = () => {
     if (animeContext.url !== "") {
@@ -40,22 +40,39 @@ function AnimeInfo(props) {
   };
 
   const handleClick = (ep) => {
+    let saveInfo = JSON.parse(localStorage.getItem(name));
+    if (saveInfo === null) {
+      localStorage.setItem(name, JSON.stringify([ep]));
+    } else {
+      if (!saveInfo.includes(ep))
+        localStorage.setItem(name, JSON.stringify([...saveInfo, ep]));
+    }
+
     setInfo(animeInfo);
     props.history.push({
       pathname: `${props.location.pathname}/${ep}`,
     });
   };
 
+  console.log(animeInfo);
+
   const epCount = () => {
+    let saveInfo = JSON.parse(localStorage.getItem(name));
+    if (saveInfo === null) console.log("NO RECORD");
     let list = [];
-    for (let i = 0; i < parseInt(animeInfo.result.episodeCount); i++) {
+    for (let i = 1; i <= parseInt(animeInfo.result.episodeCount); i++) {
       list.push(
-        <List.Item style={{ display: "inline-block" }}>
-          {`Episode ${i + 1}`}
-          <IconButton
-            icon={<Icon icon="play" onClick={() => handleClick(i + 1)} />}
-          />
-        </List.Item>
+        <div style={{ padding: "2px", display: "inline-block" }}>
+          <Button
+            appearance={
+              saveInfo !== null && saveInfo.includes(i) ? "default" : "ghost"
+            }
+            style={{ padding: "10px" }}
+            onClick={() => handleClick(i)}
+          >
+            Episode {i}
+          </Button>
+        </div>
       );
     }
     return list;
@@ -73,9 +90,11 @@ function AnimeInfo(props) {
           <div>
             <img src={animeInfo.result.image} width="250" />
             <h3>{animeInfo.result.name}</h3>
+            <p>Other Names: {animeInfo.result.other_name}</p>
             <p>{animeInfo.result.plot_summary}</p>
             <p>Released: {animeInfo.result.released}</p>
             <p>Genre: {animeInfo.result.genre}</p>
+            <p>Status: {animeInfo.result.status}</p>
             <Divider />
             <h4>Episodes:</h4>
             <List hover bordered>
