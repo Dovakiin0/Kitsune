@@ -8,7 +8,7 @@ import { useParams } from "react-router";
 function WatchEpisode(props) {
   const [activeKey, setActiveKey] = useState();
   const { animeContext } = useContext(AnimeContext);
-  const { ep } = useParams();
+  const { ep, name } = useParams();
   const [episodes, setEpisodes] = useState();
   const [loading, setLoading] = useState(false);
   const { info } = useContext(InfoContext);
@@ -41,12 +41,22 @@ function WatchEpisode(props) {
     setActiveKey(event);
   };
 
-  console.log(info);
-
   const handleNext = () => {
+    let saveInfo = JSON.parse(localStorage.getItem(name));
+    if (!saveInfo.includes(ep))
+      localStorage.setItem(
+        name,
+        JSON.stringify([...saveInfo, parseInt(ep) + 1])
+      );
     props.history.push(`/anime/${props.match.params.name}/${parseInt(ep) + 1}`);
   };
   const handlePrevious = () => {
+    let saveInfo = JSON.parse(localStorage.getItem(name));
+    if (!saveInfo.includes(ep))
+      localStorage.setItem(
+        name,
+        JSON.stringify([...saveInfo, parseInt(ep) - 1])
+      );
     props.history.push(`/anime/${props.match.params.name}/${parseInt(ep) - 1}`);
   };
 
