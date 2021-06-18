@@ -24,7 +24,6 @@ function AnimeInfo(props) {
   }, [animeContext.url, ep]);
 
   const getAnimeDetails = () => {
-    console.log(animeContext);
     if (animeContext.url !== "") {
       axios
         .post(
