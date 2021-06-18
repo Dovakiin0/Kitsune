@@ -3,16 +3,16 @@ import { useContext, useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import { Loader, Button, Divider, IconButton, Icon } from "rsuite";
 import AnimeContext from "../hooks/animecontext";
-import { InfoContext } from "../hooks/animecontext";
+
 
 export default function Player(props) {
-  const { epi, name, episodeCount, slug, animeInfo } = props;
+  const { epi, name, episodeCount, slug } = props;
   const { animeContext } = useContext(AnimeContext);
   const [episodes, setEpisodes] = useState();
   const [loading, setLoading] = useState(false);
   const { ep } = useParams();
   const [currentEpisode, setCurrentEpisode] = useState(epi);
-  const { setInfo } = useContext(InfoContext);
+
 
   useEffect(() => {
     getEpisode();
@@ -38,7 +38,7 @@ export default function Player(props) {
     }
   };
   const handleNext = () => {
-    // setInfo(animeInfo);
+   
     let saveInfo = JSON.parse(localStorage.getItem(name));
     if (!saveInfo.includes(currentEpisode)) {
       localStorage.setItem(
@@ -49,12 +49,13 @@ export default function Player(props) {
 
     if (ep) {
       props.history.push(`/anime/${name}/${parseInt(ep) + 1}`);
+      setCurrentEpisode(ep + 1);
     } else {
       setCurrentEpisode(currentEpisode + 1);
     }
   };
   const handlePrevious = () => {
-    // setInfo(animeInfo);
+  
     let saveInfo = JSON.parse(localStorage.getItem(name));
     if (!saveInfo.includes(currentEpisode))
       localStorage.setItem(
@@ -77,16 +78,6 @@ export default function Player(props) {
             <>
               <Divider />
               <h4>Watch {episodes.name}</h4>
-              {!ep && (
-                <Button
-                  appearance={"primary"}
-                  style={{ padding: "10px", marginTop: "10px" }}
-                  onClick={() => {
-                    props.history.push(`/anime/${name}/${currentEpisode}`);
-                  }}>
-                  Open in New Window
-                </Button>
-              )}
               <Divider />
               <video
                 className='episode-video-player'

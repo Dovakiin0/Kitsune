@@ -9,16 +9,14 @@ import { useParams } from "react-router";
 
 function WatchEpisode(props) {
   const [activeKey, setActiveKey] = useState();
-
   const { ep, name } = useParams();
   const { info } = useContext(InfoContext);
-
+  const [currentEpisode, setCurrentEpisode] = useState(ep);
   const handleSelect = (event) => {
     setActiveKey(event);
   };
-  useEffect(() => {
-    renderVideo();
-  }, [info, ep]);
+  useEffect(() => setCurrentEpisode(ep)
+  , [info, ep,setCurrentEpisode]);
 
   const renderVideo = () => {
     if (info) {
@@ -32,7 +30,7 @@ function WatchEpisode(props) {
             />
           </div>
           <Player
-            epi={ep}
+            epi={currentEpisode}
             name={name}
             slug={info.result.slug}
             history={props.history}
