@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useContext } from "react";
 import NavHeader from "../components/header";
+import Player from "../components/Player.jsx";
 import AnimeContext, { InfoContext } from "../hooks/animecontext";
 import axios from "axios";
 import { Loader, List, IconButton, Icon, Divider, Button } from "rsuite";
@@ -10,6 +11,7 @@ function AnimeInfo(props) {
   const [activeKey, setActiveKey] = useState();
   const { animeContext } = useContext(AnimeContext);
   const [loading, setLoading] = useState(false);
+  const [ep, setEp] = useState(1);
   const [animeInfo, setAnimeinfo] = useState();
   const { setInfo } = useContext(InfoContext);
 
@@ -19,7 +21,7 @@ function AnimeInfo(props) {
 
   useEffect(() => {
     getAnimeDetails();
-  }, [animeContext.url]);
+  }, [animeContext.url, ep]);
 
   const getAnimeDetails = () => {
     if (animeContext.url !== "") {
@@ -31,6 +33,7 @@ function AnimeInfo(props) {
         )
         .then((response) => {
           setAnimeinfo(response.data);
+          console.log(response.data);
           setLoading(false);
         })
         .catch((err) => console.log(err));
@@ -47,7 +50,6 @@ function AnimeInfo(props) {
       if (!saveInfo.includes(ep))
         localStorage.setItem(name, JSON.stringify([...saveInfo, ep]));
     }
-
     setInfo(animeInfo);
     props.history.push({
       pathname: `${props.location.pathname}/${parseInt(ep)}`,
@@ -96,7 +98,14 @@ function AnimeInfo(props) {
             <p>Released: {animeInfo.result["release_date_(jp)"]}</p>
             <p>Studio: {animeInfo.result.studio}</p>
             <p>Status: {animeInfo.result.status}</p>
-            <Divider />
+            {/* <Player
+              animeInfo={animeInfo}
+              epi={ep}
+              name={name}
+              slug={animeInfo.result.slug}
+              history={props.history}
+              episodeCount={animeInfo.result.episodeCount}
+            /> */}
             <h4>Episodes:</h4>
             <List hover bordered>
               {epCount()}

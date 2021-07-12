@@ -1,13 +1,14 @@
 import React, { useState, useContext, useEffect } from "react";
+
 import NavHeader from "../components/header";
-import AnimeContext, { InfoContext } from "../hooks/animecontext";
-import axios from "axios";
-import { Loader, Button, Divider, IconButton, Icon } from "rsuite";
+import Player from "../components/Player";
+
+import { InfoContext } from "../hooks/animecontext";
+
 import { useParams } from "react-router";
 
 function WatchEpisode(props) {
   const [activeKey, setActiveKey] = useState();
-  const { animeContext } = useContext(AnimeContext);
   const { ep, name } = useParams();
   const [episode, setEpisode] = useState();
   const [loading, setLoading] = useState(false);
@@ -49,6 +50,7 @@ function WatchEpisode(props) {
   const handleSelect = (event) => {
     setActiveKey(event);
   };
+  useEffect(() => setCurrentEpisode(ep), [info, ep, setCurrentEpisode]);
 
   const handleNext = () => {
     props.history.push(`/anime/${props.match.params.name}/${parseInt(ep) + 1}`);

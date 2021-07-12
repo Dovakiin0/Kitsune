@@ -4,5 +4,20 @@ Anime Streaming App
 Simple clone of anime stream site made with node and react.  
 Still Work-In-Progress
 
+### Local Development
+clone the repo with http or ssh
+
+> npm install
+
+on the root folder
+then head over to client dir and npm install again.  
+start backend with
+> npm start
+
+or 
+> nodemon index.js 
+
+then go inside client folder and npm start
+
 ### Demo
 See Demo here: https://animeworldz.herokuapp.com
