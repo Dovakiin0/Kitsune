@@ -1,5 +1,5 @@
 const AnimeScraper = require("ctk-anime-scraper");
-const Anime = new AnimeScraper.Gogoanime();
+const Anime = new AnimeScraper.FourAnime();
 const cheerio = require("cheerio");
 const { default: axios } = require("axios");
 
@@ -84,7 +84,7 @@ module.exports = {
 
   getAnimeEpisodes: (req, res) => {
     try {
-      Anime.getEpisodes(req.body.slug, req.params.ep)
+      Anime.getFromLink(req.body.uri)
         .then((episode) => res.status(200).send(episode))
         .catch((err) => console.log(err));
     } catch (err) {

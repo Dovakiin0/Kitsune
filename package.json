@@ -16,9 +16,9 @@
   "license": "BSD-2-Clause License ",
   "dependencies": {
     "axios": "^0.21.1",
-    "cheerio": "^1.0.0-rc.6",
+    "cheerio": "^1.0.0-rc.10",
     "cors": "^2.8.5",
-    "ctk-anime-scraper": "^2.0.0",
+    "ctk-anime-scraper": "^3.0.0",
     "express": "^4.17.1",
     "jest": "^26.6.3",
     "supertest": "^6.1.3"
