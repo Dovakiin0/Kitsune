@@ -9,26 +9,35 @@ function WatchEpisode(props) {
   const [activeKey, setActiveKey] = useState();
   const { animeContext } = useContext(AnimeContext);
   const { ep, name } = useParams();
-  const [episodes, setEpisodes] = useState();
+  const [episode, setEpisode] = useState();
   const [loading, setLoading] = useState(false);
   const { info } = useContext(InfoContext);
 
+  //ep has episode number of info.result.episodes[]
+
   useEffect(() => {
     getEpisode();
+    checkLocalStorage();
   }, [animeContext.url, ep]);
+
+  const checkLocalStorage = () => {
+    let saveInfo = JSON.parse(localStorage.getItem(name));
+    if (!saveInfo.includes(parseInt(ep)))
+      localStorage.setItem(name, JSON.stringify([...saveInfo, parseInt(ep)]));
+  };
 
   const getEpisode = () => {
     if (animeContext.url) {
       axios
         .post(
-          `/api/v1/anime/episode/${ep}`,
-          { slug: info.result.slug },
+          `/api/v1/anime/episode`,
+          { uri: info.result.episodes[ep - 1].link },
           {
             onDownloadProgress: setLoading(true),
           }
         )
         .then((response) => {
-          setEpisodes(response.data);
+          setEpisode(response.data);
           setLoading(false);
         })
         .catch((err) => console.log(err));
@@ -42,21 +51,10 @@ function WatchEpisode(props) {
   };
 
   const handleNext = () => {
-    let saveInfo = JSON.parse(localStorage.getItem(name));
-    if (!saveInfo.includes(ep))
-      localStorage.setItem(
-        name,
-        JSON.stringify([...saveInfo, parseInt(ep) + 1])
-      );
     props.history.push(`/anime/${props.match.params.name}/${parseInt(ep) + 1}`);
   };
+
   const handlePrevious = () => {
-    let saveInfo = JSON.parse(localStorage.getItem(name));
-    if (!saveInfo.includes(ep))
-      localStorage.setItem(
-        name,
-        JSON.stringify([...saveInfo, parseInt(ep) - 1])
-      );
     props.history.push(`/anime/${props.match.params.name}/${parseInt(ep) - 1}`);
   };
 
@@ -70,17 +68,19 @@ function WatchEpisode(props) {
           <Loader center size="md" />
         ) : (
           <>
-            {episodes ? (
+            {episode ? (
               <>
                 <Divider />
-                <h4>Watch {episodes.name}</h4>
+                <h4>
+                  Watch {episode.name} Episode {episode.currentEpisode}
+                </h4>
                 <Divider />
                 <video
                   className="episode-video-player"
                   width="320"
                   height="240"
                   controls
-                  src={episodes.download[0].link}
+                  src={episode.download[0].link}
                 ></video>
                 <IconButton
                   icon={<Icon icon="arrow-left" />}

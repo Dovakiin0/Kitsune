@@ -13,9 +13,12 @@ describe("Anime", () => {
 
   it("Should Fetch an anime", async () => {
     try {
-      const res = await request(server).get("/api/v1/anime/oregairu");
+      const res = await request(server).get("/api/v1/anime/yahari");
       expect(res.status).toBe(200);
-      expect(res.body[1]).toHaveProperty("title", "Oregairu OVA");
+      expect(res.body[1]).toHaveProperty(
+        "title",
+        "Yahari Ore no Seishun Love Comedy wa Machigatt"
+      );
     } catch (error) {
       return error;
     }

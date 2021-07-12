@@ -50,31 +50,32 @@ function AnimeInfo(props) {
 
     setInfo(animeInfo);
     props.history.push({
-      pathname: `${props.location.pathname}/${ep}`,
+      pathname: `${props.location.pathname}/${parseInt(ep)}`,
     });
   };
-
-  console.log(animeInfo);
 
   const epCount = () => {
     let saveInfo = JSON.parse(localStorage.getItem(name));
     if (saveInfo === null) console.log("NO RECORD");
     let list = [];
-    for (let i = 1; i <= parseInt(animeInfo.result.episodeCount); i++) {
+    for (let [i, ep] of animeInfo.result.episodes.entries()) {
       list.push(
         <div style={{ padding: "2px", display: "inline-block" }}>
           <Button
             appearance={
-              saveInfo !== null && saveInfo.includes(i) ? "default" : "ghost"
+              saveInfo !== null && saveInfo.includes(parseInt(ep.number))
+                ? "default"
+                : "ghost"
             }
             style={{ padding: "10px" }}
-            onClick={() => handleClick(i)}
+            onClick={() => handleClick(parseInt(ep.number))}
           >
-            Episode {i}
+            Episode {ep.number}
           </Button>
         </div>
       );
     }
+    // for (let i = 1; i <= parseInt(animeInfo.result.episodeCount); i++) {}
     return list;
   };
 
@@ -90,10 +91,10 @@ function AnimeInfo(props) {
           <div>
             <img src={animeInfo.result.image} width="250" />
             <h3>{animeInfo.result.name}</h3>
-            <p>Other Names: {animeInfo.result.other_name}</p>
+            <p>Language: {animeInfo.result.language}</p>
             <p>{animeInfo.result.plot_summary}</p>
-            <p>Released: {animeInfo.result.released}</p>
-            <p>Genre: {animeInfo.result.genre}</p>
+            <p>Released: {animeInfo.result["release_date_(jp)"]}</p>
+            <p>Studio: {animeInfo.result.studio}</p>
             <p>Status: {animeInfo.result.status}</p>
             <Divider />
             <h4>Episodes:</h4>
