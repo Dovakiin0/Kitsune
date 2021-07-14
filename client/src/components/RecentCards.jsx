@@ -28,36 +28,48 @@ const useStyles = makeStyles((theme) => ({
     background:
       "linear-gradient(to top, rgba(0,0,0,0.7) 0%, rgba(0,0,0,0.3) 70%, rgba(0,0,0,0) 100%)",
   },
+  img: {
+    "&:hover": {
+      opacity: 0.8,
+      transform: "scale(1.1)",
+      cursor: "pointer",
+    },
+  },
 }));
 
 function RecentCards({ Anime }) {
   const classes = useStyles();
 
   return (
-    <div className={"root"}>
-      <ImageList className={classes.imageList} cols={5}>
-        {Anime.map((item) => (
-          <ImageListItem
-            key={item.img}
-            style={{ height: 400, padding: "12px" }}
-          >
-            <img src={item.img} alt={item.name} />
-            <ImageListItemBar
-              title={item.name}
-              subtitle={item.recent_episode}
-              classes={{
-                root: classes.titleBar,
-                title: classes.title,
-              }}
-              actionIcon={
-                <IconButton aria-label={`star ${item.name}`}>
-                  <PlayArrowOutlined className={classes.title} />
-                </IconButton>
-              }
-            />
-          </ImageListItem>
-        ))}
-      </ImageList>
+    <div className={classes.root} style={{ height: 330 }}>
+      {Anime.length !== 0 ? (
+        <ImageList className={classes.imageList} cols={6}>
+          {Anime.map((item) => (
+            <ImageListItem
+              key={item.img}
+              className={classes.img}
+              style={{ height: "300px", padding: "12px" }}
+            >
+              <img src={item.img} alt={item.name} />
+              <ImageListItemBar
+                title={item.name}
+                subtitle={item.recent_episode}
+                classes={{
+                  root: classes.titleBar,
+                  title: classes.title,
+                }}
+                actionIcon={
+                  <IconButton aria-label={`star ${item.name}`}>
+                    <PlayArrowOutlined className={classes.title} />
+                  </IconButton>
+                }
+              />
+            </ImageListItem>
+          ))}
+        </ImageList>
+      ) : (
+        <div style={{ height: 400 }} />
+      )}
     </div>
   );
 }

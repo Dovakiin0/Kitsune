@@ -4,17 +4,12 @@ import Homepage from "./pages/homepage";
 import Layout from "./components/layout";
 import { Route, Switch } from "react-router-dom";
 import axios from "axios";
-import {
-  ScheduleContext,
-  PopularAnimeContext,
-  RecentAnimeContext,
-} from "./context/AnimeContext";
+import { ScheduleContext, PopularAnimeContext } from "./context/AnimeContext";
 
 function App() {
   const [darkMode, setDarkMode] = useState(true);
   const [schedule, setSchedule] = useState({});
   const [popular, setPopular] = useState([]);
-  const [recent, setRecent] = useState([]);
 
   const darkTheme = createTheme({
     palette: {
@@ -25,7 +20,6 @@ function App() {
   useEffect(() => {
     getSchedule();
     getPopular();
-    getRecent();
   }, []);
 
   const getPopular = () => {
@@ -33,15 +27,6 @@ function App() {
       .get("http://localhost:3030/api/v1/anime/popular/1", {})
       .then((res) => {
         setPopular(res.data);
-      })
-      .catch((err) => console.log(err));
-  };
-
-  const getRecent = () => {
-    axios
-      .get("http://localhost:3030/api/v1/anime/recent/1", {})
-      .then((res) => {
-        setRecent(res.data);
       })
       .catch((err) => console.log(err));
   };
@@ -64,13 +49,11 @@ function App() {
       <Paper>
         <ScheduleContext.Provider value={{ schedule }}>
           <PopularAnimeContext.Provider value={{ popular }}>
-            <RecentAnimeContext.Provider value={{ recent }}>
-              <Layout onChange={handleChange}>
-                <Switch>
-                  <Route exact path="/" component={Homepage} />
-                </Switch>
-              </Layout>
-            </RecentAnimeContext.Provider>
+            <Layout onChange={handleChange}>
+              <Switch>
+                <Route exact path="/" component={Homepage} />
+              </Switch>
+            </Layout>
           </PopularAnimeContext.Provider>
         </ScheduleContext.Provider>
       </Paper>

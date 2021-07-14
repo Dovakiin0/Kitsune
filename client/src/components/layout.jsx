@@ -16,7 +16,7 @@ import { useHistory, useLocation } from "react-router-dom";
 
 const drawerWidth = 240;
 
-const useStyle = makeStyles((theme) => {
+const useStyles = makeStyles((theme) => {
   return {
     root: {
       display: "flex",
@@ -49,7 +49,7 @@ const useStyle = makeStyles((theme) => {
 });
 
 function Layout({ onChange, children }) {
-  const classes = useStyle();
+  const classes = useStyles();
   const history = useHistory();
   const location = useLocation();
   const [time, setTime] = useState(new Date().toLocaleTimeString());
@@ -95,7 +95,7 @@ function Layout({ onChange, children }) {
       >
         <div>
           <Typography variant="h5" className={classes.title}>
-            ANIMEWORLDZ
+            ANIMEWORLD-Z
           </Typography>
         </div>
 

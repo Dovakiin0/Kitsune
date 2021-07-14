@@ -33,13 +33,13 @@ function ScheduleCard({ Anime }) {
   const classes = useStyles();
 
   return (
-    <div className={"root"}>
-      <ImageList className={classes.imageList} cols={1}>
+    <div className="root">
+      <ImageList className={classes.imageList} cols={6}>
         {Anime.map((item) => (
           <>
             <ImageListItem
               key={item.img}
-              style={{ height: 400, padding: "12px" }}
+              style={{ height: 300, padding: "12px" }}
             >
               <img src={item.img} alt={item.name} />
               <ImageListItemBar

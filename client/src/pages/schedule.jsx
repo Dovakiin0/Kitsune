@@ -3,15 +3,9 @@ import { Tab, Tabs, makeStyles } from "@material-ui/core";
 import ScheduleCard from "../components/schedulecard";
 
 function Schedule({ schedule }) {
-  const [tab, setTab] = useState(0);
+  const [tab, setTab] = useState(new Date().getDay());
 
   const useStyles = makeStyles((theme) => ({
-    spinner: {
-      position: "fixed",
-      top: "50%",
-      left: "50%",
-      padding: "10px",
-    },
     root: {
       flexGrow: 1,
       backgroundColor: theme.palette.background.paper,
@@ -41,37 +35,37 @@ function Schedule({ schedule }) {
 
   return (
     <div className={classes.root}>
-      <Tabs value={tab} onChange={handleChange} className={classes.tabs}>
+      <Tabs value={tab} onChange={handleChange}>
+        <Tab label="Sunday" />
         <Tab label="Monday" />
         <Tab label="Tuesday" />
         <Tab label="Wednesday" />
         <Tab label="Thrusday" />
         <Tab label="Friday" />
         <Tab label="Saturday" />
-        <Tab label="Sunday" />
       </Tabs>
       {Object.keys(schedule).length !== 0 ? (
         <>
           <TabPanel value={tab} index={0}>
-            <ScheduleCard Anime={schedule.monday} />
+            <ScheduleCard Anime={schedule.sunday} />
           </TabPanel>
           <TabPanel value={tab} index={1}>
-            <ScheduleCard Anime={schedule.tuesday} />
+            <ScheduleCard Anime={schedule.monday} />
           </TabPanel>
           <TabPanel value={tab} index={2}>
-            <ScheduleCard Anime={schedule.wednesday} />
+            <ScheduleCard Anime={schedule.tuesday} />
           </TabPanel>
           <TabPanel value={tab} index={3}>
-            <ScheduleCard Anime={schedule.thursday} />
+            <ScheduleCard Anime={schedule.wednesday} />
           </TabPanel>
           <TabPanel value={tab} index={4}>
-            <ScheduleCard Anime={schedule.friday} />
+            <ScheduleCard Anime={schedule.thursday} />
           </TabPanel>
           <TabPanel value={tab} index={5}>
-            <ScheduleCard Anime={schedule.saturday} />
+            <ScheduleCard Anime={schedule.friday} />
           </TabPanel>
           <TabPanel value={tab} index={6}>
-            <ScheduleCard Anime={schedule.sunday} />
+            <ScheduleCard Anime={schedule.saturday} />
           </TabPanel>
         </>
       ) : (

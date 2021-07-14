@@ -1,61 +1,76 @@
-import React, { useState, useEffect, useContext } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import {
   Typography,
   Grid,
   makeStyles,
   CircularProgress,
 } from "@material-ui/core";
-import axios from "axios";
 import PopularCards from "../components/PopularCards";
 import RecentCards from "../components/RecentCards";
 import Schedule from "./schedule";
-import {
-  PopularAnimeContext,
-  RecentAnimeContext,
-  ScheduleContext,
-} from "../context/AnimeContext";
+import { PopularAnimeContext, ScheduleContext } from "../context/AnimeContext";
+import axios from "axios";
 
 function Homepage() {
   const { popular } = useContext(PopularAnimeContext);
-  const { recent } = useContext(RecentAnimeContext);
+  const [recent, setRecent] = useState([]);
   const { schedule } = useContext(ScheduleContext);
 
   const useStyles = makeStyles({
-    spinner: {
-      position: "fixed",
-      top: "50%",
-      left: "50%",
+    root: {
+      maxWidth: "100vw",
     },
     title: {
       padding: "10px",
+      flexGrow: 1,
+    },
+    grids: {
+      display: "flex",
+    },
+    spinner: {
+      padding: "5px",
     },
   });
 
+  const getRecent = () => {
+    axios
+      .get("http://localhost:3030/api/v1/anime/recent/1", {})
+      .then((res) => {
+        setRecent(res.data);
+      })
+      .catch((err) => console.log(err));
+  };
+
+  useEffect(() => {
+    getRecent();
+  }, []);
+
   const classes = useStyles();
   return (
-    <div>
+    <div className={classes.root}>
       <Grid container spacing={2}>
-        <Grid xs={12}>
+        <Grid xs={12} className={classes.grids}>
           <Typography className={classes.title} variant="h5">
             Most Popular Anime
           </Typography>
-        </Grid>
-
-        {popular ? (
-          <PopularCards Anime={popular} />
-        ) : (
-          <CircularProgress className={classes.spinner} color="secondary" />
-        )}
-        <Grid xs={12}>
-          <Typography className={classes.title} variant="h5">
-            Most Recent Anime
-          </Typography>
-          {recent ? (
-            <RecentCards Anime={recent} />
+          {popular.length !== 0 ? (
+            ""
           ) : (
             <CircularProgress className={classes.spinner} color="secondary" />
           )}
         </Grid>
+        <PopularCards Anime={popular} />
+        <Grid xs={12} className={classes.grids}>
+          <Typography className={classes.title} variant="h5">
+            Most Recent Anime
+          </Typography>
+          {recent.length !== 0 ? (
+            ""
+          ) : (
+            <CircularProgress className={classes.spinner} color="secondary" />
+          )}
+        </Grid>
+        <RecentCards Anime={recent} />
         <Grid xs={12}>
           <Typography className={classes.title} variant="h5">
             Schedule
