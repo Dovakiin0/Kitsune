@@ -4,11 +4,16 @@ import Homepage from "./pages/homepage";
 import Layout from "./components/layout";
 import { Route, Switch } from "react-router-dom";
 import axios from "axios";
-import { ScheduleContext, PopularAnimeContext } from "./context/AnimeContext";
+import {
+  ScheduleContext,
+  PopularAnimeContext,
+  DarkModeContext,
+} from "./context/AnimeContext";
 
 function App() {
   const [darkMode, setDarkMode] = useState(true);
   const [schedule, setSchedule] = useState({});
+
   const [popular, setPopular] = useState([]);
 
   const darkTheme = createTheme({
@@ -40,22 +45,20 @@ function App() {
       .catch((err) => console.log(err));
   };
 
-  const handleChange = (value) => {
-    setDarkMode(value);
-  };
-
   return (
     <ThemeProvider theme={darkTheme}>
       <Paper>
-        <ScheduleContext.Provider value={{ schedule }}>
-          <PopularAnimeContext.Provider value={{ popular }}>
-            <Layout onChange={handleChange}>
-              <Switch>
-                <Route exact path="/" component={Homepage} />
-              </Switch>
-            </Layout>
-          </PopularAnimeContext.Provider>
-        </ScheduleContext.Provider>
+        <DarkModeContext.Provider value={{ darkMode, setDarkMode }}>
+          <ScheduleContext.Provider value={{ schedule }}>
+            <PopularAnimeContext.Provider value={{ popular }}>
+              <Layout>
+                <Switch>
+                  <Route exact path="/" component={Homepage} />
+                </Switch>
+              </Layout>
+            </PopularAnimeContext.Provider>
+          </ScheduleContext.Provider>
+        </DarkModeContext.Provider>
       </Paper>
     </ThemeProvider>
   );

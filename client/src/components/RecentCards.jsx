@@ -7,6 +7,7 @@ import {
   IconButton,
 } from "@material-ui/core";
 import { PlayArrowOutlined } from "@material-ui/icons";
+import ModalAnime from "./ModalAnime";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -39,6 +40,17 @@ const useStyles = makeStyles((theme) => ({
 
 function RecentCards({ Anime }) {
   const classes = useStyles();
+  const [selectedAnime, setSelectedAnime] = React.useState(null);
+  const [openDialog, setOpenDialog] = React.useState(false);
+
+  const handleOpen = (item) => {
+    setSelectedAnime(item);
+    setOpenDialog(true);
+  };
+
+  const handleClose = () => {
+    setOpenDialog(false);
+  };
 
   return (
     <div className={classes.root} style={{ height: 330 }}>
@@ -49,6 +61,7 @@ function RecentCards({ Anime }) {
               key={item.img}
               className={classes.img}
               style={{ height: "300px", padding: "12px" }}
+              onClick={() => handleOpen(item)}
             >
               <img src={item.img} alt={item.name} />
               <ImageListItemBar
@@ -66,6 +79,11 @@ function RecentCards({ Anime }) {
               />
             </ImageListItem>
           ))}
+          {/* <ModalAnime
+            isOpen={openDialog}
+            handleClose={handleClose}
+            data={selectedAnime}
+          /> */}
         </ImageList>
       ) : (
         <div style={{ height: 400 }} />

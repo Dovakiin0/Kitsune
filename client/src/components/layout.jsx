@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useContext } from "react";
 import {
   Drawer,
   Typography,
@@ -13,6 +13,7 @@ import {
 import { makeStyles } from "@material-ui/core/styles";
 import { HomeRounded, InfoRounded } from "@material-ui/icons";
 import { useHistory, useLocation } from "react-router-dom";
+import { DarkModeContext } from "../context/AnimeContext";
 
 const drawerWidth = 240;
 
@@ -45,6 +46,10 @@ const useStyles = makeStyles((theme) => {
     time: {
       flexGrow: 1,
     },
+    footer: {
+      marginTop: "auto",
+      textAlign: "center",
+    },
   };
 });
 
@@ -53,7 +58,7 @@ function Layout({ onChange, children }) {
   const history = useHistory();
   const location = useLocation();
   const [time, setTime] = useState(new Date().toLocaleTimeString());
-  const [switched, setSwitched] = useState(true);
+  const { darkMode, setDarkMode } = useContext(DarkModeContext);
 
   useEffect(() => {
     setInterval(() => {
@@ -75,8 +80,7 @@ function Layout({ onChange, children }) {
   ];
 
   const handleSwitch = (event) => {
-    onChange(event.target.checked);
-    setSwitched(event.target.checked);
+    setDarkMode(event.target.checked);
   };
 
   return (
@@ -84,7 +88,7 @@ function Layout({ onChange, children }) {
       <AppBar className={classes.appbar} color="seconday" elevation={0}>
         <Toolbar>
           <Typography className={classes.time}>{time}</Typography>
-          <Switch checked={switched} onChange={handleSwitch} />
+          <Switch checked={darkMode} onChange={handleSwitch} />
         </Toolbar>
       </AppBar>
       <Drawer
@@ -98,7 +102,6 @@ function Layout({ onChange, children }) {
             ANIMEWORLD-Z
           </Typography>
         </div>
-
         <List>
           {menuItems.map((menu, i) => (
             <ListItem
@@ -112,6 +115,9 @@ function Layout({ onChange, children }) {
             </ListItem>
           ))}
         </List>
+        <div className={classes.footer}>
+          <Typography variant="h6">v2.0.0</Typography>
+        </div>
       </Drawer>
       <div className={classes.page}>
         <div className={classes.toolbar}></div>

@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { makeStyles } from "@material-ui/core/styles";
 import {
   ImageList,
@@ -7,6 +7,8 @@ import {
   IconButton,
 } from "@material-ui/core";
 import { PlayArrowOutlined } from "@material-ui/icons";
+import ModalAnime from "./ModalAnime";
+import axios from "axios";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -40,6 +42,28 @@ const useStyles = makeStyles((theme) => ({
 function PopularCards({ Anime }) {
   const classes = useStyles();
 
+  const [selectedAnime, setSelectedAnime] = React.useState(null);
+  const [openDialog, setOpenDialog] = React.useState(false);
+
+  const handleOpen = (item) => {
+    getAnime(item.link);
+    setOpenDialog(true);
+  };
+
+  const handleClose = () => {
+    setOpenDialog(false);
+    setSelectedAnime(null);
+  };
+
+  const getAnime = (link) => {
+    axios
+      .post("http://localhost:3030/api/v1/anime", { uri: link })
+      .then((res) => {
+        setSelectedAnime(res.data);
+      })
+      .catch((err) => console.log(err));
+  };
+
   return (
     <div className={classes.root} style={{ height: 330 }}>
       {Anime.length !== 0 ? (
@@ -49,6 +73,7 @@ function PopularCards({ Anime }) {
               key={item.img}
               className={classes.img}
               style={{ height: "300px", padding: "12px" }}
+              onClick={() => handleOpen(item)}
             >
               <img src={item.img} alt={item.name} />
               <ImageListItemBar
@@ -59,13 +84,25 @@ function PopularCards({ Anime }) {
                   title: classes.title,
                 }}
                 actionIcon={
-                  <IconButton aria-label={`star ${item.name}`}>
+                  <IconButton
+                    aria-label={`star ${item.name}`}
+                    onClick={() => handleOpen(item)}
+                  >
                     <PlayArrowOutlined className={classes.title} />
                   </IconButton>
                 }
               />
             </ImageListItem>
           ))}
+          {selectedAnime !== null ? (
+            <ModalAnime
+              isOpen={openDialog}
+              handleClose={handleClose}
+              data={selectedAnime}
+            />
+          ) : (
+            ""
+          )}
         </ImageList>
       ) : (
         <div style={{ height: 400 }} />
