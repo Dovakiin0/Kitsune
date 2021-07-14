@@ -4,8 +4,9 @@ import {
   ImageList,
   ImageListItem,
   ImageListItemBar,
-  Button,
+  IconButton,
 } from "@material-ui/core";
+import { PlayArrowOutlined } from "@material-ui/icons";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -29,36 +30,36 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-function ScheduleCard({ Anime }) {
+function RecentCards({ Anime }) {
   const classes = useStyles();
 
   return (
     <div className={"root"}>
-      <ImageList className={classes.imageList} cols={1}>
+      <ImageList className={classes.imageList} cols={5}>
         {Anime.map((item) => (
-          <>
-            <ImageListItem
-              key={item.img}
-              style={{ height: 400, padding: "12px" }}
-            >
-              <img src={item.img} alt={item.name} />
-              <ImageListItemBar
-                title={item.title}
-                subtitle={`Airing: ${new Date(
-                  item.airing_time
-                ).toLocaleTimeString()}`}
-                classes={{
-                  root: classes.titleBar,
-                  title: classes.title,
-                }}
-                actionIcon={<Button>{`Ep ${item.episode}`}</Button>}
-              />
-            </ImageListItem>
-          </>
+          <ImageListItem
+            key={item.img}
+            style={{ height: 400, padding: "12px" }}
+          >
+            <img src={item.img} alt={item.name} />
+            <ImageListItemBar
+              title={item.name}
+              subtitle={item.recent_episode}
+              classes={{
+                root: classes.titleBar,
+                title: classes.title,
+              }}
+              actionIcon={
+                <IconButton aria-label={`star ${item.name}`}>
+                  <PlayArrowOutlined className={classes.title} />
+                </IconButton>
+              }
+            />
+          </ImageListItem>
         ))}
       </ImageList>
     </div>
   );
 }
 
-export default ScheduleCard;
+export default RecentCards;

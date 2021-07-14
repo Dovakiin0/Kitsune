@@ -11,11 +11,7 @@ import {
   Switch,
 } from "@material-ui/core";
 import { makeStyles } from "@material-ui/core/styles";
-import {
-  HomeRounded,
-  AccessTimeRounded,
-  PlayArrowRounded,
-} from "@material-ui/icons";
+import { HomeRounded, InfoRounded } from "@material-ui/icons";
 import { useHistory, useLocation } from "react-router-dom";
 
 const drawerWidth = 240;
@@ -72,14 +68,9 @@ function Layout({ onChange, children }) {
       path: "/",
     },
     {
-      text: "Recent Anime",
-      icon: <PlayArrowRounded />,
-      path: "/recent",
-    },
-    {
-      text: "Schedule",
-      icon: <AccessTimeRounded />,
-      path: "/schedule",
+      text: "About",
+      icon: <InfoRounded />,
+      path: "/about",
     },
   ];
 
@@ -122,7 +113,6 @@ function Layout({ onChange, children }) {
           ))}
         </List>
       </Drawer>
-
       <div className={classes.page}>
         <div className={classes.toolbar}></div>
         {children}

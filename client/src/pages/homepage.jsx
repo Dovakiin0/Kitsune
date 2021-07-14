@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useContext } from "react";
 import {
   Typography,
   Grid,
@@ -6,11 +6,19 @@ import {
   CircularProgress,
 } from "@material-ui/core";
 import axios from "axios";
-import PopularCard from "../components/popularCard";
+import PopularCards from "../components/PopularCards";
+import RecentCards from "../components/RecentCards";
+import Schedule from "./schedule";
+import {
+  PopularAnimeContext,
+  RecentAnimeContext,
+  ScheduleContext,
+} from "../context/AnimeContext";
 
 function Homepage() {
-  const [popular, setPopular] = useState([]);
-  const [loading, setLoading] = useState(false);
+  const { popular } = useContext(PopularAnimeContext);
+  const { recent } = useContext(RecentAnimeContext);
+  const { schedule } = useContext(ScheduleContext);
 
   const useStyles = makeStyles({
     spinner: {
@@ -23,22 +31,6 @@ function Homepage() {
     },
   });
 
-  const getPopular = () => {
-    axios
-      .get("http://localhost:3030/api/v1/anime/popular/1", {
-        onDownloadProgress: setLoading(true),
-      })
-      .then((res) => {
-        setLoading(false);
-        setPopular(res.data);
-      })
-      .catch((err) => console.log(err));
-  };
-
-  useEffect(() => {
-    getPopular();
-  }, []);
-
   const classes = useStyles();
   return (
     <div>
@@ -48,19 +40,28 @@ function Homepage() {
             Most Popular Anime
           </Typography>
         </Grid>
-        {loading ? (
-          <CircularProgress className={classes.spinner} color="secondary" />
+
+        {popular ? (
+          <PopularCards Anime={popular} />
         ) : (
-          popular.map((anime, index) => (
-            <Grid item key={index} xs={12} md={6} lg={3}>
-              <PopularCard
-                name={anime.name}
-                img={anime.img}
-                rel={anime.release}
-              />
-            </Grid>
-          ))
+          <CircularProgress className={classes.spinner} color="secondary" />
         )}
+        <Grid xs={12}>
+          <Typography className={classes.title} variant="h5">
+            Most Recent Anime
+          </Typography>
+          {recent ? (
+            <RecentCards Anime={recent} />
+          ) : (
+            <CircularProgress className={classes.spinner} color="secondary" />
+          )}
+        </Grid>
+        <Grid xs={12}>
+          <Typography className={classes.title} variant="h5">
+            Schedule
+          </Typography>
+          <Schedule schedule={schedule} />
+        </Grid>
       </Grid>
     </div>
   );
