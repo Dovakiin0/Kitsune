@@ -13,15 +13,15 @@ import { PlayArrowOutlined } from "@material-ui/icons";
 
 const useStyles = makeStyles({
   root: {
-    maxWidth: 345,
+    maxWidth: 400,
     height: "100%",
   },
   media: {
-    height: 140,
+    height: 200,
   },
 });
 
-function RecentCard({ img, name, epi }) {
+function ScheduleCard({ img, name, epi, airing }) {
   const classes = useStyles();
   return (
     <Card className={classes.root}>
@@ -32,17 +32,17 @@ function RecentCard({ img, name, epi }) {
             {name}
           </Typography>
           <Typography variant="body2" color="textSecondary" component="p">
-            {epi}
+            Airing on: {airing}
           </Typography>
         </CardContent>
       </CardActionArea>
       <CardActions>
         <Button size="medium" color="default" endIcon={<PlayArrowOutlined />}>
-          Play
+          Episode {epi}
         </Button>
       </CardActions>
     </Card>
   );
 }
 
-export default RecentCard;
+export default ScheduleCard;

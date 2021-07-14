@@ -12,11 +12,11 @@ import { makeStyles } from "@material-ui/core/styles";
 
 const useStyles = makeStyles({
   root: {
-    maxWidth: 345,
+    maxWidth: 500,
     height: "100%",
   },
   media: {
-    height: 140,
+    height: 200,
   },
 });
 
@@ -24,7 +24,7 @@ function PopularCard({ img, name, rel }) {
   const classes = useStyles();
   return (
     <Card className={classes.root}>
-      <CardActionArea>
+      <CardActionArea style={{ height: "100%" }}>
         <CardMedia className={classes.media} image={img} title={name} />
         <CardContent>
           <Typography gutterBottom variant="h5" component="h2">
@@ -35,11 +35,6 @@ function PopularCard({ img, name, rel }) {
           </Typography>
         </CardContent>
       </CardActionArea>
-      {/* <CardActions>
-        <Button size="medium" color="default">
-          Share
-        </Button>
-      </CardActions> */}
     </Card>
   );
 }

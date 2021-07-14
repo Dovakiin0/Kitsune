@@ -2,7 +2,8 @@ import { ThemeProvider, createTheme, Paper } from "@material-ui/core";
 import { useState } from "react";
 import Homepage from "./pages/homepage";
 import Layout from "./components/layout";
-
+import Recent from "./pages/recent";
+import Schedule from "./pages/schedule";
 import { Route, Switch } from "react-router-dom";
 
 function App() {
@@ -24,6 +25,8 @@ function App() {
         <Layout onChange={handleChange}>
           <Switch>
             <Route exact path="/" component={Homepage} />
+            <Route exact path="/recent" component={Recent} />
+            <Route exact path="/schedule" component={Schedule} />
           </Switch>
         </Layout>
       </Paper>

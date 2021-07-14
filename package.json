@@ -23,6 +23,7 @@
   "homepage": "https://github.com/Dovakiin0/animeworldz#readme",
   "dependencies": {
     "@dovakiin0/anime-data": "^1.3.0",
+    "cors": "^2.8.5",
     "express": "^4.17.1"
   }
 }

@@ -11,7 +11,11 @@ import {
   Switch,
 } from "@material-ui/core";
 import { makeStyles } from "@material-ui/core/styles";
-import { HomeRounded, AccessTimeRounded } from "@material-ui/icons";
+import {
+  HomeRounded,
+  AccessTimeRounded,
+  PlayArrowRounded,
+} from "@material-ui/icons";
 import { useHistory, useLocation } from "react-router-dom";
 
 const drawerWidth = 240;
@@ -36,6 +40,7 @@ const useStyle = makeStyles((theme) => {
     },
     title: {
       padding: 15,
+      letterSpacing: "0.1rem",
     },
     appbar: {
       width: `calc(100% - ${drawerWidth}px)`,
@@ -65,6 +70,11 @@ function Layout({ onChange, children }) {
       text: "HomePage",
       icon: <HomeRounded />,
       path: "/",
+    },
+    {
+      text: "Recent Anime",
+      icon: <PlayArrowRounded />,
+      path: "/recent",
     },
     {
       text: "Schedule",

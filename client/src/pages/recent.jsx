@@ -6,10 +6,10 @@ import {
   CircularProgress,
 } from "@material-ui/core";
 import axios from "axios";
-import PopularCard from "../components/popularCard";
+import RecentCard from "../components/recentCard";
 
-function Homepage() {
-  const [popular, setPopular] = useState([]);
+function Recent() {
+  const [recent, setRecent] = useState([]);
   const [loading, setLoading] = useState(false);
 
   const useStyles = makeStyles({
@@ -25,12 +25,12 @@ function Homepage() {
 
   const getPopular = () => {
     axios
-      .get("http://localhost:3030/api/v1/anime/popular/1", {
+      .get("http://localhost:3030/api/v1/anime/recent/1", {
         onDownloadProgress: setLoading(true),
       })
       .then((res) => {
         setLoading(false);
-        setPopular(res.data);
+        setRecent(res.data);
       })
       .catch((err) => console.log(err));
   };
@@ -45,18 +45,18 @@ function Homepage() {
       <Grid container spacing={2}>
         <Grid xs={12}>
           <Typography className={classes.title} variant="h5">
-            Most Popular Anime
+            Recently Updated Anime
           </Typography>
         </Grid>
         {loading ? (
-          <CircularProgress className={classes.spinner} color="secondary" />
+          <CircularProgress className={classes.spinner} />
         ) : (
-          popular.map((anime, index) => (
+          recent.map((anime, index) => (
             <Grid item key={index} xs={12} md={6} lg={3}>
-              <PopularCard
+              <RecentCard
                 name={anime.name}
                 img={anime.img}
-                rel={anime.release}
+                epi={anime.recent_episode}
               />
             </Grid>
           ))
@@ -66,4 +66,4 @@ function Homepage() {
   );
 }
 
-export default Homepage;
+export default Recent;
