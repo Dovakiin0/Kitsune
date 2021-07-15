@@ -108,7 +108,9 @@ function Layout({ onChange, children }) {
               key={i}
               button
               onClick={() => history.push(menu.path)}
-              className={location.pathname == menu.path ? classes.active : null}
+              className={
+                location.pathname === menu.path ? classes.active : null
+              }
             >
               <ListItemIcon>{menu.icon}</ListItemIcon>
               <ListItemText primary={menu.text} />

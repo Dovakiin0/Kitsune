@@ -26,7 +26,7 @@ function Schedule({ schedule }) {
         aria-labelledby={`vertical-tab-${index}`}
         style={{ padding: "10px" }}
       >
-        {value == index && <h1>{children}</h1>}
+        {value === index && <h1>{children}</h1>}
       </div>
     );
   };

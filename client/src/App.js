@@ -1,7 +1,11 @@
 import { ThemeProvider, createTheme, Paper } from "@material-ui/core";
 import { useState, useEffect } from "react";
+
 import Homepage from "./pages/homepage";
 import Layout from "./components/layout";
+import WatchAnime from "./pages/WatchAnime";
+import About from "./pages/about";
+
 import { Route, Switch } from "react-router-dom";
 import axios from "axios";
 import {
@@ -54,6 +58,13 @@ function App() {
               <Layout>
                 <Switch>
                   <Route exact path="/" component={Homepage} />
+                  <Route exact path="/anime/:slug" component={WatchAnime} />
+                  <Route
+                    exact
+                    path="/anime/:slug/episode/:ep"
+                    component={WatchAnime}
+                  />
+                  <Route exact path="/about" component={About} />
                 </Switch>
               </Layout>
             </PopularAnimeContext.Provider>

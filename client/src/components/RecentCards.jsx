@@ -8,6 +8,8 @@ import {
 } from "@material-ui/core";
 import { PlayArrowOutlined } from "@material-ui/icons";
 import ModalAnime from "./ModalAnime";
+import axios from "axios";
+import { useHistory } from "react-router-dom";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -39,17 +41,45 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 function RecentCards({ Anime }) {
+  const history = useHistory();
   const classes = useStyles();
   const [selectedAnime, setSelectedAnime] = React.useState(null);
   const [openDialog, setOpenDialog] = React.useState(false);
 
   const handleOpen = (item) => {
-    setSelectedAnime(item);
+    getAnime(item.href);
     setOpenDialog(true);
+  };
+
+  const getAnime = (link) => {
+    axios
+      .post("http://localhost:3030/api/v1/anime", { uri: link })
+      .then((res) => {
+        setSelectedAnime(res.data);
+      })
+      .catch((err) => console.log(err));
+  };
+
+  const handleWatchClick = (slug) => {
+    setOpenDialog(false);
+    history.push({
+      pathname: `/anime/${slug}`,
+    });
   };
 
   const handleClose = () => {
     setOpenDialog(false);
+    setSelectedAnime(null);
+  };
+
+  const handleToEpisode = (item) => {
+    setOpenDialog(false);
+    history.push({
+      pathname: `/anime/${item.href.replace(
+        /\/category\//g,
+        ""
+      )}/episode/${item.recent_episode.replace(/Episode /g, "")}`,
+    });
   };
 
   return (
@@ -61,9 +91,12 @@ function RecentCards({ Anime }) {
               key={item.img}
               className={classes.img}
               style={{ height: "300px", padding: "12px" }}
-              onClick={() => handleOpen(item)}
             >
-              <img src={item.img} alt={item.name} />
+              <img
+                src={item.img}
+                alt={item.name}
+                onClick={() => handleOpen(item)}
+              />
               <ImageListItemBar
                 title={item.name}
                 subtitle={item.recent_episode}
@@ -72,18 +105,22 @@ function RecentCards({ Anime }) {
                   title: classes.title,
                 }}
                 actionIcon={
-                  <IconButton aria-label={`star ${item.name}`}>
+                  <IconButton
+                    aria-label={`star ${item.name}`}
+                    onClick={() => handleToEpisode(item)}
+                  >
                     <PlayArrowOutlined className={classes.title} />
                   </IconButton>
                 }
               />
             </ImageListItem>
           ))}
-          {/* <ModalAnime
+          <ModalAnime
             isOpen={openDialog}
-            handleClose={handleClose}
+            handleWatchClick={handleWatchClick}
             data={selectedAnime}
-          /> */}
+            handleClose={handleClose}
+          />
         </ImageList>
       ) : (
         <div style={{ height: 400 }} />

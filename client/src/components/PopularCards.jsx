@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React from "react";
 import { makeStyles } from "@material-ui/core/styles";
 import {
   ImageList,
@@ -9,6 +9,7 @@ import {
 import { PlayArrowOutlined } from "@material-ui/icons";
 import ModalAnime from "./ModalAnime";
 import axios from "axios";
+import { useHistory } from "react-router-dom";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -41,6 +42,7 @@ const useStyles = makeStyles((theme) => ({
 
 function PopularCards({ Anime }) {
   const classes = useStyles();
+  const history = useHistory();
 
   const [selectedAnime, setSelectedAnime] = React.useState(null);
   const [openDialog, setOpenDialog] = React.useState(false);
@@ -55,6 +57,13 @@ function PopularCards({ Anime }) {
     setSelectedAnime(null);
   };
 
+  const handleWatchClick = (slug) => {
+    setOpenDialog(false);
+    history.push({
+      pathname: `/anime/${slug}`,
+    });
+  };
+
   const getAnime = (link) => {
     axios
       .post("http://localhost:3030/api/v1/anime", { uri: link })
@@ -62,6 +71,13 @@ function PopularCards({ Anime }) {
         setSelectedAnime(res.data);
       })
       .catch((err) => console.log(err));
+  };
+
+  const handleToEpisode = (item) => {
+    setOpenDialog(false);
+    history.push({
+      pathname: `/anime/${item.link.replace(/\/category\//g, "")}`,
+    });
   };
 
   return (
@@ -73,9 +89,12 @@ function PopularCards({ Anime }) {
               key={item.img}
               className={classes.img}
               style={{ height: "300px", padding: "12px" }}
-              onClick={() => handleOpen(item)}
             >
-              <img src={item.img} alt={item.name} />
+              <img
+                src={item.img}
+                alt={item.name}
+                onClick={() => handleOpen(item)}
+              />
               <ImageListItemBar
                 title={item.name}
                 subtitle={item.release}
@@ -86,7 +105,7 @@ function PopularCards({ Anime }) {
                 actionIcon={
                   <IconButton
                     aria-label={`star ${item.name}`}
-                    onClick={() => handleOpen(item)}
+                    onClick={() => handleToEpisode(item)}
                   >
                     <PlayArrowOutlined className={classes.title} />
                   </IconButton>
@@ -97,8 +116,9 @@ function PopularCards({ Anime }) {
           {selectedAnime !== null ? (
             <ModalAnime
               isOpen={openDialog}
-              handleClose={handleClose}
+              handleWatchClick={handleWatchClick}
               data={selectedAnime}
+              handleClose={handleClose}
             />
           ) : (
             ""
