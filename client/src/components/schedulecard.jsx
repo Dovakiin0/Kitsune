@@ -36,25 +36,23 @@ function ScheduleCard({ Anime }) {
     <div className="root">
       <ImageList className={classes.imageList} cols={6}>
         {Anime.map((item) => (
-          <>
-            <ImageListItem
-              key={item.img}
-              style={{ height: 300, padding: "12px" }}
-            >
-              <img src={item.img} alt={item.name} />
-              <ImageListItemBar
-                title={item.title}
-                subtitle={`Airing: ${new Date(
-                  item.airing_time
-                ).toLocaleTimeString()}`}
-                classes={{
-                  root: classes.titleBar,
-                  title: classes.title,
-                }}
-                actionIcon={<Button>{`Ep ${item.episode}`}</Button>}
-              />
-            </ImageListItem>
-          </>
+          <ImageListItem
+            key={item.img}
+            style={{ height: 300, padding: "12px" }}
+          >
+            <img src={item.img} alt={item.name} />
+            <ImageListItemBar
+              title={item.title}
+              subtitle={`Airing: ${new Date(
+                item.airing_time
+              ).toLocaleTimeString()}`}
+              classes={{
+                root: classes.titleBar,
+                title: classes.title,
+              }}
+              actionIcon={<Button>{`Ep ${item.episode}`}</Button>}
+            />
+          </ImageListItem>
         ))}
       </ImageList>
     </div>

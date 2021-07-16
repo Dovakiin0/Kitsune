@@ -1,10 +1,5 @@
 import React, { useContext, useEffect, useState } from "react";
-import {
-  Typography,
-  Grid,
-  makeStyles,
-  CircularProgress,
-} from "@material-ui/core";
+import { Typography, Grid, makeStyles } from "@material-ui/core";
 import PopularCards from "../components/PopularCards";
 import RecentCards from "../components/RecentCards";
 import Schedule from "./schedule";
@@ -48,30 +43,20 @@ function Homepage() {
   const classes = useStyles();
   return (
     <div className={classes.root}>
-      <Grid container spacing={2}>
-        <Grid xs={12} className={classes.grids}>
+      <Grid item container spacing={2}>
+        <Grid item xs={12} className={classes.grids}>
           <Typography className={classes.title} variant="h5">
             Most Popular Anime
           </Typography>
-          {popular.length !== 0 ? (
-            ""
-          ) : (
-            <CircularProgress className={classes.spinner} color="secondary" />
-          )}
         </Grid>
         <PopularCards Anime={popular} />
-        <Grid xs={12} className={classes.grids}>
+        <Grid item xs={12} className={classes.grids}>
           <Typography className={classes.title} variant="h5">
             Most Recent Anime
           </Typography>
-          {recent.length !== 0 ? (
-            ""
-          ) : (
-            <CircularProgress className={classes.spinner} color="secondary" />
-          )}
         </Grid>
         <RecentCards Anime={recent} />
-        <Grid xs={12}>
+        <Grid item xs={12}>
           <Typography className={classes.title} variant="h5">
             Schedule
           </Typography>

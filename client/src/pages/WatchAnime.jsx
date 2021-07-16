@@ -55,6 +55,7 @@ const useStyles = makeStyles({
     width: "50vw",
     maxHeight: "400px",
     overflowY: "scroll",
+    padding: "5px",
   },
 
   episodeButton: {
@@ -112,7 +113,7 @@ function WatchAnime(props) {
 
   useEffect(() => {
     getEpisodes();
-  }, [ep]);
+  }, [slug, ep]);
 
   return (
     <Paper style={{ maxWidth: "100vw", maxHeight: "200vh" }}>
@@ -160,7 +161,7 @@ function WatchAnime(props) {
               url={links ? links[0].link : ""}
               sandbox="allow-same-origin allow-scripts allow-top-navigation"
               width="1200px"
-              height="700px"
+              height="680px"
               id="myId"
               className="myClassname"
               display="initial"
@@ -182,7 +183,7 @@ function WatchAnime(props) {
               >
                 Reload
               </a>{" "}
-              if the video is not loading
+              if the video does not loading
             </Typography>
           </div>
           <Divider />

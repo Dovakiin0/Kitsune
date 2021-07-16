@@ -19,7 +19,7 @@ export default function ModalAnime({
 
   return (
     <div>
-      {data ? (
+      {data !== null ? (
         <Dialog
           fullScreen={fullScreen}
           open={isOpen}
@@ -102,7 +102,7 @@ export default function ModalAnime({
           </DialogActions>
         </Dialog>
       ) : (
-        <CircularProgress />
+        ""
       )}
     </div>
   );

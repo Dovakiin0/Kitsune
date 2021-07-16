@@ -9,11 +9,14 @@ import {
   AppBar,
   Toolbar,
   Switch,
+  InputBase,
 } from "@material-ui/core";
-import { makeStyles } from "@material-ui/core/styles";
-import { HomeRounded, InfoRounded } from "@material-ui/icons";
+import { makeStyles, alpha } from "@material-ui/core/styles";
+import { HomeRounded, InfoRounded, SearchOutlined } from "@material-ui/icons";
 import { useHistory, useLocation } from "react-router-dom";
 import { DarkModeContext } from "../context/AnimeContext";
+import SearchList from "../components/searchList";
+import axios from "axios";
 
 const drawerWidth = 240;
 
@@ -50,15 +53,53 @@ const useStyles = makeStyles((theme) => {
       marginTop: "auto",
       textAlign: "center",
     },
+    search: {
+      position: "relative",
+      borderRadius: theme.shape.borderRadius,
+      backgroundColor: alpha(theme.palette.common.white, 0.15),
+      "&:hover": {
+        backgroundColor: alpha(theme.palette.common.white, 0.25),
+      },
+      marginLeft: 0,
+      width: "100%",
+      [theme.breakpoints.up("sm")]: {
+        marginLeft: theme.spacing(1),
+        width: "auto",
+      },
+    },
+    searchIcon: {
+      padding: theme.spacing(0, 2),
+      height: "100%",
+      position: "absolute",
+      pointerEvents: "none",
+      display: "flex",
+      alignItems: "center",
+      justifyContent: "center",
+    },
+    inputInput: {
+      padding: theme.spacing(1, 1, 1, 0),
+      // vertical padding + font size from searchIcon
+      paddingLeft: `calc(1em + ${theme.spacing(4)}px)`,
+      transition: theme.transitions.create("width"),
+      width: "100%",
+      [theme.breakpoints.up("sm")]: {
+        width: "12ch",
+        "&:focus": {
+          width: "20ch",
+        },
+      },
+    },
   };
 });
 
-function Layout({ onChange, children }) {
+function Layout({ children }) {
   const classes = useStyles();
   const history = useHistory();
   const location = useLocation();
+  const [searchResult, setSearchResult] = useState([]);
   const [time, setTime] = useState(new Date().toLocaleTimeString());
   const { darkMode, setDarkMode } = useContext(DarkModeContext);
+  const [keyword, setKeyword] = useState("");
 
   useEffect(() => {
     setInterval(() => {
@@ -83,11 +124,61 @@ function Layout({ onChange, children }) {
     setDarkMode(event.target.checked);
   };
 
+  const handleSearch = (event) => {
+    const { value } = event.target;
+    setKeyword(value);
+  };
+
+  const getSearchAnime = () => {
+    if (keyword) {
+      axios
+        .get(`/api/v1/anime/${keyword}`)
+        .then((response) => {
+          setSearchResult(response.data);
+        })
+        .catch((err) => console.log(err));
+    } else {
+      setSearchResult([]);
+    }
+  };
+
+  const handleResetKeyword = () => {
+    setKeyword("");
+  };
+
+  useEffect(() => {
+    let timer = setTimeout(() => getSearchAnime(), 1000);
+    return () => clearTimeout(timer);
+  }, [keyword]);
+
   return (
     <div className={classes.root}>
-      <AppBar className={classes.appbar} color="seconday" elevation={0}>
+      {searchResult.length !== 0 ? (
+        <SearchList
+          results={searchResult}
+          handleResetKeyword={handleResetKeyword}
+        />
+      ) : (
+        ""
+      )}
+      <AppBar className={classes.appbar} color="dafault">
         <Toolbar>
           <Typography className={classes.time}>{time}</Typography>
+          <div className={classes.search}>
+            <div className={classes.searchIcon}>
+              <SearchOutlined />
+            </div>
+            <InputBase
+              placeholder="Search…"
+              classes={{
+                root: classes.inputRoot,
+                input: classes.inputInput,
+              }}
+              inputProps={{ "aria-label": "search" }}
+              onChange={handleSearch}
+              value={keyword}
+            />
+          </div>
           <Switch checked={darkMode} onChange={handleSwitch} />
         </Toolbar>
       </AppBar>
