@@ -1,3 +1,4 @@
+# V2 has been Released [animeworldz](https://github.com/Dovakiin0/animeworldz)
 ![CI](https://github.com/Dovakiin0/animeworldz/actions/workflows/node.js.yml/badge.svg) ![Generic badge](https://img.shields.io/badge/Status-active-<COLOR>.svg)
 # animeworldz
 Anime Streaming App  
