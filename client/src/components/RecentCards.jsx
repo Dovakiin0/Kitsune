@@ -53,7 +53,7 @@ function RecentCards({ Anime }) {
 
   const getAnime = (link) => {
     axios
-      .post("http://localhost:3030/api/v1/anime", { uri: link })
+      .post("/api/v1/anime", { uri: link })
       .then((res) => {
         setSelectedAnime(res.data);
       })
@@ -75,10 +75,10 @@ function RecentCards({ Anime }) {
   const handleToEpisode = (item) => {
     setOpenDialog(false);
     history.push({
-      pathname: `/anime/${item.href.replace(
-        /\/category\//g,
-        ""
-      )}/episode/${item.recent_episode.replace(/Episode /g, "")}`,
+      pathname: `/anime/${item.href.replace(/\/category\//g, "")}`,
+      state: {
+        ep: item.recent_episode.replace(/Episode /g, ""),
+      },
     });
   };
 

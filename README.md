@@ -8,7 +8,7 @@ Major Changes:
 
 Also, checkout my package [@dovakiin0/anime-data](https://github.com/Dovakiin0/anime-data), which was used in backend api. 
 
-Demo will be live as soon as it is completed.
+The progress has been deployed [here](https://animewordlz.herokuapp.com)
 
 ## Contributing
 Issues will be opened frequently, be sure to watch for it or make your own request/feature.  

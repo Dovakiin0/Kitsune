@@ -66,7 +66,7 @@ function PopularCards({ Anime }) {
 
   const getAnime = (link) => {
     axios
-      .post("http://localhost:3030/api/v1/anime", { uri: link })
+      .post("/api/v1/anime", { uri: link })
       .then((res) => {
         setSelectedAnime(res.data);
       })

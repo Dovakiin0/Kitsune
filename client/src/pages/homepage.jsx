@@ -34,7 +34,7 @@ function Homepage() {
 
   const getRecent = () => {
     axios
-      .get("http://localhost:3030/api/v1/anime/recent/1", {})
+      .get("/api/v1/anime/recent/1", {})
       .then((res) => {
         setRecent(res.data);
       })

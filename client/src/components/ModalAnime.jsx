@@ -97,7 +97,7 @@ export default function ModalAnime({
               color="default"
               fullWidth
             >
-              Watch Episode
+              Start Watching
             </Button>
           </DialogActions>
         </Dialog>

@@ -59,11 +59,6 @@ function App() {
                 <Switch>
                   <Route exact path="/" component={Homepage} />
                   <Route exact path="/anime/:slug" component={WatchAnime} />
-                  <Route
-                    exact
-                    path="/anime/:slug/episode/:ep"
-                    component={WatchAnime}
-                  />
                   <Route exact path="/about" component={About} />
                 </Switch>
               </Layout>

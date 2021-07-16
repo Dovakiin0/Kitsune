@@ -1,7 +1,13 @@
 import React, { useState, useEffect } from "react";
 import { useParams } from "react-router-dom";
 import axios from "axios";
-import { CircularProgress, Typography, Paper } from "@material-ui/core";
+import {
+  CircularProgress,
+  Typography,
+  Paper,
+  Divider,
+  Button,
+} from "@material-ui/core";
 import { makeStyles } from "@material-ui/core/styles";
 import Iframe from "react-iframe";
 
@@ -43,21 +49,33 @@ const useStyles = makeStyles({
   episode: {
     textAlign: "center",
   },
+  epList: {
+    textAlign: "center",
+    marginLeft: "20%",
+    width: "50vw",
+    maxHeight: "400px",
+    overflowY: "scroll",
+  },
+
+  episodeButton: {
+    width: "120px",
+  },
 });
 
-function WatchAnime() {
+function WatchAnime(props) {
+  let [ep, setEp] = useState(1);
   const [animeInfo, setAnimeInfo] = useState();
   const [loading, setLoading] = useState(false);
-  const { slug, ep } = useParams();
+  const { slug } = useParams();
+  const [episodes, setEpisodes] = useState();
+  const [links, setLinks] = useState();
 
   const classes = useStyles();
-
-  if (ep) console.log(ep);
 
   const getAnime = () => {
     axios
       .post(
-        "http://localhost:3030/api/v1/anime",
+        "/api/v1/anime",
         { uri: "/category/" + slug },
         { onDownloadProgress: setLoading(true) }
       )
@@ -68,11 +86,33 @@ function WatchAnime() {
       .catch((err) => console.log(err));
   };
 
-  const getEpisodes = () => {};
+  const handleEpClick = (epi) => {
+    setEp(epi);
+  };
+
+  const getEpisodes = () => {
+    axios
+      .post("/api/v1/anime/episode", {
+        slug,
+        ep,
+      })
+      .then((episode) => {
+        setEpisodes(episode.data);
+        setLinks(episode.data.links);
+      })
+      .catch((err) => console.log(err));
+  };
 
   useEffect(() => {
     getAnime();
+    if (props.location.state) {
+      setEp(parseInt(props.location.state.ep));
+    }
   }, [slug]);
+
+  useEffect(() => {
+    getEpisodes();
+  }, [ep]);
 
   return (
     <Paper style={{ maxWidth: "100vw", maxHeight: "200vh" }}>
@@ -108,26 +148,65 @@ function WatchAnime() {
           ""
         )}
       </div>
-      <div className={classes.episode}>
-        <br />
-        <Typography variant="h4">Watch </Typography>
-        <br />
-        <Iframe
-          url="http://www.youtube.com/embed/xDMP3i36naA"
-          // sandbox={
-          //   "allow-forms allow-pointer-lock allow-same-origin allow-scripts allow-top-navigation"
-          // }
-          width="1000px"
-          height="600px"
-          id="myId"
-          className="myClassname"
-          display="initial"
-          position="relative"
-          styles={{
-            padding: "10px",
-          }}
-        />
-      </div>
+      {episodes ? (
+        <>
+          <div className={classes.episode}>
+            <br />
+            <Typography variant="h4">
+              Watch {episodes.name} Episode {episodes.episode}
+            </Typography>
+            <br />
+            <Iframe
+              url={links ? links[0].link : ""}
+              sandbox="allow-same-origin allow-scripts allow-top-navigation"
+              width="1200px"
+              height="700px"
+              id="myId"
+              className="myClassname"
+              display="initial"
+              position="relative"
+              frameBorder="0"
+              gesture="media"
+              allow="fullscreen"
+              scrolling="no"
+              styles={{
+                padding: "10px",
+              }}
+            />
+            <Typography>
+              Please{" "}
+              <a
+                href=""
+                onClick={() => window.location.reload()}
+                style={{ textDecoration: "None", color: "lightcoral" }}
+              >
+                Reload
+              </a>{" "}
+              if the video is not loading
+            </Typography>
+          </div>
+          <Divider />
+          <Typography variant="h4" style={{ textAlign: "center" }}>
+            Episodes
+          </Typography>
+          <div className={classes.epList}>
+            {animeInfo
+              ? [...Array(parseInt(animeInfo.episode_count))].map((e, i) => (
+                  <Button
+                    variant={ep === i + 1 ? "contained" : "outlined"}
+                    color={ep === i + 1 ? "secondary" : ""}
+                    className={classes.episodeButton}
+                    onClick={() => handleEpClick(i + 1)}
+                  >
+                    Episode {i + 1}
+                  </Button>
+                ))
+              : ""}
+          </div>
+        </>
+      ) : (
+        ""
+      )}
     </Paper>
   );
 }
