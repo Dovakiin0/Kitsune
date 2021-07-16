@@ -41,6 +41,9 @@ export default function SearchResultCard({ results, handleResetKeyword }) {
   const handleClick = (link) => {
     history.push({
       pathname: `/anime/${link.replace(/\/category\//g, "")}`,
+      state: {
+        ep: 1,
+      },
     });
     handleResetKeyword();
   };
