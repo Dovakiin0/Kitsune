@@ -33,7 +33,7 @@ function App() {
 
   const getPopular = () => {
     axios
-      .get("http://localhost:3030/api/v1/anime/popular/1", {})
+      .get("/api/v1/anime/popular/1", {})
       .then((res) => {
         setPopular(res.data);
       })
@@ -42,7 +42,7 @@ function App() {
 
   const getSchedule = () => {
     axios
-      .post("http://localhost:3030/api/v1/schedule", { day: "" })
+      .post("/api/v1/schedule", { day: "" })
       .then((sche) => {
         setSchedule(sche.data);
       })
