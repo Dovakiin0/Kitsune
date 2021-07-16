@@ -12,7 +12,7 @@ import {
   InputBase,
 } from "@material-ui/core";
 import { makeStyles, alpha } from "@material-ui/core/styles";
-import { HomeRounded, InfoRounded, SearchOutlined } from "@material-ui/icons";
+import { HomeRounded, ImageRounded, SearchOutlined } from "@material-ui/icons";
 import { useHistory, useLocation } from "react-router-dom";
 import { DarkModeContext } from "../context/AnimeContext";
 import SearchList from "../components/searchList";
@@ -114,9 +114,9 @@ function Layout({ children }) {
       path: "/",
     },
     {
-      text: "About",
-      icon: <InfoRounded />,
-      path: "/about",
+      text: "Waifu Pics",
+      icon: <ImageRounded />,
+      path: "/waifu",
     },
   ];
 
@@ -153,7 +153,7 @@ function Layout({ children }) {
 
   return (
     <div className={classes.root}>
-      {searchResult.length !== 0 ? (
+      {keyword !== "" ? (
         <SearchList
           results={searchResult}
           handleResetKeyword={handleResetKeyword}

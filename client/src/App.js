@@ -4,7 +4,7 @@ import { useState, useEffect } from "react";
 import Homepage from "./pages/homepage";
 import Layout from "./components/layout";
 import WatchAnime from "./pages/WatchAnime";
-import About from "./pages/about";
+import Waifu from "./pages/Waifu";
 
 import { Route, Switch } from "react-router-dom";
 import axios from "axios";
@@ -59,7 +59,7 @@ function App() {
                 <Switch>
                   <Route exact path="/" component={Homepage} />
                   <Route exact path="/anime/:slug" component={WatchAnime} />
-                  <Route exact path="/about" component={About} />
+                  <Route exact path="/waifu" component={Waifu} />
                 </Switch>
               </Layout>
             </PopularAnimeContext.Provider>

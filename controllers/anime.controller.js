@@ -44,7 +44,6 @@ module.exports = {
       });
   },
 };
-
 // random: (req, res) => {
 //   try {
 //     axios

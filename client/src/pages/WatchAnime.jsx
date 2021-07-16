@@ -57,9 +57,13 @@ const useStyles = makeStyles({
     overflowY: "scroll",
     padding: "5px",
   },
-
   episodeButton: {
     width: "120px",
+  },
+  spinner: {
+    position: "absolute",
+    left: "45%",
+    top: "50%",
   },
 });
 
@@ -119,7 +123,7 @@ function WatchAnime(props) {
     <Paper style={{ maxWidth: "100vw", maxHeight: "200vh" }}>
       <div className={classes.container}>
         {loading ? (
-          <CircularProgress style={{ margin: "auto" }} color="secondary" />
+          <CircularProgress className={classes.spinner} color="secondary" />
         ) : animeInfo ? (
           <>
             <img className={classes.image} src={animeInfo.img} />
