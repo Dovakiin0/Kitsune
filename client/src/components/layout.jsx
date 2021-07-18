@@ -10,9 +10,18 @@ import {
   Toolbar,
   Switch,
   InputBase,
+  CssBaseline,
+  Divider,
+  Hidden,
+  IconButton,
 } from "@material-ui/core";
-import { makeStyles, alpha } from "@material-ui/core/styles";
-import { HomeRounded, ImageRounded, SearchOutlined } from "@material-ui/icons";
+import { makeStyles, alpha, useTheme } from "@material-ui/core/styles";
+import {
+  HomeRounded,
+  ImageRounded,
+  SearchOutlined,
+  MenuBookRounded,
+} from "@material-ui/icons";
 import { useHistory, useLocation } from "react-router-dom";
 import { DarkModeContext } from "../context/AnimeContext";
 import SearchList from "../components/searchList";
@@ -25,12 +34,38 @@ const useStyles = makeStyles((theme) => {
     root: {
       display: "flex",
     },
+    drawer: {
+      [theme.breakpoints.up("sm")]: {
+        width: drawerWidth,
+        flexShrink: 0,
+      },
+    },
+    appBar: {
+      [theme.breakpoints.up("sm")]: {
+        width: `calc(100% - ${drawerWidth}px)`,
+        marginLeft: drawerWidth,
+      },
+    },
+    menuButton: {
+      marginRight: theme.spacing(2),
+      [theme.breakpoints.up("sm")]: {
+        display: "none",
+      },
+    },
+    // necessary for content to be below app bar
+    toolbar: theme.mixins.toolbar,
     drawerPaper: {
       width: drawerWidth,
     },
+    content: {
+      flexGrow: 1,
+      padding: theme.spacing(3),
+    },
     page: {
-      width: "100%",
-      padding: 10,
+      [theme.breakpoints.down("xs")]: {
+        width: `100%`,
+      },
+      width: `calc(100% - ${drawerWidth}px)`,
     },
     drawer: {
       width: drawerWidth,
@@ -45,13 +80,15 @@ const useStyles = makeStyles((theme) => {
     appbar: {
       width: `calc(100% - ${drawerWidth}px)`,
     },
-    toolbar: theme.mixins.toolbar,
     time: {
       flexGrow: 1,
+      [theme.breakpoints.down("xs")]: {
+        display: "none",
+      },
     },
     footer: {
-      marginTop: "auto",
-      textAlign: "center",
+      position: "absolute",
+      bottom: 0,
     },
     search: {
       position: "relative",
@@ -92,7 +129,8 @@ const useStyles = makeStyles((theme) => {
   };
 });
 
-function Layout({ children }) {
+function Layout({ window, children }) {
+  const theme = useTheme();
   const classes = useStyles();
   const history = useHistory();
   const location = useLocation();
@@ -100,6 +138,7 @@ function Layout({ children }) {
   const [time, setTime] = useState(new Date().toLocaleTimeString());
   const { darkMode, setDarkMode } = useContext(DarkModeContext);
   const [keyword, setKeyword] = useState("");
+  const [mobileOpen, setMobileOpen] = React.useState(false);
 
   useEffect(() => {
     setInterval(() => {
@@ -119,6 +158,33 @@ function Layout({ children }) {
       path: "/waifu",
     },
   ];
+
+  const drawer = (
+    <div>
+      <div>
+        <Typography variant="h5" className={classes.title}>
+          ANIMEWORLD-Z
+        </Typography>
+      </div>
+      <Divider />
+      <List>
+        {menuItems.map((menu, i) => (
+          <ListItem
+            key={i}
+            button
+            onClick={() => history.push(menu.path)}
+            className={location.pathname === menu.path ? classes.active : null}
+          >
+            <ListItemIcon>{menu.icon}</ListItemIcon>
+            <ListItemText primary={menu.text} />
+          </ListItem>
+        ))}
+      </List>
+      <div className={classes.footer}>
+        <Typography variant="h6">v2.0.0</Typography>
+      </div>
+    </div>
+  );
 
   const handleSwitch = (event) => {
     setDarkMode(event.target.checked);
@@ -142,6 +208,10 @@ function Layout({ children }) {
     }
   };
 
+  const handleDrawerToggle = () => {
+    setMobileOpen(!mobileOpen);
+  };
+
   const handleResetKeyword = () => {
     setKeyword("");
   };
@@ -151,8 +221,12 @@ function Layout({ children }) {
     return () => clearTimeout(timer);
   }, [keyword]);
 
+  const container =
+    window !== undefined ? () => window().document.body : undefined;
+
   return (
     <div className={classes.root}>
+      <CssBaseline />
       {keyword !== "" ? (
         <SearchList
           results={searchResult}
@@ -161,8 +235,17 @@ function Layout({ children }) {
       ) : (
         ""
       )}
-      <AppBar className={classes.appbar} color="dafault">
+      <AppBar className={classes.appBar} color="dafault">
         <Toolbar>
+          <IconButton
+            color="inherit"
+            aria-label="open drawer"
+            edge="start"
+            onClick={handleDrawerToggle}
+            className={classes.menuButton}
+          >
+            <MenuBookRounded />
+          </IconButton>
           <Typography className={classes.time}>{time}</Typography>
           <div className={classes.search}>
             <div className={classes.searchIcon}>
@@ -182,36 +265,37 @@ function Layout({ children }) {
           <Switch checked={darkMode} onChange={handleSwitch} />
         </Toolbar>
       </AppBar>
-      <Drawer
-        variant="permanent"
-        anchor="left"
-        className={classes.drawer}
-        classes={{ paper: classes.drawerPaper }}
-      >
-        <div>
-          <Typography variant="h5" className={classes.title}>
-            ANIMEWORLD-Z
-          </Typography>
-        </div>
-        <List>
-          {menuItems.map((menu, i) => (
-            <ListItem
-              key={i}
-              button
-              onClick={() => history.push(menu.path)}
-              className={
-                location.pathname === menu.path ? classes.active : null
-              }
-            >
-              <ListItemIcon>{menu.icon}</ListItemIcon>
-              <ListItemText primary={menu.text} />
-            </ListItem>
-          ))}
-        </List>
-        <div className={classes.footer}>
-          <Typography variant="h6">v2.0.0</Typography>
-        </div>
-      </Drawer>
+      <nav className={classes.drawer}>
+        {/* The implementation can be swapped with js to avoid SEO duplication of links. */}
+        <Hidden smUp implementation="css">
+          <Drawer
+            container={container}
+            variant="temporary"
+            anchor={theme.direction === "rtl" ? "right" : "left"}
+            open={mobileOpen}
+            onClose={handleDrawerToggle}
+            classes={{
+              paper: classes.drawerPaper,
+            }}
+            ModalProps={{
+              keepMounted: true, // Better open performance on mobile.
+            }}
+          >
+            {drawer}
+          </Drawer>
+        </Hidden>
+        <Hidden xsDown implementation="css">
+          <Drawer
+            classes={{
+              paper: classes.drawerPaper,
+            }}
+            variant="permanent"
+            open
+          >
+            {drawer}
+          </Drawer>
+        </Hidden>
+      </nav>
       <div className={classes.page}>
         <div className={classes.toolbar}></div>
         {children}

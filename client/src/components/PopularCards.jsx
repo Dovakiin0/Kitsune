@@ -1,5 +1,6 @@
 import React from "react";
-import { makeStyles } from "@material-ui/core/styles";
+import { makeStyles, useTheme } from "@material-ui/core/styles";
+import useMediaQuery from "@material-ui/core/useMediaQuery";
 import {
   ImageList,
   ImageListItem,
@@ -18,6 +19,7 @@ const useStyles = makeStyles((theme) => ({
     justifyContent: "space-around",
     overflow: "hidden",
     backgroundColor: theme.palette.background.paper,
+    height: "330px",
   },
   imageList: {
     flexWrap: "nowrap",
@@ -41,6 +43,22 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 function PopularCards({ Anime }) {
+  const theme = useTheme();
+  const two_cards = useMediaQuery(theme.breakpoints.down("xs"));
+  const three_cards = useMediaQuery(theme.breakpoints.down("sm"));
+  const four_cards = useMediaQuery(theme.breakpoints.down("md"));
+
+  let temp_col;
+  if (two_cards) {
+    temp_col = 2;
+  } else if (three_cards) {
+    temp_col = 3;
+  } else if (four_cards) {
+    temp_col = 4;
+  } else {
+    temp_col = 6;
+  }
+
   const classes = useStyles();
   const history = useHistory();
 
@@ -81,9 +99,9 @@ function PopularCards({ Anime }) {
   };
 
   return (
-    <div className={classes.root} style={{ height: 330 }}>
+    <div className={classes.root}>
       {Anime.length !== 0 ? (
-        <ImageList className={classes.imageList} cols={6}>
+        <ImageList className={classes.imageList} cols={temp_col}>
           {Anime.map((item) => (
             <ImageListItem
               key={item.img}
@@ -103,10 +121,7 @@ function PopularCards({ Anime }) {
                   title: classes.title,
                 }}
                 actionIcon={
-                  <IconButton
-                    aria-label={`star ${item.name}`}
-                    onClick={() => handleToEpisode(item)}
-                  >
+                  <IconButton onClick={() => handleToEpisode(item)}>
                     <PlayArrowOutlined className={classes.title} />
                   </IconButton>
                 }

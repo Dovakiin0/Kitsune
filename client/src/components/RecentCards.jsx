@@ -1,5 +1,6 @@
 import React from "react";
-import { makeStyles } from "@material-ui/core/styles";
+import { makeStyles, useTheme } from "@material-ui/core/styles";
+import useMediaQuery from "@material-ui/core/useMediaQuery";
 import {
   ImageList,
   ImageListItem,
@@ -41,10 +42,26 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 function RecentCards({ Anime }) {
+  const theme = useTheme();
   const history = useHistory();
   const classes = useStyles();
   const [selectedAnime, setSelectedAnime] = React.useState(null);
   const [openDialog, setOpenDialog] = React.useState(false);
+
+  const two_cards = useMediaQuery(theme.breakpoints.down("xs"));
+  const three_cards = useMediaQuery(theme.breakpoints.down("sm"));
+  const four_cards = useMediaQuery(theme.breakpoints.down("md"));
+
+  let temp_col;
+  if (two_cards) {
+    temp_col = 2;
+  } else if (three_cards) {
+    temp_col = 3;
+  } else if (four_cards) {
+    temp_col = 4;
+  } else {
+    temp_col = 6;
+  }
 
   const handleOpen = (item) => {
     getAnime(item.href);
@@ -85,7 +102,7 @@ function RecentCards({ Anime }) {
   return (
     <div className={classes.root} style={{ height: 330 }}>
       {Anime.length !== 0 ? (
-        <ImageList className={classes.imageList} cols={6}>
+        <ImageList className={classes.imageList} cols={temp_col}>
           {Anime.map((item) => (
             <ImageListItem
               key={item.img}

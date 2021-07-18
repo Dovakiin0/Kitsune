@@ -7,7 +7,6 @@ function Schedule({ schedule }) {
 
   const useStyles = makeStyles((theme) => ({
     root: {
-      flexGrow: 1,
       backgroundColor: theme.palette.background.paper,
     },
   }));
@@ -35,7 +34,12 @@ function Schedule({ schedule }) {
 
   return (
     <div className={classes.root}>
-      <Tabs value={tab} onChange={handleChange}>
+      <Tabs
+        value={tab}
+        onChange={handleChange}
+        variant="scrollable"
+        scrollButtons="auto"
+      >
         <Tab label="Sunday" />
         <Tab label="Monday" />
         <Tab label="Tuesday" />

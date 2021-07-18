@@ -1,12 +1,24 @@
 import React from "react";
-import { Button, CircularProgress } from "@material-ui/core";
+import { Button, IconButton } from "@material-ui/core";
 import Dialog from "@material-ui/core/Dialog";
 import DialogActions from "@material-ui/core/DialogActions";
 import DialogContent from "@material-ui/core/DialogContent";
 import DialogContentText from "@material-ui/core/DialogContentText";
 import DialogTitle from "@material-ui/core/DialogTitle";
 import useMediaQuery from "@material-ui/core/useMediaQuery";
-import { useTheme } from "@material-ui/core/styles";
+import { useTheme, makeStyles } from "@material-ui/core/styles";
+import { CloseRounded } from "@material-ui/icons";
+
+const useStyles = makeStyles((theme) => {
+  return {
+    closeButton: {
+      position: "absolute",
+      right: theme.spacing(1),
+      top: theme.spacing(1),
+      color: "#e6e6e6",
+    },
+  };
+});
 
 export default function ModalAnime({
   isOpen,
@@ -15,6 +27,7 @@ export default function ModalAnime({
   data,
 }) {
   const theme = useTheme();
+  const classes = useStyles();
   const fullScreen = useMediaQuery(theme.breakpoints.down("sm"));
 
   return (
@@ -34,7 +47,16 @@ export default function ModalAnime({
             },
           }}
         >
-          <DialogTitle id="responsive-dialog-title">{data.title}</DialogTitle>
+          <DialogTitle id="responsive-dialog-title">
+            {data.title}
+            <IconButton
+              aria-label="close"
+              className={classes.closeButton}
+              onClick={handleClose}
+            >
+              <CloseRounded />
+            </IconButton>
+          </DialogTitle>
           <DialogContent>
             <DialogContentText
               style={{ fontWeight: "bolder", color: "#e6e6e6" }}

@@ -11,60 +11,80 @@ import {
 import { makeStyles } from "@material-ui/core/styles";
 import Iframe from "react-iframe";
 
-const useStyles = makeStyles({
-  container: {
-    position: "relative",
-    height: "400px",
-    maxWidth: "100vw",
-  },
-  image: {
-    position: "absolute",
-    marginRight: "auto",
-    width: "100%",
-    maxHeight: "100%",
-    filter: "blur(90px)",
-  },
-  animeInfoCover: {
-    position: "absolute",
-    width: "70%",
-  },
-  cover: {
-    position: "absolute",
-    maxHeight: "350px",
-    maxWidth: "450px",
-    marginTop: "30px",
-    marginLeft: "17%",
-    objectFit: "cover",
-  },
-  title: {
-    position: "absolute",
-    marginLeft: "30%",
-    marginTop: "40px",
-  },
-  detail: {
-    position: "absolute",
-    marginLeft: "30%",
-    marginTop: "70px",
-  },
-  episode: {
-    textAlign: "center",
-  },
-  epList: {
-    textAlign: "center",
-    marginLeft: "20%",
-    width: "50vw",
-    maxHeight: "400px",
-    overflowY: "scroll",
-    padding: "5px",
-  },
-  episodeButton: {
-    width: "120px",
-  },
-  spinner: {
-    position: "absolute",
-    left: "45%",
-    top: "50%",
-  },
+const useStyles = makeStyles((theme) => {
+  return {
+    container: {
+      // position: "relative",
+      // height: "400px",
+      // maxWidth: "100vw",
+    },
+    detailCover: {
+      [theme.breakpoints.up("md")]: {
+        display: "flex",
+        flexDirection: "row",
+        textAlign: "left",
+      },
+      alignItems: "center",
+      display: "flex",
+      flexDirection: "column",
+      textAlign: "center",
+    },
+    image: {
+      position: "absolute",
+      marginRight: "auto",
+      width: "100%",
+      maxHeight: "100%",
+      filter: "blur(90px)",
+    },
+    animeInfoCover: {
+      width: "70%",
+    },
+    cover: {
+      [theme.breakpoints.down("sm")]: {
+        width: "100%",
+      },
+      objectFit: "cover",
+      filter: "blur(0px)",
+      padding: "20px",
+    },
+    title: {
+      filter: "blur(0px)",
+    },
+    detail: {
+      filter: "blur(0px)",
+    },
+    episode: {
+      filter: "blur(0px)",
+      textAlign: "center",
+    },
+    frame: {
+      [theme.breakpoints.down("sm")]: {
+        width: "420px",
+        height: "290px",
+      },
+    },
+    epList: {
+      filter: "blur(0px)",
+      marginLeft: "20%",
+      width: "50vw",
+      maxHeight: "400px",
+      overflowY: "scroll",
+      padding: "5px",
+    },
+    episodeButton: {
+      [theme.breakpoints.down("xs")]: {
+        width: "100%",
+      },
+      filter: "blur(0px)",
+      width: "120px",
+    },
+    spinner: {
+      filter: "blur(0px)",
+      position: "absolute",
+      left: "45%",
+      top: "50%",
+    },
+  };
 });
 
 function WatchAnime(props) {
@@ -121,33 +141,39 @@ function WatchAnime(props) {
 
   return (
     <Paper style={{ maxWidth: "100vw", maxHeight: "200vh" }}>
-      <div className={classes.container}>
+      <div>
         {loading ? (
           <CircularProgress className={classes.spinner} color="secondary" />
         ) : animeInfo ? (
           <>
             <img className={classes.image} src={animeInfo.img} />
-            <div className={classes.animeInfoCover}>
-              <img className={classes.cover} src={animeInfo.img} />
+            <div className={classes.detailCover}>
+              {/* left */}
+              <div className={classes.animeInfoCover}>
+                <img className={classes.cover} src={animeInfo.img} />
+              </div>
+              {/* right */}
+              <div>
+                <Typography variant="h5" className={classes.title}>
+                  {animeInfo.title}
+                </Typography>
+                <Typography className={classes.detail}>
+                  <span style={{ fontStyle: "italic" }}>
+                    <span style={{ fontWeight: "bold" }}>Other Names:</span>
+                    {animeInfo.other_name} <br />
+                  </span>
+                  {animeInfo.plot_summary} <br />
+                  <span style={{ fontWeight: "bold" }}>Genre: </span>
+                  {animeInfo.genre.join(", ")} <br />
+                  <span style={{ fontWeight: "bold" }}>Released: </span>
+                  {animeInfo.released} <br />
+                  <span style={{ fontWeight: "bold" }}>Status: </span>
+                  {animeInfo.status} <br />
+                  <span style={{ fontWeight: "bold" }}>Type: </span>
+                  {animeInfo.type} <br />
+                </Typography>
+              </div>
             </div>
-            <Typography variant="h5" className={classes.title}>
-              {animeInfo.title}
-            </Typography>
-            <Typography className={classes.detail}>
-              <span style={{ fontStyle: "italic" }}>
-                <span style={{ fontWeight: "bold" }}>Other Names:</span>
-                {animeInfo.other_name} <br />
-              </span>
-              {animeInfo.plot_summary} <br />
-              <span style={{ fontWeight: "bold" }}>Genre: </span>
-              {animeInfo.genre.join(", ")} <br />
-              <span style={{ fontWeight: "bold" }}>Released: </span>
-              {animeInfo.released} <br />
-              <span style={{ fontWeight: "bold" }}>Status: </span>
-              {animeInfo.status} <br />
-              <span style={{ fontWeight: "bold" }}>Type: </span>
-              {animeInfo.type} <br />
-            </Typography>
           </>
         ) : (
           ""
@@ -166,10 +192,9 @@ function WatchAnime(props) {
               sandbox="allow-same-origin allow-scripts allow-top-navigation"
               width="1200px"
               height="680px"
-              id="myId"
-              className="myClassname"
               display="initial"
               position="relative"
+              className={classes.frame}
               frameBorder="0"
               gesture="media"
               allow="fullscreen"

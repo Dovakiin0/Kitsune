@@ -9,6 +9,10 @@ const useStyles = makeStyles((theme) => {
       maxHeight: "400px",
       maxWidth: "500px",
       position: "fixed",
+      [theme.breakpoints.down("xs")]: {
+        right: 10,
+        top: 60,
+      },
       right: 80,
       zIndex: 100,
       top: 70,
