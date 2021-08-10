@@ -3,7 +3,7 @@ now comes with Complete overhaul.
 
 ## Now ported to Mobile
 check out [animeworldz-mobile](https://github.com/Dovakiin0/animeworldz-mobile)  
-Download [Here](https://github.com/Dovakiin0/animeworldz-mobile/releases/tag/2.0.0)
+Download [Here](https://github.com/Dovakiin0/animeworldz-mobile/releases/download/2.0.0/animeworldz-signed.apk)
 
 Major Changes:
  - Complete new Web Design.
