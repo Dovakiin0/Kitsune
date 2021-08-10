@@ -1,6 +1,9 @@
 # Animeworldz v2.0
 now comes with Complete overhaul.
 
+## Now ported to Mobile
+check out [animeworldz-mobile](https://github.com/Dovakiin0/animeworldz-mobile)
+
 Major Changes:
  - Complete new Web Design.
  - More Sources to watch episode.
