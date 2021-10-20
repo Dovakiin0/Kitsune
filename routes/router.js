@@ -14,7 +14,7 @@ module.exports = (app) => {
   app.use(cors());
   app.use(express.urlencoded({ extended: false }));
 
-  app.use("/api/v1/anime", cache("5 minutes"), anime);
+  app.use("/api/v1/anime", anime);
   app.use("/api/v1/genre", cache("5 minutes"), genre);
   app.use("/api/v1/schedule", cache("5 minutes"), schedule);
 };
