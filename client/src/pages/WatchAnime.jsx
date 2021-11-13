@@ -22,8 +22,10 @@ const useStyles = makeStyles((theme) => {
       [theme.breakpoints.up("md")]: {
         display: "flex",
         flexDirection: "row",
+        justifyContent: "center",
         textAlign: "left",
       },
+      justifyContent: "space-around",
       alignItems: "center",
       display: "flex",
       flexDirection: "column",
@@ -33,11 +35,12 @@ const useStyles = makeStyles((theme) => {
       position: "absolute",
       marginRight: "auto",
       width: "100%",
-      maxHeight: "100%",
+      maxHeight: "50%",
       filter: "blur(90px)",
     },
     animeInfoCover: {
       width: "70%",
+      height: "500px",
     },
     cover: {
       [theme.breakpoints.down("sm")]: {
@@ -46,6 +49,7 @@ const useStyles = makeStyles((theme) => {
       objectFit: "cover",
       filter: "blur(0px)",
       padding: "20px",
+      height: "100%",
     },
     title: {
       filter: "blur(0px)",
@@ -189,7 +193,7 @@ function WatchAnime(props) {
             <br />
             <Iframe
               url={links ? links[0].link : ""}
-              sandbox="allow-same-origin allow-scripts allow-top-navigation"
+              sandbox="allow-scripts allow-top-navigation"
               width="1200px"
               height="680px"
               display="initial"

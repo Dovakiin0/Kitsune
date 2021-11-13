@@ -89,6 +89,7 @@ const useStyles = makeStyles((theme) => {
     footer: {
       position: "absolute",
       bottom: 0,
+      left: "40%",
     },
     search: {
       position: "relative",
@@ -181,7 +182,9 @@ function Layout({ window, children }) {
         ))}
       </List>
       <div className={classes.footer}>
-        <Typography variant="h6">v2.0.0</Typography>
+        <Typography variant="h6" className={classes.version}>
+          v2.1
+        </Typography>
       </div>
     </div>
   );
