@@ -193,7 +193,7 @@ function WatchAnime(props) {
             <br />
             <Iframe
               url={links ? links[0].link : ""}
-              sandbox="allow-scripts allow-top-navigation"
+              // sandbox="allow-scripts allow-top-navigation"
               width="1200px"
               height="680px"
               display="initial"
