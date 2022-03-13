@@ -1,6 +1,0 @@
-POST http://localhost:3030/api/v1/anime/episode-fix
-Content-Type: application/json
-
-{
-    "slug": "grand-blue"
-}
