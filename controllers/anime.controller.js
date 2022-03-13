@@ -12,6 +12,15 @@ module.exports = {
         res.status(400).send(err);
       });
   },
+
+  getEpisodeFix: async (req, res) => {
+    Anime.getEpisodeFix(req.body.slug)
+      .then((episodes) => {
+        res.status(200).send(episodes);
+      })
+      .catch((err) => res.status(400).send(err));
+  },
+
   getRecent: async (req, res) => {
     Anime.getRecent(req.params.page)
       .then((animes) => res.status(200).send(animes))

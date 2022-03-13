@@ -24,7 +24,7 @@
   },
   "homepage": "https://github.com/Dovakiin0/animeworldz#readme",
   "dependencies": {
-    "@dovakiin0/anime-data": "^1.5.1",
+    "@dovakiin0/anime-data": "^1.6.3",
     "apicache": "^1.6.2",
     "cors": "^2.8.5",
     "express": "^4.17.1",
