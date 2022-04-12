@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import axios from "axios";
 import { makeStyles } from "@material-ui/core/styles";
 import { Fab, Select, MenuItem } from "@material-ui/core";
@@ -20,6 +20,7 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 function Waifu() {
+  const listInnerRef = useRef(null);
   const [picsList, setPicsList] = useState([]);
   const [refreshKey, setRefreshKey] = useState(0);
   const [keyword, setKeyword] = useState("waifu");
@@ -41,8 +42,8 @@ function Waifu() {
     picsList.files.map((img) => {
       temp.push({
         src: img,
-        width: Math.floor(Math.random() * 6) + 5,
-        height: Math.floor(Math.random() * 6) + 4,
+        width: 4,
+        height: 4,
       });
     });
   }
@@ -51,8 +52,17 @@ function Waifu() {
     setKeyword(event.target.value);
   };
 
+  const onScroll = () => {
+    if (listInnerRef.current) {
+      const { scrollTop, scrollHeight, clientHeight } = listInnerRef.current;
+      if (scrollTop + clientHeight === scrollHeight) {
+        console.log("reached bottom");
+      }
+    }
+  };
+
   return (
-    <div className={classes.root}>
+    <div className={classes.root} ref={listInnerRef} onScroll={onScroll}>
       <Gallery photos={temp ? temp : ""} />
       <Select
         value={keyword}
