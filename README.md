@@ -8,7 +8,7 @@ now comes with Complete overhaul.
 
 ## Now ported to Mobile
 
-check out [animeworldz-mobile](https://github.com/Dovakiin0/animeworldz-mobile)  
+check out [animeworldz-mobile](https://github.com/Dovakiin0/animeworldz-mobile) for ad-free experience on mobile  
 Download [Here](https://github.com/Dovakiin0/animeworldz-mobile/releases/download/2.1.0/animeworldz.apk)
 
 Major Changes:
