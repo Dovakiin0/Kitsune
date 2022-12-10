@@ -15,10 +15,7 @@ Major Changes:
 
 Also, checkout my package [@dovakiin0/anime-data](https://github.com/Dovakiin0/anime-data), which was used in backend api.
 
-The progress has been deployed [here](https://animeworldz.herokuapp.com)
-
-Also, checkout the discord server if you ever want to reach out or discuss something  
-https://discord.gg/RNADXBTvcx
+The progress has been deployed [here](https://animeworldz.onrender.com)
 
 ## Contributing
 
