@@ -3,6 +3,7 @@ const nextConfig = {
   experimental: {
     appDir: true,
   },
-}
+  images: {},
+};
 
-module.exports = nextConfig
+module.exports = nextConfig;
