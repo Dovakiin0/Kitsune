@@ -16,12 +16,15 @@ export default function RootLayout({
 }) {
   return (
     <html data-theme="dracula" lang="en" className={roboto.className}>
-      <body className="lg:m-5">
-        <div className="lg:flex items-center bg-base-100">
+      <body>
+        <div className="lg:flex mb-3 lg:mb-0 items-center bg-base-200 shadow-md sticky top-0 z-50">
           <div className="flex-1 justify-between items-center">
             <div className="flex items-center">
               <Image src="/icon.png" alt="logo" width="100" height="100" />
-              <a className="btn btn-ghost font-extrabold text-3xl text-transparent bg-clip-text bg-gradient-to-r from-gray-200 to-pink-600 tracking-wide">
+              <a
+                href="/"
+                className="btn btn-ghost font-extrabold text-3xl text-transparent bg-clip-text bg-gradient-to-r from-gray-200 to-pink-600 tracking-wide"
+              >
                 KITSUNE
               </a>
             </div>
