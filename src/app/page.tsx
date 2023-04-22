@@ -1,22 +1,10 @@
 import AnimeCard from "@/components/AnimeCard";
 import { TRecentAnime, TPopularAnime } from "@/@types/AnimeType";
 import Carousel from "@/components/Carousel";
-
-async function getRecent() {
-  const data = await fetch(
-    "https://api.consumet.org/anime/gogoanime/recent-episodes"
-  );
-  return data.json();
-}
-
-async function getPopular() {
-  const data = await fetch(
-    "https://api.consumet.org/anime/gogoanime/top-airing"
-  );
-  return data.json();
-}
+import useAnime from "@/hooks/useAnime";
 
 export default async function Home() {
+  const { getRecent, getPopular } = useAnime();
   const recentAnimes = await getRecent();
   const popularAnimes = await getPopular();
 

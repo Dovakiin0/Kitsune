@@ -1,5 +1,6 @@
 import React from "react";
 import Link from "next/link";
+import { FaPlay } from "react-icons/fa";
 
 type AnimeProps = {
   title: string;
@@ -9,16 +10,23 @@ type AnimeProps = {
 
 function AnimeCard({ title, src, additional }: AnimeProps) {
   return (
-    <Link href={`/${title}`}>
-      <div className="card card-compact w-[180px] lg:w-[200px] bg-base-300 shadow-xl">
+    <Link href={`/${encodeURIComponent(title)}`}>
+      <div className="card card-compact w-[180px] lg:w-[200px] h-[350px] bg-base-300 shadow-xl">
         <figure className="h-[250px]">
-          <img src={src} alt="Shoes" width="100%" height="100%" />
+          <img
+            src={src}
+            alt={title}
+            className="hover:opacity-50 hover:scale-110 transition ease-in-out delay-50"
+          />
         </figure>
-        <div className="card-body">
+        <div className="card-body ">
           <p className="font-bold">
             {title.length > 35 ? title.slice(0, 35) + "..." : title}
           </p>
-          <p className="text-accent">{additional}</p>
+          <div className="flex item-center justify-between">
+            <p className="text-accent text-xs">{additional}</p>
+            <FaPlay />
+          </div>
         </div>
       </div>
     </Link>
