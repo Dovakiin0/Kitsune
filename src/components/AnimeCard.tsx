@@ -11,7 +11,7 @@ type AnimeProps = {
 
 function AnimeCard({ id, title, src, additional }: AnimeProps) {
   return (
-    <Link href={`/anime/${encodeURIComponent(id)}/watch?ep=1`}>
+    <Link href={`/anime/${encodeURIComponent(id)}/watch`}>
       <div className="card card-compact w-[180px] lg:w-[200px] h-[350px] bg-base-300 shadow-xl">
         <figure className="h-[250px]">
           <img
