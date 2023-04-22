@@ -12,6 +12,7 @@
     "@types/node": "18.15.13",
     "@types/react": "18.0.37",
     "@types/react-dom": "18.0.11",
+    "@videojs/themes": "^1.0.1",
     "autoprefixer": "10.4.14",
     "daisyui": "^2.51.5",
     "next": "13.3.0",
@@ -20,6 +21,10 @@
     "react-dom": "18.2.0",
     "react-icons": "^4.8.0",
     "tailwindcss": "3.3.1",
-    "typescript": "5.0.4"
+    "typescript": "5.0.4",
+    "video.js": "^8.0.4"
+  },
+  "devDependencies": {
+    "@types/video.js": "^7.3.51"
   }
 }

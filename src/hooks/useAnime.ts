@@ -5,6 +5,8 @@ export default function useAnime() {
     recent: ANIME_URI + "/recent-episodes",
     popular: ANIME_URI + "/top-airing",
     info: ANIME_URI + "/info",
+    episode: ANIME_URI + "/watch",
+    server: ANIME_URI + "/servers",
   };
 
   async function getRecent() {
@@ -22,5 +24,15 @@ export default function useAnime() {
     return data.json();
   }
 
-  return { getRecent, getPopular, getInfo };
+  async function getEpisode(id: string, serverName: string = "gogocdn") {
+    const data = await fetch(API.episode + "/" + id + "?server=" + serverName);
+    return data.json();
+  }
+
+  async function getServers(id: string) {
+    const data = await fetch(API.server + "/" + id);
+    return data.json();
+  }
+
+  return { getRecent, getPopular, getInfo, getEpisode, getServers };
 }

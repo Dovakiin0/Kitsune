@@ -27,11 +27,26 @@ export type TAnimeInfo = {
   status: string;
   otherName: string | null; // or null
   totalEpisodes: number;
-  episodes: IEpisode[];
+  episodes: TAnimeInfoEpisode[];
 };
 
-export type IEpisode = {
+export type TAnimeInfoEpisode = {
   id: string;
   number: number;
   url: string;
+};
+
+export type TEpisodeInfo = {
+  headers: {
+    Referer: string;
+    watchsb: string;
+    "User-Agent": string;
+  };
+  sources: TEpisodeSources[];
+};
+
+export type TEpisodeSources = {
+  url: string;
+  quality: string;
+  isM3U8: boolean;
 };
