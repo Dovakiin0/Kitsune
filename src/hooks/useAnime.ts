@@ -17,5 +17,10 @@ export default function useAnime() {
     return data.json();
   }
 
-  return { getRecent, getPopular };
+  async function getInfo(id: string) {
+    const data = await fetch(API.info + "/" + id);
+    return data.json();
+  }
+
+  return { getRecent, getPopular, getInfo };
 }

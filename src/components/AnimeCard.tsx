@@ -3,14 +3,15 @@ import Link from "next/link";
 import { FaPlay } from "react-icons/fa";
 
 type AnimeProps = {
+  id: string;
   title: string;
   src: string;
   additional: string;
 };
 
-function AnimeCard({ title, src, additional }: AnimeProps) {
+function AnimeCard({ id, title, src, additional }: AnimeProps) {
   return (
-    <Link href={`/${encodeURIComponent(title)}`}>
+    <Link href={`/anime/${encodeURIComponent(id)}/watch?ep=1`}>
       <div className="card card-compact w-[180px] lg:w-[200px] h-[350px] bg-base-300 shadow-xl">
         <figure className="h-[250px]">
           <img

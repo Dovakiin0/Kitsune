@@ -13,3 +13,25 @@ export type TPopularAnime = {
   image: string;
   url: string;
 };
+
+export type TAnimeInfo = {
+  id: string;
+  title: string;
+  url: string;
+  image: string;
+  releaseDate: string | null; // or null
+  description: string | null; // or null
+  genres: string[];
+  subOrDub: string;
+  type: string | null; // or null
+  status: string;
+  otherName: string | null; // or null
+  totalEpisodes: number;
+  episodes: IEpisode[];
+};
+
+export type IEpisode = {
+  id: string;
+  number: number;
+  url: string;
+};

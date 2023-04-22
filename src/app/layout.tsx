@@ -42,10 +42,10 @@ export default function RootLayout({
                 className="menu menu-compact dropdown-content mt-3 p-2 shadow bg-base-100 rounded-box w-52"
               >
                 <li>
-                  <a>Home</a>
+                  <a href="/">Home</a>
                 </li>
-                <li tabIndex={0}>
-                  <a className="justify-between">Genre</a>
+                <li>
+                  <a>Genre</a>
                 </li>
                 <li>
                   <a>News</a>
@@ -68,9 +68,9 @@ export default function RootLayout({
           <div className="navbar-center hidden lg:flex">
             <ul className="menu menu-horizontal px-1">
               <li>
-                <a>Home</a>
+                <a href="/">Home</a>
               </li>
-              <li tabIndex={0}>
+              <li>
                 <a>Genre</a>
               </li>
               <li>
@@ -86,7 +86,7 @@ export default function RootLayout({
               <input
                 type="text"
                 placeholder="Search Anime"
-                className="input input-md input-bordered w-full focus:input-accent"
+                className="input input-md input-bordered w-full"
               />
             </div>
             <FaSearch className="lg:hidden mr-10" fontSize={20} />

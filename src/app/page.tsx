@@ -18,6 +18,7 @@ export default async function Home() {
         <div className="flex flex-wrap gap-5 justify-evenly lg:justify-start">
           {recentAnimes.results.map((anime: TRecentAnime, index: number) => (
             <AnimeCard
+              id={anime.id}
               key={index}
               title={anime.title}
               src={anime.image}
@@ -31,6 +32,7 @@ export default async function Home() {
         <div className="flex flex-wrap gap-5 justify-evenly lg:justify-start">
           {popularAnimes.results.map((anime: TPopularAnime, index: number) => (
             <AnimeCard
+              id={anime.id}
               key={index}
               title={anime.title !== "" ? anime.title : "Anime"}
               src={anime.image}
