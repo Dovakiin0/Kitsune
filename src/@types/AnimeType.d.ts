@@ -50,3 +50,11 @@ export type TEpisodeSources = {
   quality: string;
   isM3U8: boolean;
 };
+
+export type TSearchAnime = {
+  id: string;
+  title: string;
+  image: string;
+  releaseDate: string | null;
+  subOrDub: string;
+};

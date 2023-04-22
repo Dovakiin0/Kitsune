@@ -2,6 +2,7 @@ import "./globals.css";
 import Image from "next/image";
 import { Roboto } from "next/font/google";
 import { FaSearch } from "react-icons/fa";
+import SearchAnime from "@/partials/SearchAnime";
 
 export const metadata = {
   title: "Kitsune | Anime Streaming",
@@ -82,12 +83,8 @@ export default function RootLayout({
             </ul>
           </div>
           <div className="navbar-end">
-            <div className="form-control w-full lg:w-1/2 hidden lg:block">
-              <input
-                type="text"
-                placeholder="Search Anime"
-                className="input input-md input-bordered w-full"
-              />
+            <div className="w-full lg:w-1/2 hidden lg:block">
+              <SearchAnime />
             </div>
             <FaSearch className="lg:hidden mr-10" fontSize={20} />
           </div>

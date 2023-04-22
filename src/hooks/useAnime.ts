@@ -34,5 +34,10 @@ export default function useAnime() {
     return data.json();
   }
 
-  return { getRecent, getPopular, getInfo, getEpisode, getServers };
+  async function getSearch(query: string) {
+    const data = await fetch(ANIME_URI + "/" + query);
+    return data.json();
+  }
+
+  return { getRecent, getPopular, getInfo, getEpisode, getServers, getSearch };
 }
