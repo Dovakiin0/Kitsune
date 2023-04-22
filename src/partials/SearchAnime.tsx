@@ -27,7 +27,7 @@ function Search() {
   };
 
   return (
-    <div>
+    <>
       <input
         type="text"
         placeholder="Search Anime"
@@ -64,7 +64,7 @@ function Search() {
           )}
         </div>
       </div>
-    </div>
+    </>
   );
 }
 
