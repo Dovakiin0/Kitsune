@@ -93,10 +93,10 @@ export default function RootLayout({
                 </ul>
               </div>
               <div className="flex items-center">
-                <Image src="/icon.png" alt="logo" width="100" height="100" />
+                <Image src="/icon.png" alt="logo" width="80" height="80" />
                 <a
                   href="/"
-                  className="btn btn-ghost font-extrabold text-3xl text-transparent bg-clip-text bg-gradient-to-r from-gray-200 to-pink-600 tracking-wide"
+                  className="btn btn-ghost font-extrabold text-2xl text-transparent bg-clip-text bg-gradient-to-r from-gray-200 to-pink-600 tracking-widest"
                 >
                   KITSUNE
                 </a>
