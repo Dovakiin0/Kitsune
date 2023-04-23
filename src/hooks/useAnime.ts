@@ -10,7 +10,11 @@ export default function useAnime() {
   };
 
   async function getRecent() {
-    const data = await fetch(API.recent);
+    const data = await fetch(API.recent, {
+      next: {
+        revalidate: 300,
+      },
+    });
     return data.json();
   }
 

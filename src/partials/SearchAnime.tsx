@@ -13,12 +13,15 @@ function Search() {
 
   useEffect(() => {
     if (search === "") return setSearchFilter([]);
-    setTimeout(async () => {
+    const delayDebounceFn = setTimeout(async () => {
       setLoading(true);
       const data = await getSearch(search);
       setSearchFilter(data.results.slice(0, 5));
       setLoading(false);
     }, 1000);
+    return () => {
+      clearTimeout(delayDebounceFn);
+    };
   }, [search]);
 
   const handleSearchCallback = () => {
@@ -31,13 +34,13 @@ function Search() {
       <input
         type="text"
         placeholder="Search Anime"
-        className="input input-md input-bordered w-full"
+        className="input input-bordered w-full"
         value={search}
         onChange={(e) => setSearch(e.target.value)}
       />
       <div className="absolute">
         <div
-          className="mt-5 bg-base-100 shadow-lg rounded-lg"
+          className="mt-1 bg-base-100 shadow-lg rounded-lg"
           style={{ width: "400px" }}
         >
           {loading ? (

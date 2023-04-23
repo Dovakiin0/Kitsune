@@ -17,8 +17,8 @@ async function page({ params, searchParams }: any) {
 
   let episode: TAnimeInfoEpisode = searchParams.ep
     ? animeInfo.episodes.filter(
-        (ep: TAnimeInfoEpisode) => ep.id === searchParams.ep
-      )[0]
+      (ep: TAnimeInfoEpisode) => ep.id === searchParams.ep
+    )[0]
     : animeInfo.episodes[0];
 
   const episodeInfo: TEpisodeInfo = await getEpisode(
@@ -66,11 +66,10 @@ async function page({ params, searchParams }: any) {
                   <Link
                     href={`/anime/${animeInfo.id}/watch?ep=${ep.id}`}
                     key={index}
-                    className={`btn btn-sm ${
-                      episode.id === ep.id
+                    className={`btn btn-sm ${episode.id === ep.id
                         ? "btn-primary text-primary-content"
                         : "btn-secondary text-secondary-content"
-                    }`}
+                      }`}
                   >
                     {ep.number}
                   </Link>
@@ -82,7 +81,7 @@ async function page({ params, searchParams }: any) {
       {/*Information Panel*/}
       <div className="relative lg:right-0 lg:w-1/4">
         <div
-          className={`rounded-lg p-5 h-[70vh] lg:h-full w-full`}
+          className={`rounded-lg p-5 h-[90vh] lg:h-full w-full`}
           style={{
             backgroundImage: `url(${animeInfo.image})`,
             backgroundRepeat: "no-repeat",
@@ -92,10 +91,10 @@ async function page({ params, searchParams }: any) {
           }}
         ></div>
         <div
-          className={`rounded-lg absolute top-0 p-5 h-[70vh] lg:h-full w-full bg-primary opacity-20`}
+          className={`rounded-lg absolute top-0 p-5 h-[90vh] lg:h-full w-full bg-gray-700 opacity-20`}
         ></div>
         <div className="absolute top-0 m-5 flex flex-col gap-5">
-          <div className="flex gap-3">
+          <div className="flex lg:flex-row flex-col gap-3">
             <img
               src={animeInfo.image}
               width="150"
@@ -122,7 +121,7 @@ async function page({ params, searchParams }: any) {
             </div>
           </div>
           <div>
-            <div className="max-h-[60vh] overflow-y-auto">
+            <div className="max-h-[40vh] overflow-y-auto">
               {animeInfo.description}
             </div>
           </div>

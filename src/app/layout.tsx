@@ -2,10 +2,46 @@ import "./globals.css";
 import Image from "next/image";
 import { Roboto } from "next/font/google";
 import SearchAnime from "@/partials/SearchAnime";
+import { Metadata } from "next";
 
-export const metadata = {
-  title: "Kitsune | Anime Streaming",
-  description: "Stream your favourite anime with ease and no ads",
+const APP_NAME = "Kitsune";
+const APP_DEFAULT_TITLE = "Kitsune | Anime Streaming";
+const APP_TITLE_TEMPLATE = "Kitsune - PWA App";
+const APP_DESCRIPTION = "Stream your favourite anime with ease and no ads";
+
+export const metadata: Metadata = {
+  applicationName: APP_NAME,
+  title: {
+    default: APP_DEFAULT_TITLE,
+    template: APP_TITLE_TEMPLATE,
+  },
+  description: APP_DESCRIPTION,
+  appleWebApp: {
+    capable: true,
+    statusBarStyle: "default",
+    title: APP_DEFAULT_TITLE,
+  },
+  manifest: "/manifest.json",
+  formatDetection: {
+    telephone: false,
+  },
+  openGraph: {
+    type: "website",
+    siteName: APP_NAME,
+    title: {
+      default: APP_DEFAULT_TITLE,
+      template: APP_TITLE_TEMPLATE,
+    },
+    description: APP_DESCRIPTION,
+  },
+  twitter: {
+    card: "summary",
+    title: {
+      default: APP_DEFAULT_TITLE,
+      template: APP_TITLE_TEMPLATE,
+    },
+    description: APP_DESCRIPTION,
+  },
 };
 
 const roboto = Roboto({ weight: "400", subsets: ["latin"] });

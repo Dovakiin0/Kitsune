@@ -12,18 +12,16 @@ type AnimeProps = {
 function AnimeCard({ id, title, src, additional }: AnimeProps) {
   return (
     <Link href={`/anime/${encodeURIComponent(id)}/watch`}>
-      <div className="card card-compact w-[180px] lg:w-[200px] h-[350px] bg-base-300 shadow-xl">
-        <figure className="h-[250px]">
+      <div className="card card-compact w-[120px] h-[250px] md:w-[180px] lg:w-[200px] lg:h-[350px] bg-base-300 shadow-xl">
+        <figure className="lg:h-[250px] h-[150px]">
           <img
             src={src}
             alt={title}
-            className="hover:opacity-50 hover:scale-110 transition ease-in-out delay-50"
+            className="hover:opacity-50 hover:scale-110 transition ease-in-out w-full h-full delay-50 object-cover"
           />
         </figure>
         <div className="card-body ">
-          <p className="font-bold">
-            {title.length > 35 ? title.slice(0, 35) + "..." : title}
-          </p>
+          <p className="font-bold capitalize truncate">{title}</p>
           <div className="flex item-center justify-between">
             <p className="text-accent text-xs">{additional}</p>
             <FaPlay />
