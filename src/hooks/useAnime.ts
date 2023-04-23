@@ -11,9 +11,7 @@ export default function useAnime() {
 
   async function getRecent() {
     const data = await fetch(API.recent, {
-      next: {
-        revalidate: 300,
-      },
+      cache: "no-store",
     });
     return data.json();
   }

@@ -1,11 +1,11 @@
 {
-  "theme_color": "#B24E7F",
+  "theme_color": "#282A36",
   "background_color": "#282A36",
   "display": "standalone",
   "scope": "/",
   "start_url": "/",
   "name": "Kitsune",
-  "short_name": "kitsune",
+  "short_name": "Kitsune",
   "description": "Watch anime with ease and no ads",
   "icons": [
     {
