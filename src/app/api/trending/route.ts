@@ -9,18 +9,24 @@ export async function GET() {
       const doc = await data.text();
       const $ = cheerio.load(doc);
       const animeData: any = [];
-      $("#most-view ul li").each(function() {
-        const position = $(this).children(".film-number").text().trim();
-        const poster = $(this).find("img").data("src");
-        const title = $(this).find(".film-name").text().trim();
-        const episodeId = title
-          .replaceAll(" ", "-")
-          .replaceAll(":", "")
-          .replaceAll("(", "")
-          .replaceAll(")", "")
-          .toLowerCase();
-        animeData.push({ position, image: poster, title, episodeId });
-      });
+      $("#trending-home .swiper-container .swiper-wrapper .swiper-slide").each(
+        function() {
+          const position = $(this)
+            .find(".number")
+            .children("span")
+            .text()
+            .trim();
+          const poster = $(this).find("img").data("src");
+          const title = $(this).find(".film-title").text().trim();
+          const episodeId = title
+            .replaceAll(" ", "-")
+            .replaceAll(":", "")
+            .replaceAll("(", "")
+            .replaceAll(")", "")
+            .toLowerCase();
+          animeData.push({ position, image: poster, title, episodeId });
+        }
+      );
 
       return NextResponse.json(animeData);
     }
