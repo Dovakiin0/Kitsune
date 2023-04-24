@@ -53,7 +53,7 @@ export default function RootLayout({
 }) {
   return (
     <html data-theme="dracula" lang="en" className={roboto.className}>
-      <body>
+      <body className="">
         <div className="lg:sticky lg:top-0 z-50">
           <div className="navbar bg-base-100 ">
             <div className="navbar-start">

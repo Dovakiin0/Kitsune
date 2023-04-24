@@ -9,27 +9,17 @@ export async function GET() {
       const doc = await data.text();
       const $ = cheerio.load(doc);
       const animeData: any = [];
-      $("#slider .swiper-wrapper .swiper-slide").each(function() {
-        const spotlight = $(this).find(".desi-sub-text").text().trim();
-        const img = $(this)
-          .find(".deslide-cover-img")
-          .children("img")
-          .data("src");
-        const title = $(this).find(".desi-head-title").text().trim();
-        const desc = $(this).find(".desi-description").text().trim();
+      $("#most-view ul li").each(function() {
+        const position = $(this).children(".film-number").text().trim();
+        const poster = $(this).find("img").data("src");
+        const title = $(this).find(".film-name").text().trim();
         const episodeId = title
           .replaceAll(" ", "-")
           .replaceAll(":", "")
           .replaceAll("(", "")
           .replaceAll(")", "")
           .toLowerCase();
-        animeData.push({
-          title,
-          image: img,
-          description: desc,
-          spotlight,
-          episodeId,
-        });
+        animeData.push({ position, poster, title, episodeId });
       });
 
       return NextResponse.json(animeData);

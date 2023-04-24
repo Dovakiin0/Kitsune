@@ -64,4 +64,5 @@ export type TSpotlightAnime = {
   image: string;
   description: string;
   spotlight: string;
+  episodeId: string;
 };
