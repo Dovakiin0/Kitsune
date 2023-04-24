@@ -7,6 +7,8 @@ export default function useAnime() {
     info: ANIME_URI + "/info",
     episode: ANIME_URI + "/watch",
     server: ANIME_URI + "/servers",
+    spotlight: `${process.env.NODE_ENV === "production" ? "https" : "http"}://${process.env.VERCEL_URL
+      }/api/spotlight`,
   };
 
   async function getRecent() {
@@ -42,7 +44,7 @@ export default function useAnime() {
   }
 
   async function getSpotlight() {
-    const data = await fetch(process.env.VERCEL_URL + "/api/spotlight");
+    const data = await fetch(API.spotlight);
     return data.json();
   }
 
