@@ -64,7 +64,7 @@ export default async function Home() {
           <h2 className="text-xl mb-10 uppercase font-bold text-pink-200 tracking-widest">
             Trending Anime
           </h2>
-          <div className="flex flex-col space-y-5">
+          <div className="flex flex-col space-y-5 m-3 lg:m-0">
             {trendingAnimes.map((anime: TTrendingAnime, index: number) => (
               <TrendingAnimeCard key={index} anime={anime} />
             ))}
