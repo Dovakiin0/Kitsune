@@ -41,5 +41,18 @@ export default function useAnime() {
     return data.json();
   }
 
-  return { getRecent, getPopular, getInfo, getEpisode, getServers, getSearch };
+  async function getSpotlight() {
+    const data = await fetch(process.env.VERCEL_URL + "/api/spotlight");
+    return data.json();
+  }
+
+  return {
+    getRecent,
+    getSpotlight,
+    getPopular,
+    getInfo,
+    getEpisode,
+    getServers,
+    getSearch,
+  };
 }

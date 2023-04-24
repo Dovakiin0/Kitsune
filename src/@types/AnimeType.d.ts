@@ -58,3 +58,10 @@ export type TSearchAnime = {
   releaseDate: string | null;
   subOrDub: string;
 };
+
+export type TSpotlightAnime = {
+  title: string;
+  image: string;
+  description: string;
+  spotlight: string;
+};

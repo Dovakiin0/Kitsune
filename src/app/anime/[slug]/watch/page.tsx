@@ -4,11 +4,10 @@ import {
   TEpisodeSources,
   TAnimeInfoEpisode,
 } from "@/@types/AnimeType";
-import Loading from "@/app/loading";
 import KitsuneVideo from "@/components/KitsuneVideo";
 import useAnime from "@/hooks/useAnime";
 import Link from "next/link";
-import React, { Suspense } from "react";
+import React from "react";
 import { FaBackward, FaForward } from "react-icons/fa";
 
 async function page({ params, searchParams }: any) {

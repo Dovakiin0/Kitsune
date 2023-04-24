@@ -1,16 +1,20 @@
 import AnimeCard from "@/components/AnimeCard";
-import { TRecentAnime, TPopularAnime } from "@/@types/AnimeType";
+import {
+  TRecentAnime,
+  TPopularAnime,
+  TSpotlightAnime,
+} from "@/@types/AnimeType";
 import Carousel from "@/components/Carousel";
 import useAnime from "@/hooks/useAnime";
 
 export default async function Home() {
-  const { getRecent, getPopular } = useAnime();
+  const { getRecent, getPopular, getSpotlight } = useAnime();
   const recentAnimes = await getRecent();
   const popularAnimes = await getPopular();
-
+  const spotlightInfo: TSpotlightAnime[] = await getSpotlight();
   return (
     <div>
-      <Carousel />
+      <Carousel spotlightInfo={spotlightInfo} />
       <div className="lg:flex">
         <div className="lg:m-10 mt-10 flex flex-col items-center justify-center lg:items-start lg:justify-start">
           <h2 className="text-xl mb-10 uppercase font-bold text-pink-200 tracking-widest">

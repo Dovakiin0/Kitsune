@@ -2,7 +2,7 @@
 import React from "react";
 import videojs from "video.js";
 import "video.js/dist/video-js.css";
-import "@videojs/themes/dist/city/index.css";
+import "@videojs/themes/dist/fantasy/index.css";
 
 function VideoPlayer(props: any) {
   const videoRef = React.useRef<any | null>(null);
@@ -10,22 +10,14 @@ function VideoPlayer(props: any) {
   const { options, onReady } = props;
 
   React.useEffect(() => {
-    // Make sure Video.js player is only initialized once
     if (!playerRef.current) {
-      // The Video.js player needs to be _inside_ the component el for React 18 Strict Mode.
-      const videoElement = document.createElement("video-js");
-
-      videoElement.classList.add("vjs-big-play-centered");
-      videoElement.classList.add("vjs-theme-city");
-      videoRef.current!.appendChild(videoElement);
+      const videoElement = videoRef.current;
+      if (!videoElement) return;
 
       const player = (playerRef.current = videojs(videoElement, options, () => {
-        videojs.log("player is ready");
+        videojs.log("Player is ready");
         onReady && onReady(player);
       }));
-
-      // You could update an existing player in the `else` block here
-      // on prop change, for example:
     } else {
       const player = playerRef.current;
 
@@ -35,7 +27,6 @@ function VideoPlayer(props: any) {
     }
   }, [options, videoRef]);
 
-  // Dispose the Video.js player when the functional component unmounts
   React.useEffect(() => {
     const player = playerRef.current;
 
@@ -49,7 +40,10 @@ function VideoPlayer(props: any) {
 
   return (
     <div data-vjs-player>
-      <div ref={videoRef} />
+      <video
+        ref={videoRef}
+        className={`video-js vjs-big-play-centered vjs-theme-fantasy`}
+      />
     </div>
   );
 }

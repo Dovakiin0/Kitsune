@@ -38,7 +38,7 @@ function Search() {
         value={search}
         onChange={(e) => setSearch(e.target.value)}
       />
-      <div className="absolute">
+      <div className="absolute z-50">
         <div
           className="mt-1 bg-base-100 shadow-lg rounded-lg"
           style={{ width: "400px" }}

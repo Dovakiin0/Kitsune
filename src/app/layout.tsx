@@ -54,7 +54,7 @@ export default function RootLayout({
   return (
     <html data-theme="dracula" lang="en" className={roboto.className}>
       <body>
-        <div className="sticky top-0 z-50">
+        <div className="lg:sticky lg:top-0 z-50">
           <div className="navbar bg-base-100 ">
             <div className="navbar-start">
               <div className="dropdown">
@@ -82,9 +82,6 @@ export default function RootLayout({
                     <a href="/">Home</a>
                   </li>
                   <li>
-                    <a>Genre</a>
-                  </li>
-                  <li>
                     <a>News</a>
                   </li>
                   <li>
@@ -106,9 +103,6 @@ export default function RootLayout({
               <ul className="menu menu-horizontal px-1">
                 <li>
                   <a href="/">Home</a>
-                </li>
-                <li>
-                  <a>Genre</a>
                 </li>
                 <li>
                   <a>News</a>
