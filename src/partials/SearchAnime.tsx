@@ -54,7 +54,11 @@ function Search() {
                 <SearchAnimeCard
                   key={anime.id}
                   id={anime.id}
-                  title={anime.title}
+                  title={
+                    anime.title !== ""
+                      ? anime.title
+                      : anime.id.split("-").join(" ").toString()
+                  }
                   src={anime.image}
                   additional={anime.releaseDate ?? ""}
                   cb={handleSearchCallback}

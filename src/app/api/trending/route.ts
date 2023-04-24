@@ -19,7 +19,7 @@ export async function GET() {
           .replaceAll("(", "")
           .replaceAll(")", "")
           .toLowerCase();
-        animeData.push({ position, poster, title, episodeId });
+        animeData.push({ position, image: poster, title, episodeId });
       });
 
       return NextResponse.json(animeData);

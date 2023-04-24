@@ -66,3 +66,10 @@ export type TSpotlightAnime = {
   spotlight: string;
   episodeId: string;
 };
+
+export type TTrendingAnime = {
+  position: string;
+  image: string;
+  title: string;
+  episodeId: string;
+};

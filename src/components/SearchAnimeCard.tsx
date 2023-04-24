@@ -30,7 +30,7 @@ function SearchAnimeCard({
         className="object-contain"
       />
       <div className="">
-        <p className="font-bold break-word">{title}</p>
+        <p className="font-bold break-word capitalize">{title}</p>
         <p className="text-accent">{additional}</p>
       </div>
     </Link>

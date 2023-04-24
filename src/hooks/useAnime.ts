@@ -1,4 +1,4 @@
-import { ANIME_URI } from "@/utils/constants";
+import { ANIME_URI, DOMAIN_URL } from "@/utils/constants";
 
 export default function useAnime() {
   let API = {
@@ -7,8 +7,8 @@ export default function useAnime() {
     info: ANIME_URI + "/info",
     episode: ANIME_URI + "/watch",
     server: ANIME_URI + "/servers",
-    spotlight: `${process.env.NODE_ENV === "production" ? "https" : "http"}://${process.env.VERCEL_URL
-      }/api/spotlight`,
+    spotlight: `${DOMAIN_URL}/api/spotlight`,
+    trending: DOMAIN_URL + "/api/trending",
   };
 
   async function getRecent() {
@@ -48,7 +48,13 @@ export default function useAnime() {
     return data.json();
   }
 
+  async function getTrending() {
+    const data = await fetch(API.trending);
+    return data.json();
+  }
+
   return {
+    getTrending,
     getRecent,
     getSpotlight,
     getPopular,

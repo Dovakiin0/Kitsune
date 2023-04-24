@@ -11,7 +11,7 @@ type CarouselProps = {
 
 function Carousel({ spotlightInfo }: CarouselProps) {
   return (
-    <ReactCarousel autoPlay infiniteLoop dynamicHeight>
+    <ReactCarousel autoPlay showThumbs={false} infiniteLoop dynamicHeight>
       {spotlightInfo.map((anime: TSpotlightAnime, index: number) => (
         <CarouselSingle
           key={index}
