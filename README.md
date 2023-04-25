@@ -8,11 +8,6 @@ Migrated from [AnimeWorldz Backend](https://github.com/Dovakiin0/anime-data) to 
 
 _Kitsune is still under development and may encounter many bugs. Feel free to open any issue regarding bugs or features_
 
-<a href="https://discord.gg/6yAJ3XDHTt">
-   <img src="https://discordapp.com/api/guilds/1100342425886675036/widget.png?style=banner2">
-</p>
-
-
 ## Features
 
 - **No Ads** - No ads, no popups, no redirects, no bullshit.
@@ -42,3 +37,6 @@ cd kitsune/
 npm install or yarn
 npm run dev or yarn dev
 ```
+
+## Support
+Join the Discord server: https://discord.gg/6yAJ3XDHTt
