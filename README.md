@@ -3,9 +3,15 @@
 Watch your favourite anime anywhere, anytime. No Ads.
 
 Previously called [**AnimeWorldz**](https://github.com/Dovakiin0/Kitsune/tree/v2.0), Kitsune is a free, open-source anime streaming website. It is built using the [Next Js](https://nextjs.org/) framework and [Tailwind CSS](https://tailwindcss.com/).  
-Migrated from Animeworldz Backend to Consumet.
+Migrated from [AnimeWorldz Backend](https://github.com/Dovakiin0/anime-data) to [Consumet](https://github.com/consumet/api.consumet.org).
+
 
 _Kitsune is still under development and may encounter many bugs. Feel free to open any issue regarding bugs or features_
+
+<a href="https://discord.gg/6yAJ3XDHTt">
+   <img src="https://discordapp.com/api/guilds/1100342425886675036/widget.png?style=banner2">
+</p>
+
 
 ## Features
 
