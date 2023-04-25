@@ -1,6 +1,5 @@
 import { TWaifuCategory } from "@/@types/WaifuCategory";
 import useWaifu from "@/hooks/useWaifu";
-import React from "react";
 import KitsuneMasonry from "./KitsuneMasonry";
 
 async function page() {
@@ -8,11 +7,7 @@ async function page() {
   let category: TWaifuCategory = "waifu";
   const waifuInfo = await getManyWaifu(category);
 
-  return (
-    <div>
-      <KitsuneMasonry waifuPics={waifuInfo} />
-    </div>
-  );
+  return <KitsuneMasonry waifuInfo={waifuInfo} />;
 }
 
 export default page;

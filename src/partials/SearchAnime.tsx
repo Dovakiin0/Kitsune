@@ -34,7 +34,7 @@ function Search() {
       <input
         type="text"
         placeholder="Search Anime"
-        className="input input-bordered w-full"
+        className="input input-bordered w-full lg:input-md input-sm"
         value={search}
         onChange={(e) => setSearch(e.target.value)}
       />

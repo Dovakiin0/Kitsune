@@ -6,7 +6,9 @@ const nextConfig = {
   experimental: {
     appDir: true,
   },
-  images: {},
+  images: {
+    domains: ["i.waifu.pics"],
+  },
 };
 
 module.exports = withPWA(nextConfig);

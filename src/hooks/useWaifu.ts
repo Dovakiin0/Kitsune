@@ -9,6 +9,7 @@ export default function useWaifu() {
   async function getManyWaifu(category: TWaifuCategory): Promise<TWaifuImage> {
     const data = await fetch(`${API.many}/sfw/${category}`, {
       method: "POST",
+      cache: "no-store",
       headers: {
         "Content-Type": "application/json",
         // 'Content-Type': 'application/x-www-form-urlencoded',
