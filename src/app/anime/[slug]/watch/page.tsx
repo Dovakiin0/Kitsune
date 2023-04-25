@@ -4,7 +4,7 @@ import {
   TEpisodeSources,
   TAnimeInfoEpisode,
 } from "@/@types/AnimeType";
-import KitsuneVideo from "@/components/KitsuneVideo";
+import KitsunePlayer from "@/components/KitsunePlayer";
 import useAnime from "@/hooks/useAnime";
 import Link from "next/link";
 import React from "react";
@@ -25,27 +25,12 @@ async function page({ params, searchParams }: any) {
     "vidstreaming"
   );
 
-  let quality = "1080p";
-  let source: TEpisodeSources | undefined;
-
-  episodeInfo.sources.map((ep: TEpisodeSources) => {
-    if (ep.quality === quality) {
-      source = ep;
-    }
-  });
-
   return (
     <div className="flex lg:flex-row flex-col h-full">
       {/*Episode Panel*/}
       <div className="flex-1 lg:pl-5 lg:pr-5">
         <div className="flex-col">
-          <KitsuneVideo
-            src={
-              typeof source !== "undefined"
-                ? source.url
-                : episodeInfo.sources[0].url
-            }
-          />
+          <KitsunePlayer episodeInfo={episodeInfo} animeInfo={animeInfo} />
 
           <div className="flex justify-between items-center lg:p-5 p-2 gap-5">
             <FaBackward size={25} className="hover:text-primary" />
