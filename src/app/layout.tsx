@@ -82,10 +82,10 @@ export default function RootLayout({
                     <a href="/">Home</a>
                   </li>
                   <li>
-                    <a>News</a>
+                    <a href="/news">News</a>
                   </li>
                   <li>
-                    <a>Waifu</a>
+                    <a href="/waifu">Waifu</a>
                   </li>
                 </ul>
               </div>
@@ -105,10 +105,10 @@ export default function RootLayout({
                   <a href="/">Home</a>
                 </li>
                 <li>
-                  <a>News</a>
+                  <a href="/news">News</a>
                 </li>
                 <li>
-                  <a>Waifu</a>
+                  <a href="/waifu">Waifu</a>
                 </li>
               </ul>
             </div>
