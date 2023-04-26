@@ -7,7 +7,11 @@ async function page() {
   let category: TWaifuCategory = "waifu";
   const waifuInfo = await getManyWaifu(category);
 
-  return <KitsuneMasonry waifuInfo={waifuInfo} />;
+  return (
+    <div className="m-2">
+      <KitsuneMasonry waifuInfo={waifuInfo} />
+    </div>
+  );
 }
 
 export default page;

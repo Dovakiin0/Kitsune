@@ -1,7 +1,6 @@
 import {
   TAnimeInfo,
   TEpisodeInfo,
-  TEpisodeSources,
   TAnimeInfoEpisode,
 } from "@/@types/AnimeType";
 import KitsunePlayer from "@/components/KitsunePlayer";

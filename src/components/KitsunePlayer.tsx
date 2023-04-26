@@ -12,7 +12,7 @@ type KitsunePlayerProps = {
 function KitsunePlayer({ episodeInfo, animeInfo }: KitsunePlayerProps) {
   let uri;
   episodeInfo.sources.map((source: TEpisodeSources) => {
-    if (source.quality === "1080p") {
+    if (source.quality === "720p") {
       uri = "https://cors.zimjs.com/" + source.url;
     }
   });
@@ -63,7 +63,7 @@ function KitsunePlayer({ episodeInfo, animeInfo }: KitsunePlayerProps) {
       crossOrigin: "anonymous",
     },
     quality: episodeInfo.sources.map((source: TEpisodeSources) => ({
-      default: source.quality === "1080p",
+      default: source.quality === "720p",
       html: source.quality,
       url: "https://cors.zimjs.com/" + source.url,
     })),

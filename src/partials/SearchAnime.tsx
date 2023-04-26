@@ -4,6 +4,7 @@ import SearchAnimeCard from "@/components/SearchAnimeCard";
 import { TSearchAnime } from "@/@types/AnimeType";
 import useAnime from "@/hooks/useAnime";
 import Loading from "@/components/LoadingSingle";
+import Link from "next/link";
 
 function Search() {
   const [search, setSearch] = useState("");
@@ -60,11 +61,20 @@ function Search() {
                       : anime.id.split("-").join(" ").toString()
                   }
                   src={anime.image}
-                  additional={anime.releaseDate ?? ""}
+                  additional={
+                    anime.releaseDate + " | " + anime.subOrDub.toUpperCase() ??
+                    ""
+                  }
                   cb={handleSearchCallback}
                 />
               ))}
-              <a className="btn btn-secondary w-full">See More</a>
+              <Link
+                className="btn btn-secondary w-full"
+                href={`/search?q=${encodeURIComponent(search)}`}
+                onClick={handleSearchCallback}
+              >
+                See More
+              </Link>
             </>
           ) : (
             ""
