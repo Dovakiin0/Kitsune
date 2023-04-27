@@ -3,6 +3,7 @@ import Image from "next/image";
 import { Roboto } from "next/font/google";
 import SearchAnime from "@/partials/SearchAnime";
 import { Metadata } from "next";
+import { FaDiscord, FaGithub } from "react-icons/fa";
 
 const APP_NAME = "Kitsune";
 const APP_DEFAULT_TITLE = "Kitsune | Anime Streaming";
@@ -53,7 +54,7 @@ export default function RootLayout({
 }) {
   return (
     <html data-theme="dracula" lang="en" className={roboto.className}>
-      <body className="">
+      <body className="m-1">
         <div className="lg:sticky lg:top-0 z-50">
           <div className="navbar bg-base-100 ">
             <div className="navbar-start">
@@ -87,6 +88,19 @@ export default function RootLayout({
                   <li>
                     <a href="/waifu">Waifu</a>
                   </li>
+                  <li>
+                    <a
+                      href="https://github.com/Dovakiin0/Kitsune"
+                      target="_blank"
+                    >
+                      <FaGithub size={25} />
+                    </a>
+                  </li>
+                  <li>
+                    <a href="https://discord.gg/6yAJ3XDHTt" target="_blank">
+                      <FaDiscord size={25} />
+                    </a>
+                  </li>
                 </ul>
               </div>
               <div className="flex items-center">
@@ -109,6 +123,19 @@ export default function RootLayout({
                 </li>
                 <li>
                   <a href="/waifu">Waifu</a>
+                </li>
+                <li>
+                  <a
+                    href="https://github.com/Dovakiin0/Kitsune"
+                    target="_blank"
+                  >
+                    <FaGithub size={25} />
+                  </a>
+                </li>
+                <li>
+                  <a href="https://discord.gg/6yAJ3XDHTt" target="_blank">
+                    <FaDiscord size={25} />
+                  </a>
                 </li>
               </ul>
             </div>

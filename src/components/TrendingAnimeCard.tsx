@@ -35,12 +35,14 @@ function TrendingAnimeCard({ anime }: TrendingAnimeCardProps) {
   return (
     <Link
       href={`/anime/${anime.episodeId}/watch`}
-      className="flex items-center space-x-2 hover:scale-110"
+      className="flex items-center space-x-5 hover:scale-110 bg-base-300 p-3 rounded-md"
     >
       {getPositionWithStyle(anime.position)}
       <img
         src={anime.image}
-        className="w-20 h-20 object-contain rounded-lg shadow-lg"
+        width={50}
+        height={50}
+        className="object-contain rounded-lg shadow-lg"
       />
       <p className="font-bold">{anime.title}</p>
     </Link>

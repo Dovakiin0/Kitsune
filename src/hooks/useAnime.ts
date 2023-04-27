@@ -24,7 +24,9 @@ export default function useAnime() {
   }
 
   async function getInfo(id: string) {
-    const data = await fetch(API.info + "/" + id);
+    const data = await fetch(API.info + "/" + id, {
+      next: { revalidate: 120 },
+    });
     return data.json();
   }
 
