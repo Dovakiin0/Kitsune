@@ -29,7 +29,7 @@ export default async function Home() {
           <h2 className="text-xl mb-10 uppercase font-bold text-pink-200 tracking-widest">
             Recent Release
           </h2>
-          <div className="flex flex-wrap justify-center lg:justify-start xl:gap-8 lg:gap-6 gap-3">
+          <div className="flex flex-wrap justify-between lg:justify-start xl:gap-8 lg:gap-6 gap-3">
             {recentAnimes.results.map((anime: TRecentAnime, index: number) => (
               <AnimeCard
                 id={anime.id}
@@ -47,7 +47,7 @@ export default async function Home() {
           <p className="text-xl mt-10 mb-10 uppercase font-bold text-pink-200 tracking-widest">
             Popular Release
           </p>
-          <div className="flex flex-wrap gap-5">
+          <div className="flex flex-wrap justify-between lg:justify-start xl:gap-8 lg:gap-6 gap-3">
             {popularAnimes.results.map(
               (anime: TPopularAnime, index: number) => (
                 <AnimeCard
