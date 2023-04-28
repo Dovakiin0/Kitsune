@@ -1,3 +1,4 @@
+import { TNewsFeed } from "@/@types/NewsType";
 import { NEWS_URI } from "@/utils/constants";
 
 export default function useNews() {
@@ -6,7 +7,7 @@ export default function useNews() {
     info: NEWS_URI + "/info",
   };
 
-  async function getRecentNews(topic: string = "anime") {
+  async function getRecentNews(topic: string = "anime"): Promise<TNewsFeed[]> {
     const data = await fetch(API.recent + "?topic=" + topic);
     return data.json();
   }

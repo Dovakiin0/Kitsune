@@ -22,6 +22,7 @@ export async function GET() {
           .replaceAll(":", "")
           .replaceAll("(", "")
           .replaceAll(")", "")
+          .replaceAll("'", "")
           .toLowerCase();
         animeData.push({
           title,

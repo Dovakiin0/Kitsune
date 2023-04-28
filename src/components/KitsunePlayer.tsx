@@ -41,7 +41,7 @@ function KitsunePlayer({ episodeInfo, animeInfo }: KitsunePlayerProps) {
     autoplay: false,
     pip: true,
     autoSize: false,
-    autoMini: true,
+    autoMini: false,
     screenshot: true,
     setting: true,
     loop: false,
