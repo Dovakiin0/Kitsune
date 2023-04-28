@@ -17,7 +17,7 @@ function NewsCard({ news }: { news: TNewsFeed }) {
             : news.preview.intro}
           .{" "}
           <a
-            className="text-blue-500 cursor-pointer"
+            className="text-blue-300 cursor-pointer"
             href={news.url}
             target="_blank"
           >
