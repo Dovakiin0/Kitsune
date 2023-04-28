@@ -21,13 +21,11 @@ function AnimeCard({ id, title, src, additional }: AnimeProps) {
               className="hover:opacity-50 hover:scale-110 transition ease-in-out w-full h-full delay-50 object-cover rounded-lg"
             />
           </div>
-          <div className="tooltip text-left" data-tip={title}>
-            <div className="m-2 flex flex-col space-y-3">
-              <p className="font-bold text-sm capitalize truncate">{title}</p>
-              <div className="flex item-center justify-between">
-                <p className="text-accent text-xs">{additional}</p>
-                <FaPlay />
-              </div>
+          <div className="m-2 flex flex-col space-y-3">
+            <p className="font-bold text-sm capitalize truncate">{title}</p>
+            <div className="flex item-center justify-between">
+              <p className="text-accent text-xs">{additional}</p>
+              <FaPlay />
             </div>
           </div>
         </div>

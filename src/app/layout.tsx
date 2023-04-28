@@ -139,7 +139,7 @@ export default function RootLayout({
             </div>
           </div>
         </div>
-        <div className="lg:hidden">
+        <div className="lg:hidden mb-5">
           <SearchAnime />
         </div>
         {children}
