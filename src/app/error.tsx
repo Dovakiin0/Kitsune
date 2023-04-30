@@ -17,10 +17,13 @@ function error({ error, reset }: any) {
         />
         <p className="font-bold text-2xl">Something went wrong!</p>
         <div className="flex gap-3 items-center">
-          <Link href="/" className="btn btn-primary">
+          <Link href="/" className="btn-sm lg:btn-md btn btn-primary">
             Back to Home
           </Link>
-          <button onClick={() => reset()} className="btn btn-primary">
+          <button
+            onClick={() => reset()}
+            className="btn-sm lg:btn-md btn btn-primary"
+          >
             Reload
           </button>
         </div>

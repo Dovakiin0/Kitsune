@@ -3,15 +3,20 @@ import {
   TEpisodeInfo,
   TAnimeInfoEpisode,
 } from "@/@types/AnimeType";
+import { IKitsuEpisode, IKitsuEpisodeCore } from "@/@types/KitsuAnime";
 import KitsunePlayer from "@/components/KitsunePlayer";
 import useAnime from "@/hooks/useAnime";
+import useKitsu from "@/hooks/useKitsu";
 import Link from "next/link";
 import React from "react";
 import { FaBackward, FaForward } from "react-icons/fa";
+import EpisodeDisplay from "./EpisodeDisplay";
 
 async function page({ params, searchParams }: any) {
   const { getInfo, getEpisode } = useAnime();
-  const animeInfo: TAnimeInfo = await getInfo(params.slug);
+  const { getKitsuMapping } = useKitsu();
+  let animeInfo: TAnimeInfo = await getInfo(params.slug);
+  const kitsuMapping: IKitsuEpisode = await getKitsuMapping(params.slug);
 
   let episode: TAnimeInfoEpisode = searchParams.ep
     ? animeInfo.episodes.filter(
@@ -24,6 +29,13 @@ async function page({ params, searchParams }: any) {
     "vidstreaming"
   );
 
+  if (typeof kitsuMapping !== "undefined") {
+    kitsuMapping.data.map((kitsu: IKitsuEpisodeCore, index: number) => {
+      if (kitsu.attributes.airdate) {
+        animeInfo.episodes[index].kitsu = kitsu;
+      }
+    });
+  }
   return (
     <div className="flex lg:flex-row flex-col h-full">
       {/*Episode Panel*/}
@@ -42,19 +54,15 @@ async function page({ params, searchParams }: any) {
 
           <div className="flex flex-col gap-5 mb-10 mt-10 ml-3 mr-3 lg:ml-0 lg:mr-0 lg:m-10 lg:mb-5 ">
             <p className="text-2xl uppercase font-bold">Episodes</p>
-            <div className="grid lg:grid-cols-10 grid-cols-5 gap-4 max-h-[400px] overflow-y-auto">
+            <div className="flex flex-wrap gap-5 max-h-[90vh] overflow-y-auto">
               {animeInfo.episodes
                 .reverse()
                 .map((ep: TAnimeInfoEpisode, index: number) => (
                   <Link
                     href={`/anime/${animeInfo.id}/watch?ep=${ep.id}`}
                     key={index}
-                    className={`btn btn-sm ${episode.id === ep.id
-                        ? "btn-primary text-primary-content"
-                        : "btn-secondary text-secondary-content"
-                      }`}
                   >
-                    {ep.number}
+                    <EpisodeDisplay ep={ep} backSrc={animeInfo.image} />
                   </Link>
                 ))}
             </div>

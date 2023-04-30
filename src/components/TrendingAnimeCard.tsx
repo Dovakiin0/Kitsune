@@ -1,11 +1,11 @@
 "use client";
-import { TTrendingAnime } from "@/@types/AnimeType";
 import Link from "next/link";
 import React from "react";
 import { motion } from "framer-motion";
+import { IKitsuAnime } from "@/@types/KitsuAnime";
 
 type TrendingAnimeCardProps = {
-  anime: TTrendingAnime;
+  anime: IKitsuAnime;
   index: number;
 };
 

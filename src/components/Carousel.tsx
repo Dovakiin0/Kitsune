@@ -1,12 +1,12 @@
 "use client";
-import { TTrendingAnime } from "@/@types/AnimeType";
+import { IKitsuAnime } from "@/@types/KitsuAnime";
 import Link from "next/link";
 import React from "react";
 import { Carousel as ReactCarousel } from "react-responsive-carousel";
 import "react-responsive-carousel/lib/styles/carousel.min.css";
 
 type CarouselProps = {
-  spotlightInfo: TTrendingAnime[];
+  spotlightInfo: IKitsuAnime[];
 };
 
 function Carousel({ spotlightInfo }: CarouselProps) {
@@ -18,14 +18,17 @@ function Carousel({ spotlightInfo }: CarouselProps) {
       dynamicHeight
       stopOnHover
     >
-      {spotlightInfo.map((anime: TTrendingAnime, index: number) => (
+      {spotlightInfo.map((anime: IKitsuAnime, index: number) => (
         <CarouselSingle
           key={index}
           id={index}
           src={anime.attributes.coverImage.original}
           title={anime.attributes.canonicalTitle}
           description={anime.attributes.synopsis}
-          episodeId={anime.attributes.slug}
+          episodeId={anime.attributes.titles.en_jp
+            .toLowerCase()
+            .replaceAll(" ", "-")
+            .replaceAll(":", "")}
         />
       ))}
     </ReactCarousel>

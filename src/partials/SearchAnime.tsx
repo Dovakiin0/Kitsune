@@ -39,11 +39,8 @@ function Search() {
         value={search}
         onChange={(e) => setSearch(e.target.value)}
       />
-      <div className="absolute z-50">
-        <div
-          className="mt-1 bg-base-100 shadow-lg rounded-lg"
-          style={{ width: "400px" }}
-        >
+      <div className="absolute z-[99] w-full lg:w-auto">
+        <div className="mt-1 bg-base-100 shadow-lg rounded-lg w-full lg:w-[400px]">
           {(searchFilter.length === 0 && search !== "") || loading ? (
             <div className="flex w-full gap-5 p-10 items-center justify-center">
               <Loading />

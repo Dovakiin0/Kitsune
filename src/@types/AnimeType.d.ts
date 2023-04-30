@@ -1,3 +1,5 @@
+import { IKitsuEpisode, IKitsuEpisodeCore } from "./KitsuAnime";
+
 export type TRecentAnime = {
   id: string;
   episodeId: string;
@@ -34,6 +36,7 @@ export type TAnimeInfoEpisode = {
   id: string;
   number: number;
   url: string;
+  kitsu?: IKitsuEpisodeCore;
 };
 
 export type TEpisodeInfo = {
@@ -57,20 +60,4 @@ export type TSearchAnime = {
   image: string;
   releaseDate: string | null;
   subOrDub: string;
-};
-
-export type TTrendingAnime = {
-  id: string;
-  attributes: {
-    slug: string;
-    synopsis: string;
-    canonicalTitle: string;
-    posterImage: {
-      original: string;
-    };
-    coverImage: {
-      original: string;
-    };
-    youtubeVideoID: string;
-  };
 };

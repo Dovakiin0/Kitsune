@@ -1,15 +1,12 @@
 import AnimeCard from "@/components/AnimeCard";
-import {
-  TRecentAnime,
-  TPopularAnime,
-  TTrendingAnime,
-} from "@/@types/AnimeType";
+import { TRecentAnime, TPopularAnime } from "@/@types/AnimeType";
 import Carousel from "@/components/Carousel";
 import useAnime from "@/hooks/useAnime";
 import TrendingAnimeCard from "@/components/TrendingAnimeCard";
 import NewsCard from "@/components/NewsCard";
 import useNews from "@/hooks/useNews";
 import { TNewsFeed } from "@/@types/NewsType";
+import { IKitsuAnime } from "@/@types/KitsuAnime";
 
 export default async function Home() {
   const { getRecent, getPopular, getTrending } = useAnime();
@@ -69,7 +66,7 @@ export default async function Home() {
             Trending Anime
           </h2>
           <div className="flex flex-col space-y-5 m-3 lg:m-0 w-full">
-            {trendingAnimes.data.map((anime: TTrendingAnime, index: number) => (
+            {trendingAnimes.data.map((anime: IKitsuAnime, index: number) => (
               <TrendingAnimeCard key={index} anime={anime} index={index} />
             ))}
           </div>
