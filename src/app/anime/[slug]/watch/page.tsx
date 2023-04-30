@@ -10,7 +10,8 @@ import useKitsu from "@/hooks/useKitsu";
 import Link from "next/link";
 import React from "react";
 import { FaBackward, FaForward } from "react-icons/fa";
-import EpisodeDisplay from "./EpisodeDisplay";
+import EpisodeDisplay from "./components/EpisodeDisplay";
+import EpisodeLayout from "./partial/EpisodeLayout";
 
 async function page({ params, searchParams }: any) {
   const { getInfo, getEpisode } = useAnime();
@@ -55,27 +56,7 @@ async function page({ params, searchParams }: any) {
 
             <FaForward size={25} className="hover:text-primary" />
           </div>
-
-          <div className="flex flex-col gap-5 mb-10 mt-10 ml-3 mr-3 lg:ml-0 lg:mr-0 lg:m-10 lg:mb-5 ">
-            <p className="text-2xl uppercase font-bold">Episodes</p>
-            <div className="flex flex-wrap gap-5 max-h-[90vh] overflow-y-auto">
-              {animeInfo.episodes
-                .reverse()
-                .map((ep: TAnimeInfoEpisode, index: number) => (
-                  <Link
-                    href={`/anime/${animeInfo.id}/watch?ep=${ep.id}`}
-                    key={index}
-                    className={"w-full lg:w-[320px]"}
-                  >
-                    <EpisodeDisplay
-                      ep={ep}
-                      backSrc={animeInfo.image}
-                      isCurrent={episode.id === ep.id}
-                    />
-                  </Link>
-                ))}
-            </div>
-          </div>
+          <EpisodeLayout animeInfo={animeInfo} episode={episode} />
         </div>
       </div>
       {/*Information Panel*/}
