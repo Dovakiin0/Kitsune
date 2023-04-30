@@ -41,7 +41,11 @@ async function page({ params, searchParams }: any) {
       {/*Episode Panel*/}
       <div className="flex-1 lg:pl-5 lg:pr-5">
         <div className="flex-col">
-          <KitsunePlayer episodeInfo={episodeInfo} animeInfo={animeInfo} />
+          <KitsunePlayer
+            episodeInfo={episodeInfo}
+            animeInfo={animeInfo}
+            thumb={episode.kitsu?.attributes.thumbnail.original}
+          />
 
           <div className="flex justify-between items-center lg:p-5 p-2 gap-5">
             <FaBackward size={25} className="hover:text-primary" />
@@ -61,8 +65,13 @@ async function page({ params, searchParams }: any) {
                   <Link
                     href={`/anime/${animeInfo.id}/watch?ep=${ep.id}`}
                     key={index}
+                    className={"w-full lg:w-[320px]"}
                   >
-                    <EpisodeDisplay ep={ep} backSrc={animeInfo.image} />
+                    <EpisodeDisplay
+                      ep={ep}
+                      backSrc={animeInfo.image}
+                      isCurrent={episode.id === ep.id}
+                    />
                   </Link>
                 ))}
             </div>

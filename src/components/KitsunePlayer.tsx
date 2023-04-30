@@ -7,9 +7,10 @@ import Hls from "hls.js";
 type KitsunePlayerProps = {
   episodeInfo: TEpisodeInfo;
   animeInfo: TAnimeInfo;
+  thumb: string | undefined;
 };
 
-function KitsunePlayer({ episodeInfo, animeInfo }: KitsunePlayerProps) {
+function KitsunePlayer({ episodeInfo, animeInfo, thumb }: KitsunePlayerProps) {
   let uri;
   episodeInfo.sources.map((source: TEpisodeSources) => {
     if (source.quality === "720p") {
@@ -34,7 +35,7 @@ function KitsunePlayer({ episodeInfo, animeInfo }: KitsunePlayerProps) {
       },
     },
     title: animeInfo.title,
-    poster: animeInfo.image,
+    poster: typeof thumb !== "undefined" ? thumb : animeInfo.image,
     volume: 1,
     isLive: false,
     muted: false,

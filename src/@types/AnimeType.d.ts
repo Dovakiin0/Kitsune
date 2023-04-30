@@ -46,6 +46,7 @@ export type TEpisodeInfo = {
     "User-Agent": string;
   };
   sources: TEpisodeSources[];
+  thumbnail?: string | null;
 };
 
 export type TEpisodeSources = {
