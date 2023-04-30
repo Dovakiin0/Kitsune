@@ -59,17 +59,18 @@ export type TSearchAnime = {
   subOrDub: string;
 };
 
-export type TSpotlightAnime = {
-  title: string;
-  image: string;
-  description: string;
-  spotlight: string;
-  episodeId: string;
-};
-
 export type TTrendingAnime = {
-  position: string;
-  image: string;
-  title: string;
-  episodeId: string;
+  id: string;
+  attributes: {
+    slug: string;
+    synopsis: string;
+    canonicalTitle: string;
+    posterImage: {
+      original: string;
+    };
+    coverImage: {
+      original: string;
+    };
+    youtubeVideoID: string;
+  };
 };

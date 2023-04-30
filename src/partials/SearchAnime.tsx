@@ -44,10 +44,9 @@ function Search() {
           className="mt-1 bg-base-100 shadow-lg rounded-lg"
           style={{ width: "400px" }}
         >
-          {loading ? (
-            <div className="flex gap-5 items-center">
+          {(searchFilter.length === 0 && search !== "") || loading ? (
+            <div className="flex w-full gap-5 p-10 items-center justify-center">
               <Loading />
-              <p>Searching...</p>
             </div>
           ) : searchFilter.length > 0 ? (
             <>

@@ -1,4 +1,4 @@
-import { ANIME_URI, DOMAIN_URL } from "@/utils/constants";
+import { ANIME_URI, KITSU_URI } from "@/utils/constants";
 
 export default function useAnime() {
   let API = {
@@ -7,8 +7,7 @@ export default function useAnime() {
     info: ANIME_URI + "/info",
     episode: ANIME_URI + "/watch",
     server: ANIME_URI + "/servers",
-    spotlight: `${DOMAIN_URL}/api/spotlight`,
-    trending: DOMAIN_URL + "/api/trending",
+    trending: KITSU_URI + "/trending/anime",
   };
 
   async function getRecent() {
@@ -45,11 +44,6 @@ export default function useAnime() {
     return data.json();
   }
 
-  async function getSpotlight() {
-    const data = await fetch(API.spotlight);
-    return data.json();
-  }
-
   async function getTrending() {
     const data = await fetch(API.trending);
     return data.json();
@@ -58,7 +52,6 @@ export default function useAnime() {
   return {
     getTrending,
     getRecent,
-    getSpotlight,
     getPopular,
     getInfo,
     getEpisode,

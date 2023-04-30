@@ -1,28 +1,31 @@
+"use client";
 import { TTrendingAnime } from "@/@types/AnimeType";
 import Link from "next/link";
 import React from "react";
+import { motion } from "framer-motion";
 
 type TrendingAnimeCardProps = {
   anime: TTrendingAnime;
+  index: number;
 };
 
-function TrendingAnimeCard({ anime }: TrendingAnimeCardProps) {
-  function getPositionWithStyle(position: string) {
-    if (position === "01") {
+function TrendingAnimeCard({ anime, index }: TrendingAnimeCardProps) {
+  function getPositionWithStyle(position: number) {
+    if (position === 1) {
       return (
         <p className="text-2xl text-primary border-b-4 border-b-white">
           {position}
         </p>
       );
     }
-    if (position === "02") {
+    if (position === 2) {
       return (
         <p className="text-2xl text-secondary border-b-4 border-b-white">
           {position}
         </p>
       );
     }
-    if (position === "03") {
+    if (position === 3) {
       return (
         <p className="text-2xl text-accent border-b-4 border-b-white">
           {position}
@@ -33,19 +36,26 @@ function TrendingAnimeCard({ anime }: TrendingAnimeCardProps) {
   }
 
   return (
-    <Link
-      href={`/anime/${anime.episodeId}/watch`}
-      className="flex items-center space-x-5 hover:scale-110 bg-base-300 p-3 rounded-md"
+    <motion.div
+      initial={{ opacity: 0 }}
+      whileInView={{ opacity: 1 }}
+      whileHover={{ scale: 1.1, rotateZ: 2 }}
+      whileTap={{ scale: 0.9 }}
     >
-      {getPositionWithStyle(anime.position)}
-      <img
-        src={anime.image}
-        width={50}
-        height={50}
-        className="object-contain rounded-lg shadow-lg"
-      />
-      <p className="font-bold">{anime.title}</p>
-    </Link>
+      <Link
+        href={`/anime/${anime.attributes.slug}/watch`}
+        className="flex items-center space-x-5 bg-base-300 p-3 rounded-md w-full"
+      >
+        {getPositionWithStyle(index + 1)}
+        <img
+          src={anime.attributes.posterImage.original}
+          width={50}
+          height={50}
+          className="object-contain rounded-lg shadow-lg"
+        />
+        <p className="font-bold">{anime.attributes.canonicalTitle}</p>
+      </Link>
+    </motion.div>
   );
 }
 

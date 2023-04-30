@@ -4,7 +4,7 @@ import LoadingGIF from "@/assets/genkai.gif";
 
 function Loading() {
   return (
-    <div className="fixed w-screen h-screen top-0 bg-base-300 opacity-50">
+    <div className="fixed w-screen h-screen top-0 bg-base-300 opacity-70">
       <Image
         src={LoadingGIF}
         alt="loading..."

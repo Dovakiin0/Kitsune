@@ -1,9 +1,15 @@
+"use client";
 import { TNewsFeed } from "@/@types/NewsType";
 import React from "react";
+import { motion } from "framer-motion";
 
 function NewsCard({ news }: { news: TNewsFeed }) {
   return (
-    <div className="flex gap-5 items-center flex-col bg-base-100 shadow-xl h-[400px]">
+    <motion.div
+      initial={{ opacity: 0 }}
+      whileInView={{ opacity: 1 }}
+      className="flex gap-5 items-center flex-col h-[400px]"
+    >
       <img
         src={news.thumbnail}
         alt={news.title}
@@ -26,7 +32,7 @@ function NewsCard({ news }: { news: TNewsFeed }) {
         </p>
         <p className="text-sm">{news.uploadedAt}</p>
       </div>
-    </div>
+    </motion.div>
   );
 }
 

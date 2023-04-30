@@ -1,6 +1,8 @@
+"use client";
 import React from "react";
 import Link from "next/link";
 import { FaPlay } from "react-icons/fa";
+import { motion } from "framer-motion";
 
 type AnimeProps = {
   id: string;
@@ -11,14 +13,20 @@ type AnimeProps = {
 
 function AnimeCard({ id, title, src, additional }: AnimeProps) {
   return (
-    <div className="w-[180px] lg:w-[200px] rounded-lg">
+    <motion.div
+      initial={{ opacity: 0 }}
+      whileInView={{ opacity: 1, transition: { delay: 0.05 } }}
+      whileHover={{ scale: 1.1, rotateZ: 2 }}
+      whileTap={{ scale: 0.9 }}
+      className="w-[180px] lg:w-[200px] rounded-lg"
+    >
       <Link href={`/anime/${encodeURIComponent(id)}/watch`}>
         <div className="flex flex-col space-y-2 justify-between bg-base-300 shadow-xl">
           <div className="w-full h-[250px]">
             <img
               src={src}
               alt={title}
-              className="hover:opacity-50 hover:scale-110 transition ease-in-out w-full h-full delay-50 object-cover rounded-lg"
+              className="w-full h-full delay-50 object-cover rounded-lg"
             />
           </div>
           <div className="m-2 flex flex-col space-y-3">
@@ -30,7 +38,7 @@ function AnimeCard({ id, title, src, additional }: AnimeProps) {
           </div>
         </div>
       </Link>
-    </div>
+    </motion.div>
   );
 }
 
