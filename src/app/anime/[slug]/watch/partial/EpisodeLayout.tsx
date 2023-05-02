@@ -59,7 +59,7 @@ function EpisodeLayout({ animeInfo, episode }: EpisodeLayoutProps) {
           onChange={onSearch}
         />
       </div>
-      <div className="flex flex-wrap gap-5 h-[600px] max-h-[90vh] overflow-y-auto">
+      <div className="flex flex-wrap gap-5 max-h-[90vh] overflow-y-auto">
         {animeInfo.episodes.map((ep: TAnimeInfoEpisode, index: number) => (
           <div
             onClick={() =>
