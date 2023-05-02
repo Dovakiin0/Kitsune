@@ -62,3 +62,13 @@ export type TSearchAnime = {
   releaseDate: string | null;
   subOrDub: string;
 };
+
+export type TWatchedAnime = {
+  id: string;
+  title: string;
+  image: string;
+  ep: {
+    id: string;
+    number: number;
+  }[];
+};

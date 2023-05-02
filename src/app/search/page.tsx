@@ -21,7 +21,7 @@ async function page({ searchParams }: any) {
         Search Result for{" "}
         <span className="font-extrabold">{searchParams.q}</span>
       </p>
-      <div className="mt-10 grid grid-cols-3 sm:grid-cols-4 xl:grid-cols-6 xl:gap-6 gap-3">
+      <div className="mt-10 flex flex-wrap justify-between lg:justify-start xl:gap-8 lg:gap-6 gap-3">
         {animeInfo.results.map((anime: TSearchAnime, index: number) => (
           <AnimeCard
             id={anime.id}

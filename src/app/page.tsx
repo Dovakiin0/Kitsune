@@ -7,6 +7,7 @@ import NewsCard from "@/components/NewsCard";
 import useNews from "@/hooks/useNews";
 import { TNewsFeed } from "@/@types/NewsType";
 import { IKitsuAnime } from "@/@types/KitsuAnime";
+import ContinueWatching from "@/partials/ContinueWatching";
 
 export default async function Home() {
   const { getRecent, getPopular, getTrending } = useAnime();
@@ -22,9 +23,9 @@ export default async function Home() {
       <Carousel spotlightInfo={trendingAnimes.data} />
       <div className="xl:flex justify-between">
         <div className="lg:m-10 mt-10 flex flex-col items-center justify-center lg:items-start lg:justify-start">
-          <h2 className="text-xl mb-10 uppercase font-bold text-pink-200 tracking-widest">
+          <p className="text-xl mb-10 uppercase font-bold text-pink-200 tracking-widest">
             Recent Release
-          </h2>
+          </p>
           <div className="flex flex-wrap justify-between lg:justify-start xl:gap-8 lg:gap-6 gap-3 m-2 lg:m-0">
             {recentAnimes.results.map((anime: TRecentAnime, index: number) => (
               <AnimeCard
@@ -40,6 +41,7 @@ export default async function Home() {
               />
             ))}
           </div>
+          <ContinueWatching />
           <p className="text-xl mt-10 mb-10 uppercase font-bold text-pink-200 tracking-widest">
             Popular Release
           </p>

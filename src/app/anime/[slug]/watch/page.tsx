@@ -7,10 +7,8 @@ import { IKitsuEpisode, IKitsuEpisodeCore } from "@/@types/KitsuAnime";
 import KitsunePlayer from "@/components/KitsunePlayer";
 import useAnime from "@/hooks/useAnime";
 import useKitsu from "@/hooks/useKitsu";
-import Link from "next/link";
 import React from "react";
 import { FaBackward, FaForward } from "react-icons/fa";
-import EpisodeDisplay from "./components/EpisodeDisplay";
 import EpisodeLayout from "./partial/EpisodeLayout";
 
 async function page({ params, searchParams }: any) {
@@ -78,9 +76,7 @@ async function page({ params, searchParams }: any) {
           <div className="flex lg:flex-row flex-col gap-3">
             <img
               src={animeInfo.image}
-              width="150"
-              height="150"
-              className="rounded-lg object-cover"
+              className="rounded-lg object-cover w-[150px] max-h-[200px]"
             />
             <div className="flex-col">
               <p className="font-bold text-xl">{animeInfo.title}</p>

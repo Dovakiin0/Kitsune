@@ -43,7 +43,10 @@ function TrendingAnimeCard({ anime, index }: TrendingAnimeCardProps) {
       whileTap={{ scale: 0.9 }}
     >
       <Link
-        href={`/anime/${anime.attributes.slug}/watch`}
+        href={`/anime/${anime.attributes.titles.en_jp
+          .toLowerCase()
+          .replaceAll(" ", "-")
+          .replaceAll(":", "")}/watch`}
         className="flex items-center space-x-5 bg-base-300 p-3 rounded-md w-full"
       >
         {getPositionWithStyle(index + 1)}

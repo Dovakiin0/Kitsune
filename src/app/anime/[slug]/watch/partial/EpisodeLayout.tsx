@@ -1,8 +1,13 @@
 "use client";
-import React, { createRef, useRef } from "react";
-import { TAnimeInfoEpisode, TAnimeInfo } from "@/@types/AnimeType";
-import Link from "next/link";
+import React, { createRef, useEffect, useRef, useState } from "react";
+import {
+  TAnimeInfoEpisode,
+  TAnimeInfo,
+  TWatchedAnime,
+} from "@/@types/AnimeType";
 import EpisodeDisplay from "../components/EpisodeDisplay";
+import useLocalStorage from "@/hooks/useLocalStorage";
+import { useRouter } from "next/navigation";
 
 type EpisodeLayoutProps = {
   animeInfo: TAnimeInfo;
@@ -10,11 +15,27 @@ type EpisodeLayoutProps = {
 };
 
 function EpisodeLayout({ animeInfo, episode }: EpisodeLayoutProps) {
+  const router = useRouter();
+  const { setKitsuneWatched, getKitsuneWatchedId } = useLocalStorage();
   const curRef = useRef<null | HTMLDivElement>(null);
+  const [watched, setWatched] = useState<TWatchedAnime | null>(null);
   let refs = animeInfo.episodes.reverse().reduce((acc: any, value) => {
     acc[value.number] = createRef();
     return acc;
   }, {});
+
+  useEffect(() => {
+    setWatched(getKitsuneWatchedId(animeInfo.id));
+    setKitsuneWatched({
+      id: animeInfo.id,
+      title: animeInfo.title,
+      image: animeInfo.image,
+      ep: {
+        id: episode.id,
+        number: episode.number,
+      },
+    });
+  }, []);
 
   const onSearch = (e: any) => {
     e.preventDefault();
@@ -38,10 +59,12 @@ function EpisodeLayout({ animeInfo, episode }: EpisodeLayoutProps) {
           onChange={onSearch}
         />
       </div>
-      <div className="flex flex-wrap gap-5 max-h-[90vh] overflow-y-auto">
+      <div className="flex flex-wrap gap-5 h-[600px] max-h-[90vh] overflow-y-auto">
         {animeInfo.episodes.map((ep: TAnimeInfoEpisode, index: number) => (
-          <Link
-            href={`/anime/${animeInfo.id}/watch?ep=${ep.id}`}
+          <div
+            onClick={() =>
+              router.push(`/anime/${animeInfo.id}/watch?ep=${ep.id}`)
+            }
             key={index}
             className={"w-full lg:w-[320px]"}
             ref={refs[ep.number]}
@@ -50,8 +73,15 @@ function EpisodeLayout({ animeInfo, episode }: EpisodeLayoutProps) {
               ep={ep}
               backSrc={animeInfo.image}
               isCurrent={episode.id === ep.id}
+              watched={
+                watched
+                  ? watched.ep.some(
+                    (e: { id: string; number: number }) => e.id === ep.id
+                  )
+                  : false
+              }
             />
-          </Link>
+          </div>
         ))}
       </div>
     </div>

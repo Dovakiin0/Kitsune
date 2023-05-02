@@ -1,3 +1,4 @@
+import kv from "@vercel/kv";
 import { ANIME_URI, KITSU_URI } from "@/utils/constants";
 
 export default function useAnime() {
@@ -14,7 +15,8 @@ export default function useAnime() {
     const data = await fetch(API.recent, {
       cache: "no-store",
     });
-    return data.json();
+    const json = await data.json();
+    return json;
   }
 
   async function getPopular() {
@@ -24,14 +26,20 @@ export default function useAnime() {
 
   async function getInfo(id: string) {
     const data = await fetch(API.info + "/" + id, {
-      next: { revalidate: 120 },
+      next: { revalidate: 5 * 60 },
     });
     return data.json();
   }
 
   async function getEpisode(id: string, serverName: string = "gogocdn") {
+    const KV = await kv.get(id);
+    if (KV !== null) {
+      return KV;
+    }
     const data = await fetch(API.episode + "/" + id + "?server=" + serverName);
-    return data.json();
+    let json = await data.json();
+    await kv.set(id, JSON.stringify(json));
+    return json;
   }
 
   async function getServers(id: string) {
