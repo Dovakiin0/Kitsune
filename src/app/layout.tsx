@@ -1,5 +1,4 @@
 import "./globals.css";
-import Image from "next/image";
 import { Roboto } from "next/font/google";
 import SearchAnime from "@/partials/SearchAnime";
 import { Metadata } from "next";
@@ -82,7 +81,7 @@ export default function RootLayout({
               </ul>
             </div>
             <div className="flex items-center">
-              <Image src="/icon.png" alt="logo" width="80" height="80" />
+              <img src="/icon.png" alt="logo" width="80" height="80" />
               <a
                 href="/"
                 className="btn btn-ghost font-extrabold text-2xl text-transparent bg-clip-text bg-gradient-to-r from-gray-200 to-pink-600 tracking-widest"
@@ -115,7 +114,7 @@ export default function RootLayout({
         </div>
         {children}
         <footer className="w-full bg-base-300 shadow-xl p-5 flex flex-col items-center space-y-5">
-          <Image src="/icon.png" alt="logo" width="100" height="100" />
+          <img src="/icon.png" alt="logo" width="100" height="100" />
           <div className="flex space-x-5 items-center">
             <a href="https://github.com/Dovakiin0/Kitsune" target="_blank">
               <FaGithub size={25} />
