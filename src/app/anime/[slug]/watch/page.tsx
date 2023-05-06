@@ -28,6 +28,8 @@ async function page({ params, searchParams }: any) {
     "vidstreaming"
   );
 
+  function refetchCallback() { }
+
   if (typeof kitsuMapping !== "undefined") {
     kitsuMapping.data.map((kitsu: IKitsuEpisodeCore, index: number) => {
       if (kitsu.attributes.airdate) {

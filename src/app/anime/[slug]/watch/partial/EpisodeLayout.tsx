@@ -7,7 +7,6 @@ import {
 } from "@/@types/AnimeType";
 import EpisodeDisplay from "../components/EpisodeDisplay";
 import useLocalStorage from "@/hooks/useLocalStorage";
-import { useRouter } from "next/navigation";
 
 type EpisodeLayoutProps = {
   animeInfo: TAnimeInfo;
@@ -15,11 +14,10 @@ type EpisodeLayoutProps = {
 };
 
 function EpisodeLayout({ animeInfo, episode }: EpisodeLayoutProps) {
-  const router = useRouter();
   const { setKitsuneWatched, getKitsuneWatchedId } = useLocalStorage();
   const curRef = useRef<null | HTMLDivElement>(null);
   const [watched, setWatched] = useState<TWatchedAnime | null>(null);
-  let refs = animeInfo.episodes.reverse().reduce((acc: any, value) => {
+  let refs = animeInfo.episodes.reduce((acc: any, value) => {
     acc[value.number] = createRef();
     return acc;
   }, {});
@@ -62,25 +60,24 @@ function EpisodeLayout({ animeInfo, episode }: EpisodeLayoutProps) {
       <div className="flex flex-wrap gap-5 max-h-[90vh] overflow-y-auto">
         {animeInfo.episodes.map((ep: TAnimeInfoEpisode, index: number) => (
           <div
-            onClick={() =>
-              router.push(`/anime/${animeInfo.id}/watch?ep=${ep.id}`)
-            }
             key={index}
             className={"w-full lg:w-[320px]"}
             ref={refs[ep.number]}
           >
-            <EpisodeDisplay
-              ep={ep}
-              backSrc={animeInfo.image}
-              isCurrent={episode.id === ep.id}
-              watched={
-                watched
-                  ? watched.ep.some(
-                    (e: { id: string; number: number }) => e.id === ep.id
-                  )
-                  : false
-              }
-            />
+            <a href={`/anime/${animeInfo.id}/watch?ep=${ep.id}`}>
+              <EpisodeDisplay
+                ep={ep}
+                backSrc={animeInfo.image}
+                isCurrent={episode.id === ep.id}
+                watched={
+                  watched
+                    ? watched.ep.some(
+                      (e: { id: string; number: number }) => e.id === ep.id
+                    )
+                    : false
+                }
+              />
+            </a>
           </div>
         ))}
       </div>
