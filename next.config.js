@@ -3,9 +3,6 @@ const withPWA = require("@ducanh2912/next-pwa").default({
 });
 /** @type {import('next').NextConfig} */
 const nextConfig = {
-  experimental: {
-    appDir: true,
-  },
   images: {
     domains: ["i.waifu.pics"],
   },
