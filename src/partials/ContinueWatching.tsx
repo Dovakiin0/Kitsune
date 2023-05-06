@@ -2,6 +2,7 @@
 import React, { useEffect, useState } from "react";
 import AnimeCard from "@/components/AnimeCard";
 import useLocalStorage from "@/hooks/useLocalStorage";
+import { AiOutlineFieldTime } from "react-icons/ai";
 
 function ContinueWatching() {
   const { getKitsuneWatched } = useLocalStorage();
@@ -12,10 +13,13 @@ function ContinueWatching() {
   }, []);
 
   return animes !== null ? (
-    <div className="mt-10">
-      <p className="text-xl mb-10 uppercase font-bold text-pink-200 tracking-widest text-center lg:text-start">
-        Continue Watching
-      </p>
+    <div className="mt-40">
+      <div className="flex space-x-5 items-center mb-10 text-pink-200">
+        <p className="text-xl uppercase font-bold tracking-widest text-center lg:text-start">
+          Continue Watching
+        </p>
+        <AiOutlineFieldTime size={35} />
+      </div>
       <div className="flex flex-wrap justify-between lg:justify-start xl:gap-8 lg:gap-6 gap-3 m-2 lg:m-0">
         {Object.keys(animes)
           .reverse()

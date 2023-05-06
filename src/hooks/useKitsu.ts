@@ -1,17 +1,27 @@
 import { IKitsuAnime, IKitsuEpisodeCore } from "@/@types/KitsuAnime";
 import { KITSU_URI } from "@/utils/constants";
+import * as stringsim from "string-similarity";
 
 export default function useKitsu() {
   const API = {
     info: KITSU_URI + "/anime",
   };
 
-  async function getKitsuMapping(episodeId: string) {
-    const res = await fetch(API.info + "?filter[slug]=" + episodeId);
+  async function getKitsuMapping(title: string) {
+    const res = await fetch(API.info + "?filter[text]=" + title);
+
     const infoData: { data: IKitsuAnime[] } = await res.json();
+
     if (infoData.data.length <= 0) return;
+    const bestMatch = stringsim.findBestMatch(
+      String(title),
+      infoData.data.map(
+        (d: any) => d.attributes.titles.en_jp ?? d.attributes.titles.en ?? ""
+      )
+    );
+    const match = infoData.data[bestMatch.bestMatchIndex];
     return getEpisodesInfo(
-      infoData.data[0].relationships.episodes.links.related + "?page[limit]=20"
+      match.relationships.episodes.links.related + "?page[limit]=20"
     );
   }
 

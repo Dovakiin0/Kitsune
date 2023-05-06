@@ -18,9 +18,9 @@ function AnimeCard({ id, title, src, additional, episodeId }: AnimeProps) {
     <motion.div
       initial={{ opacity: 0 }}
       whileInView={{ opacity: 1, transition: { delay: 0.05 } }}
-      whileHover={{ scale: 1.1, rotateZ: 2 }}
+      whileHover={{ scale: 1.1 }}
       whileTap={{ scale: 0.9 }}
-      className="w-[180px] lg:w-[200px] rounded-lg"
+      className="w-[180px] lg:w-[200px] rounded-lg hover:cursor-pointer"
       onClick={() =>
         router.push(
           `/anime/${encodeURIComponent(id)}/watch${episodeId ? "?ep=" + episodeId : ""

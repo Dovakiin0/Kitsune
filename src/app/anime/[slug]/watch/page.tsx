@@ -15,7 +15,7 @@ async function page({ params, searchParams }: any) {
   const { getInfo, getEpisode } = useAnime();
   const { getKitsuMapping } = useKitsu();
   let animeInfo: TAnimeInfo = await getInfo(params.slug);
-  const kitsuMapping: IKitsuEpisode = await getKitsuMapping(params.slug);
+  const kitsuMapping: IKitsuEpisode = await getKitsuMapping(animeInfo.title);
 
   let episode: TAnimeInfoEpisode = searchParams.ep
     ? animeInfo.episodes.filter(

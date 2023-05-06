@@ -28,10 +28,12 @@
     "react-responsive-carousel": "^3.2.23",
     "react-responsive-masonry": "^2.1.7",
     "rss-parser": "^3.13.0",
+    "string-similarity": "^4.0.4",
     "tailwindcss": "3.3.2",
     "typescript": "5.0.4"
   },
   "devDependencies": {
-    "@types/react-responsive-masonry": "^2.1.0"
+    "@types/react-responsive-masonry": "^2.1.0",
+    "@types/string-similarity": "^4.0.0"
   }
 }
