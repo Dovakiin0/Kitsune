@@ -38,7 +38,7 @@ function EpisodeDisplay({
           }`}
       >
         <p className={`font-bold`}>
-          EP {ep.number} {ep.kitsu?.attributes.titles.en}
+          EP {ep.number} {ep.kitsu?.attributes.canonicalTitle}
         </p>
       </div>
       {watched && (

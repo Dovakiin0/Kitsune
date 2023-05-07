@@ -22,6 +22,8 @@ function EpisodeLayout({ animeInfo, episode }: EpisodeLayoutProps) {
     return acc;
   }, {});
 
+  console.log(animeInfo);
+
   useEffect(() => {
     setWatched(getKitsuneWatchedId(animeInfo.id));
     setKitsuneWatched({

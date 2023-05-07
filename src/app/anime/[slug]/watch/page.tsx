@@ -28,11 +28,10 @@ async function page({ params, searchParams }: any) {
     "vidstreaming"
   );
 
-  function refetchCallback() { }
-
   if (typeof kitsuMapping !== "undefined") {
     kitsuMapping.data.map((kitsu: IKitsuEpisodeCore, index: number) => {
-      if (kitsu.attributes.airdate) {
+      const animeEpisode = animeInfo.episodes[index];
+      if (typeof animeEpisode !== "undefined" && kitsu.attributes.airdate) {
         animeInfo.episodes[index].kitsu = kitsu;
       }
     });
@@ -45,7 +44,7 @@ async function page({ params, searchParams }: any) {
           <KitsunePlayer
             episodeInfo={episodeInfo}
             animeInfo={animeInfo}
-            thumb={episode.kitsu?.attributes.thumbnail.original}
+            thumb={episode.kitsu?.attributes.thumbnail?.original}
           />
 
           <div className="flex justify-between items-center lg:p-5 p-2 gap-5">

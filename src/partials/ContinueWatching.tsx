@@ -13,9 +13,9 @@ function ContinueWatching() {
   }, []);
 
   return animes !== null ? (
-    <div className="mt-40">
-      <div className="flex space-x-5 items-center mb-10 text-pink-200">
-        <p className="text-xl uppercase font-bold tracking-widest text-center lg:text-start">
+    <div className="mt-20 lg:mt-40">
+      <div className="flex space-x-5 items-center mb-10 text-pink-200 justify-center lg:justify-start">
+        <p className="text-xl uppercase font-bold tracking-widest lg:text-start">
           Continue Watching
         </p>
         <AiOutlineFieldTime size={35} />
