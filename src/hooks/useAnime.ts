@@ -32,13 +32,21 @@ export default function useAnime() {
   }
 
   async function getEpisode(id: string, serverName: string = "gogocdn") {
-    const KV = await kv.get(id);
-    if (KV !== null) {
-      return KV;
+    let KV;
+    if (process.env.KV_REST_API_URL && process.env.KV_REST_API_TOKEN) {
+      KV = await kv.get(id);
+      if (KV !== null) {
+        console.log("HIT");
+        return KV;
+      }
     }
     const data = await fetch(API.episode + "/" + id + "?server=" + serverName);
     let json = await data.json();
-    await kv.set(id, JSON.stringify(json));
+
+    console.log("MISS");
+    if (KV) {
+      await kv.set(id, JSON.stringify(json));
+    }
     return json;
   }
 

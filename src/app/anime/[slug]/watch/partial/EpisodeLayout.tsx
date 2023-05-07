@@ -22,8 +22,6 @@ function EpisodeLayout({ animeInfo, episode }: EpisodeLayoutProps) {
     return acc;
   }, {});
 
-  console.log(animeInfo);
-
   useEffect(() => {
     setWatched(getKitsuneWatchedId(animeInfo.id));
     setKitsuneWatched({
@@ -74,8 +72,8 @@ function EpisodeLayout({ animeInfo, episode }: EpisodeLayoutProps) {
                 watched={
                   watched
                     ? watched.ep.some(
-                      (e: { id: string; number: number }) => e.id === ep.id
-                    )
+                        (e: { id: string; number: number }) => e.id === ep.id
+                      )
                     : false
                 }
               />
