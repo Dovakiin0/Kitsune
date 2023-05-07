@@ -17,8 +17,6 @@ Also checkout the mobile app: [Android](https://github.com/Dovakiin0/animeworldz
 
 ## Contributing
 
-Issues will be opened frequently, be sure to watch for it or make your own request/feature.
-
 ```
 fork the repo
 
@@ -39,6 +37,12 @@ cd kitsune/
 npm install or yarn
 npm run dev or yarn dev
 ```
+
+## Deployment
+
+Kitsune uses vercel KV to cache data. However, it is optional. To use caching you can create your own KV instance.
+
+[![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https%3A%2F%2Fgithub.com%2FDovakiin0%2FKitsune)
 
 ## Support
 
