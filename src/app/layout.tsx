@@ -4,6 +4,7 @@ import SearchAnime from "@/partials/SearchAnime";
 import { Metadata } from "next";
 import { FaDiscord, FaGithub } from "react-icons/fa";
 import Link from "next/link";
+import Script from "next/script";
 
 const APP_NAME = "Kitsune";
 const APP_DEFAULT_TITLE = "Kitsune | Anime Streaming";
@@ -45,6 +46,18 @@ export default function RootLayout({
 }) {
   return (
     <html data-theme="dracula" lang="en" className={roboto.className}>
+      <Script
+        src="https://www.googletagmanager.com/gtag/js?id=G-X9RZ58XPH1"
+        strategy="afterInteractive"
+      />
+      <Script id="google-analytics" strategy="afterInteractive">
+        {`
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'G-X9RZ58XPH1');`}
+      </Script>
       <body>
         <div className="navbar bg-base-100">
           <div className="navbar-start">
@@ -73,7 +86,7 @@ export default function RootLayout({
                   <a href="/">Home</a>
                 </li>
                 <li>
-                  <a href="/news">News</a>
+                  <a href="/manga">Manga</a>
                 </li>
                 <li>
                   <a href="/waifu">Waifu</a>
@@ -96,7 +109,7 @@ export default function RootLayout({
                 <a href="/">Home</a>
               </li>
               <li>
-                <a href="/news">News</a>
+                <a href="/manga">Manga</a>
               </li>
               <li>
                 <a href="/waifu">Waifu</a>
