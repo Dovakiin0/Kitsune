@@ -1,7 +1,6 @@
 "use client";
 import React from "react";
 import { motion } from "framer-motion";
-import { TAnimeInfoEpisode } from "@/@types/AnimeType";
 import { Episode } from "@/@types/EnimeType";
 
 type EpisodeDisplayProps = {
@@ -27,14 +26,12 @@ function EpisodeDisplay({
     >
       <img
         src={ep.image || backSrc}
-        className={`object-cover w-full h-full rounded-lg ${
-          !isCurrent && "opacity-40"
-        }`}
+        className={`object-cover w-full h-full rounded-lg ${!isCurrent && "opacity-40"
+          }`}
       />
       <div
-        className={`absolute bottom-0 m-5 p-2 ${
-          isCurrent && "bg-base-100 rounded-md"
-        }`}
+        className={`absolute bottom-0 m-5 p-2 ${isCurrent && "bg-base-100 rounded-md"
+          }`}
       >
         <p className={`font-bold`}>
           EP {ep.number} {ep.title}
@@ -42,9 +39,8 @@ function EpisodeDisplay({
       </div>
       {watched && (
         <div
-          className={`badge badge-primary ${
-            !isCurrent && "badge-outline"
-          } absolute top-0 right-0 m-5`}
+          className={`badge badge-primary ${!isCurrent && "badge-outline"
+            } absolute top-0 right-0 m-5`}
         >
           {isCurrent ? "Watching" : "Watched"}{" "}
         </div>
