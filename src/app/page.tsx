@@ -22,19 +22,18 @@ export default async function Home() {
           <p className="text-xl mb-10 uppercase font-bold text-pink-200 tracking-widest">
             Recent Release
           </p>
-          {
-            <div className="flex flex-wrap justify-between lg:justify-start xl:gap-8 lg:gap-6 gap-3 m-2 lg:m-0">
-              {recentAnimes.data.map((anime: IRecentAnime, index: number) => (
-                <AnimeCard
-                  id={anime.id}
-                  key={index}
-                  title={anime.anime.title.romaji}
-                  src={anime.anime.coverImage}
-                  additional={`Episode: ${anime.number}`}
-                />
-              ))}
-            </div>
-          }
+
+          <div className="flex flex-wrap justify-between lg:justify-start xl:gap-8 lg:gap-6 gap-3 m-2 lg:m-0">
+            {recentAnimes.data.map((anime: IRecentAnime, index: number) => (
+              <AnimeCard
+                id={anime.anime.slug}
+                key={index}
+                title={anime.anime.title.romaji}
+                src={anime.anime.coverImage}
+                additional={`Episode: ${anime.number}`}
+              />
+            ))}
+          </div>
           <ContinueWatching />
           <p
             className={`text-xl mt-20 lg:mt-30 mb-10 uppercase font-bold text-pink-200 tracking-widest`}
@@ -44,7 +43,7 @@ export default async function Home() {
           <div className="flex flex-wrap justify-between lg:justify-start xl:gap-8 lg:gap-6 gap-3 m-2 lg:m-0">
             {popularAnimes.data.map((anime: IAnime, index: number) => (
               <AnimeCard
-                id={anime.id}
+                id={anime.slug}
                 key={index}
                 title={anime.title.romaji}
                 src={anime.coverImage}

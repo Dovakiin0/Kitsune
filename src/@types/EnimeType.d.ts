@@ -29,6 +29,13 @@ export interface IAnime {
   relations: Relation[];
 }
 
+export interface ITmdbImage {
+  backdrops: Logos[];
+  id: number;
+  logos: Logos[];
+  poster: Logos[];
+}
+
 export interface Logos {
   aspect_ratio: number;
   height: number;

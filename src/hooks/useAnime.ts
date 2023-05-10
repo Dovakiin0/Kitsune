@@ -1,12 +1,12 @@
 import kv from "@vercel/kv";
-import { ANIME_URI } from "@/utils/constants";
+import { ANIME_URI, BASE_URI } from "@/utils/constants";
 
 export default function useAnime() {
   let API = {
     recent: ANIME_URI + "/recent",
     popular: ANIME_URI + "/popular",
     info: ANIME_URI + "/anime",
-    episode: ANIME_URI + "/watch",
+    episode: BASE_URI + "/anime/gogoanime/watch",
     search: ANIME_URI + "/search",
   };
 
@@ -30,19 +30,17 @@ export default function useAnime() {
     return data.json();
   }
 
-  async function getEpisode(id: string, serverName: string = "gogocdn") {
+  async function getEpisode(id: string, serverName: string = "vidstreaming") {
     let KV;
     if (process.env.KV_REST_API_URL && process.env.KV_REST_API_TOKEN) {
       KV = await kv.get(id);
       if (KV !== null) {
-        console.log("HIT");
         return KV;
       }
     }
-    const data = await fetch(API.episode + "/" + id + "?server=" + serverName);
+    const data = await fetch(API.episode + id + "?server=" + serverName);
     let json = await data.json();
 
-    console.log("MISS");
     if (KV) {
       await kv.set(id, JSON.stringify(json));
     }

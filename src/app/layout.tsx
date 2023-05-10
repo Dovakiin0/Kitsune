@@ -123,7 +123,7 @@ export default function RootLayout({
             </div>
           </div>
         </div>
-        <div className="lg:hidden mb-5">
+        <div className="lg:hidden">
           <SearchAnime />
         </div>
         {children}
