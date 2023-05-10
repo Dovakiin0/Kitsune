@@ -1,29 +1,38 @@
 "use client";
-import React from "react";
+import React, { useEffect, useState } from "react";
 import ArtPlayer from "./ArtPlayer";
-import { TEpisodeInfo, TAnimeInfo, TEpisodeSources } from "@/@types/AnimeType";
 import Hls from "hls.js";
+import { Episode, EpisodeSource, IAnime } from "@/@types/EnimeType";
+import useAnime from "@/hooks/useAnime";
+import { TEpisodeInfo, TEpisodeSources } from "@/@types/AnimeType";
 
 type KitsunePlayerProps = {
-  episodeInfo: TEpisodeInfo;
-  animeInfo: TAnimeInfo;
-  thumb: string | undefined;
+  episodeInfo: Episode;
+  animeInfo: IAnime;
 };
 
-function KitsunePlayer({ episodeInfo, animeInfo, thumb }: KitsunePlayerProps) {
-  let uri;
-  episodeInfo.sources.map((source: TEpisodeSources) => {
-    if (source.quality === "720p") {
-      uri = "https://cors.zimjs.com/" + source.url;
-    }
-  });
+function KitsunePlayer({ episodeInfo, animeInfo }: KitsunePlayerProps) {
+  const [epSource, setEpSource] = useState<TEpisodeInfo | null>(null);
+  const [uri, setUri] = useState<string>("");
+  const { getEpisode } = useAnime();
+
+  const fetchSource = async () => {
+    const data = await getEpisode(episodeInfo.sources[0].target);
+    setEpSource(data);
+    data.sources.map((source: TEpisodeSources) => {
+      if (source.quality === "720p") {
+        setUri("https://cors.zimjs.com/" + source.url);
+      }
+    });
+  };
+
+  useEffect(() => {
+    fetchSource();
+  }, []);
 
   let options = {
     container: ".artplayer-app",
-    url:
-      typeof uri !== "undefined"
-        ? uri
-        : "https://cors.zimjs.com/" + episodeInfo.sources[0].url,
+    url: uri,
     customType: {
       m3u8: function(video: any, url: string) {
         let hls = new Hls();
@@ -35,7 +44,7 @@ function KitsunePlayer({ episodeInfo, animeInfo, thumb }: KitsunePlayerProps) {
       },
     },
     title: animeInfo.title,
-    poster: typeof thumb !== "undefined" ? thumb : animeInfo.image,
+    poster: episodeInfo.image ?? animeInfo.bannerImage,
     volume: 1,
     isLive: false,
     muted: false,
@@ -63,13 +72,15 @@ function KitsunePlayer({ episodeInfo, animeInfo, thumb }: KitsunePlayerProps) {
     moreVideoAttr: {
       crossOrigin: "anonymous",
     },
-    quality: episodeInfo.sources.map((source: TEpisodeSources) => ({
-      default: source.quality === "720p",
-      html: source.quality,
-      url: "https://cors.zimjs.com/" + source.url,
-    })),
+    quality: epSource
+      ? epSource.sources.map((source: TEpisodeSources) => ({
+        default: source.quality === "720p",
+        html: source.quality,
+        url: "https://cors.zimjs.com/" + source.url,
+      }))
+      : [],
     thumbnails: {
-      url: animeInfo.image,
+      url: animeInfo.coverImage,
       number: 60,
       column: 10,
     },
@@ -80,8 +91,19 @@ function KitsunePlayer({ episodeInfo, animeInfo, thumb }: KitsunePlayerProps) {
     // },
   };
 
-  return (
+  return epSource ? (
     <ArtPlayer option={options} className="md:h-[800px] h-[250px] w-full" />
+  ) : (
+    <div
+      className={`rounded-lg p-5 md:h-[800px] h-[250px] w-full`}
+      style={{
+        backgroundImage: `url(${animeInfo.bannerImage})`,
+        backgroundRepeat: "no-repeat",
+        backgroundSize: "cover",
+        filter: "blur(20px)",
+        WebkitFilter: "blur(20px)",
+      }}
+    ></div>
   );
 }
 

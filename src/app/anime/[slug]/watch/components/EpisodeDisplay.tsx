@@ -2,9 +2,10 @@
 import React from "react";
 import { motion } from "framer-motion";
 import { TAnimeInfoEpisode } from "@/@types/AnimeType";
+import { Episode } from "@/@types/EnimeType";
 
 type EpisodeDisplayProps = {
-  ep: TAnimeInfoEpisode;
+  ep: Episode;
   backSrc: string;
   isCurrent: boolean;
   watched?: boolean;
@@ -16,10 +17,6 @@ function EpisodeDisplay({
   isCurrent,
   watched = false,
 }: EpisodeDisplayProps) {
-  const thumbnail = ep.kitsu?.attributes!.thumbnail;
-
-  const src = thumbnail ? thumbnail.original : backSrc;
-
   return (
     <motion.div
       initial={{ opacity: 0 }}
@@ -29,22 +26,25 @@ function EpisodeDisplay({
       className="w-full h-[150px] rounded-lg relative hover:cursor-pointer"
     >
       <img
-        src={src}
-        className={`object-cover w-full h-full rounded-lg ${!isCurrent && "opacity-40"
-          }`}
+        src={ep.image || backSrc}
+        className={`object-cover w-full h-full rounded-lg ${
+          !isCurrent && "opacity-40"
+        }`}
       />
       <div
-        className={`absolute bottom-0 m-5 p-2 ${isCurrent && "bg-base-100 rounded-md"
-          }`}
+        className={`absolute bottom-0 m-5 p-2 ${
+          isCurrent && "bg-base-100 rounded-md"
+        }`}
       >
         <p className={`font-bold`}>
-          EP {ep.number} {ep.kitsu?.attributes.canonicalTitle}
+          EP {ep.number} {ep.title}
         </p>
       </div>
       {watched && (
         <div
-          className={`badge badge-primary ${!isCurrent && "badge-outline"
-            } absolute top-0 right-0 m-5`}
+          className={`badge badge-primary ${
+            !isCurrent && "badge-outline"
+          } absolute top-0 right-0 m-5`}
         >
           {isCurrent ? "Watching" : "Watched"}{" "}
         </div>

@@ -4,8 +4,6 @@ Watch your favourite anime anywhere, anytime. No Ads.
 
 Previously called [**AnimeWorldz**](https://github.com/Dovakiin0/Kitsune/tree/v2.0), Kitsune is a free, open-source anime streaming website. It is built using the [Next Js](https://nextjs.org/) framework and [Tailwind CSS](https://tailwindcss.com/).
 
-Migrated from [AnimeWorldz Backend](https://github.com/Dovakiin0/anime-data) to [Consumet](https://github.com/consumet/api.consumet.org).
-
 _Kitsune is still under development and may encounter many bugs. Feel free to open any issue regarding bugs or features_
 
 Also checkout the mobile app: [Android](https://github.com/Dovakiin0/animeworldz-mobile), which is still called AnimeWorldz but will later be updated.
@@ -43,6 +41,12 @@ npm run dev or yarn dev
 Kitsune uses vercel KV to cache data. However, it is optional. To use caching you can create your own KV instance.
 
 [![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https%3A%2F%2Fgithub.com%2FDovakiin0%2FKitsune)
+
+## Credits
+
+[Consumet](https://github.com/consumet/consumet.ts)
+[Enime-Project](https://github.com/Enime-Project/api.enime.moe)
+[anime-data](https://github.com/Dovakiin0/anime-data)
 
 ## Support
 

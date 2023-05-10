@@ -5,6 +5,7 @@ import { Metadata } from "next";
 import { FaDiscord, FaGithub } from "react-icons/fa";
 import Link from "next/link";
 import Script from "next/script";
+import { nightTokyo } from "@/utils/fonts";
 
 const APP_NAME = "Kitsune";
 const APP_DEFAULT_TITLE = "Kitsune | Anime Streaming";
@@ -59,7 +60,7 @@ export default function RootLayout({
   gtag('config', 'G-X9RZ58XPH1');`}
       </Script>
       <body>
-        <div className="navbar bg-base-100">
+        <div className="navbar bg-gradient-to-b from-base-300 to-transparent lg:absolute lg:top-0 lg:z-50">
           <div className="navbar-start">
             <div className="dropdown">
               <label tabIndex={0} className="btn btn-ghost lg:hidden">
@@ -97,7 +98,7 @@ export default function RootLayout({
               <img src="/icon.png" alt="logo" width="80" height="80" />
               <a
                 href="/"
-                className="btn btn-ghost font-extrabold text-2xl text-transparent bg-clip-text bg-gradient-to-r from-gray-200 to-pink-600 tracking-widest"
+                className={`${nightTokyo.className} btn btn-ghost font-extrabold text-3xl text-transparent bg-clip-text bg-gradient-to-r from-gray-200 to-pink-600 tracking-widest`}
               >
                 KITSUNE
               </a>
@@ -122,7 +123,7 @@ export default function RootLayout({
             </div>
           </div>
         </div>
-        <div className="lg:hidden mb-5">
+        <div className="lg:hidden">
           <SearchAnime />
         </div>
         {children}

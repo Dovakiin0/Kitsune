@@ -1,16 +1,13 @@
 "use client";
-import React, { createRef, useEffect, useRef, useState } from "react";
-import {
-  TAnimeInfoEpisode,
-  TAnimeInfo,
-  TWatchedAnime,
-} from "@/@types/AnimeType";
+import React, { createRef, useRef, useEffect, useState } from "react";
+import { TWatchedAnime } from "@/@types/AnimeType";
 import EpisodeDisplay from "../components/EpisodeDisplay";
 import useLocalStorage from "@/hooks/useLocalStorage";
+import { Episode, IAnime } from "@/@types/EnimeType";
 
 type EpisodeLayoutProps = {
-  animeInfo: TAnimeInfo;
-  episode: TAnimeInfoEpisode;
+  animeInfo: IAnime;
+  episode: Episode;
 };
 
 function EpisodeLayout({ animeInfo, episode }: EpisodeLayoutProps) {
@@ -23,11 +20,11 @@ function EpisodeLayout({ animeInfo, episode }: EpisodeLayoutProps) {
   }, {});
 
   useEffect(() => {
-    setWatched(getKitsuneWatchedId(animeInfo.id));
+    setWatched(getKitsuneWatchedId(animeInfo.slug));
     setKitsuneWatched({
-      id: animeInfo.id,
-      title: animeInfo.title,
-      image: animeInfo.image,
+      id: animeInfo.slug,
+      title: animeInfo.title.romaji,
+      image: animeInfo.coverImage,
       ep: {
         id: episode.id,
         number: episode.number,
@@ -58,22 +55,22 @@ function EpisodeLayout({ animeInfo, episode }: EpisodeLayoutProps) {
         />
       </div>
       <div className="flex flex-wrap gap-5 max-h-[90vh] overflow-y-auto">
-        {animeInfo.episodes.map((ep: TAnimeInfoEpisode, index: number) => (
+        {animeInfo.episodes.map((ep: Episode, index: number) => (
           <div
             key={index}
             className={"w-full lg:w-[320px]"}
             ref={refs[ep.number]}
           >
-            <a href={`/anime/${animeInfo.id}/watch?ep=${ep.id}`}>
+            <a href={`/anime/${animeInfo.slug}/watch?ep=${ep.id}`}>
               <EpisodeDisplay
                 ep={ep}
-                backSrc={animeInfo.image}
+                backSrc={animeInfo.coverImage}
                 isCurrent={episode.id === ep.id}
                 watched={
                   watched
                     ? watched.ep.some(
-                        (e: { id: string; number: number }) => e.id === ep.id
-                      )
+                      (e: { id: string; number: number }) => e.id === ep.id
+                    )
                     : false
                 }
               />

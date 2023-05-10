@@ -1,14 +1,13 @@
 import kv from "@vercel/kv";
-import { ANIME_URI, KITSU_URI } from "@/utils/constants";
+import { ANIME_URI, BASE_URI } from "@/utils/constants";
 
 export default function useAnime() {
   let API = {
-    recent: ANIME_URI + "/recent-episodes",
-    popular: ANIME_URI + "/top-airing",
-    info: ANIME_URI + "/info",
-    episode: ANIME_URI + "/watch",
-    server: ANIME_URI + "/servers",
-    trending: KITSU_URI + "/trending/anime",
+    recent: ANIME_URI + "/recent",
+    popular: ANIME_URI + "/popular",
+    info: ANIME_URI + "/anime",
+    episode: BASE_URI + "/anime/gogoanime/watch",
+    search: ANIME_URI + "/search",
   };
 
   async function getRecent() {
@@ -31,47 +30,33 @@ export default function useAnime() {
     return data.json();
   }
 
-  async function getEpisode(id: string, serverName: string = "gogocdn") {
+  async function getEpisode(id: string, serverName: string = "vidstreaming") {
     let KV;
     if (process.env.KV_REST_API_URL && process.env.KV_REST_API_TOKEN) {
       KV = await kv.get(id);
       if (KV !== null) {
-        console.log("HIT");
         return KV;
       }
     }
-    const data = await fetch(API.episode + "/" + id + "?server=" + serverName);
+    const data = await fetch(API.episode + id + "?server=" + serverName);
     let json = await data.json();
 
-    console.log("MISS");
     if (KV) {
       await kv.set(id, JSON.stringify(json));
     }
     return json;
   }
 
-  async function getServers(id: string) {
-    const data = await fetch(API.server + "/" + id);
-    return data.json();
-  }
-
   async function getSearch(query: string) {
-    const data = await fetch(ANIME_URI + "/" + query);
-    return data.json();
-  }
-
-  async function getTrending() {
-    const data = await fetch(API.trending);
+    const data = await fetch(API.search + "/" + query);
     return data.json();
   }
 
   return {
-    getTrending,
     getRecent,
     getPopular,
     getInfo,
     getEpisode,
-    getServers,
     getSearch,
   };
 }
