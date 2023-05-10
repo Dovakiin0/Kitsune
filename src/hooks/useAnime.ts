@@ -1,14 +1,12 @@
 import kv from "@vercel/kv";
-import { ANIME_URI, KITSU_URI } from "@/utils/constants";
+import { ANIME_URI } from "@/utils/constants";
 
 export default function useAnime() {
   let API = {
-    recent: ANIME_URI + "/recent-episodes",
-    popular: ANIME_URI + "/top-airing",
-    info: ANIME_URI + "/info",
+    recent: ANIME_URI + "/recent",
+    popular: ANIME_URI + "/popular",
+    info: ANIME_URI + "/anime",
     episode: ANIME_URI + "/watch",
-    server: ANIME_URI + "/servers",
-    trending: KITSU_URI + "/trending/anime",
   };
 
   async function getRecent() {
@@ -50,28 +48,16 @@ export default function useAnime() {
     return json;
   }
 
-  async function getServers(id: string) {
-    const data = await fetch(API.server + "/" + id);
-    return data.json();
-  }
-
   async function getSearch(query: string) {
     const data = await fetch(ANIME_URI + "/" + query);
     return data.json();
   }
 
-  async function getTrending() {
-    const data = await fetch(API.trending);
-    return data.json();
-  }
-
   return {
-    getTrending,
     getRecent,
     getPopular,
     getInfo,
     getEpisode,
-    getServers,
     getSearch,
   };
 }
