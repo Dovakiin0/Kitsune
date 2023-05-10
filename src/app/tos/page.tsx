@@ -7,6 +7,7 @@ export const metadata = {
 function page() {
   return (
     <div className="m-5 lg:m-10 flex flex-col space-y-5">
+      <div className="h-20"></div>
       <p className="text-3xl">Terms of Service</p>
       <p>
         By using our website, you agree to be bound by the following terms and

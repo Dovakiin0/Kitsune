@@ -24,7 +24,7 @@ async function page({ searchParams }: any) {
       <div className="mt-10 flex flex-wrap justify-between lg:justify-start xl:gap-8 lg:gap-6 gap-3">
         {animeInfo.data.map((anime: ISearchAnime, index: number) => (
           <AnimeCard
-            id={anime.id}
+            id={anime.slug}
             key={index}
             title={anime.title.romaji}
             src={anime.coverImage}

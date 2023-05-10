@@ -27,7 +27,7 @@ export async function GET(req: Request) {
 async function getTMDBLogo(id: number) {
   const res = await fetch(`${API.logo}/${id}/images`, {
     headers: {
-      Authorization: `Bearer eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiI2MmFmODlmMDkzOTMyY2UwNmJmNmZiZjAwMzI3YjFlZSIsInN1YiI6IjYwYTFmMWEwYjBiYTdlMDA1ODQwMmFiOCIsInNjb3BlcyI6WyJhcGlfcmVhZCJdLCJ2ZXJzaW9uIjoxfQ.g9Q4IzacEEki4VQZS_YLcCt2RYvkVq2s0H0pICiY3UE`,
+      Authorization: `Bearer ${process.env.TMDB_ACCESS_KEY}`,
       accept: "application/json",
     },
   });

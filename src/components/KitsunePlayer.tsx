@@ -44,7 +44,7 @@ function KitsunePlayer({ episodeInfo, animeInfo }: KitsunePlayerProps) {
       },
     },
     title: animeInfo.title,
-    poster: episodeInfo.image ?? animeInfo.bannerImage,
+    poster: episodeInfo.image ?? "",
     volume: 1,
     isLive: false,
     muted: false,

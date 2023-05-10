@@ -65,7 +65,7 @@ function Search() {
               {searchFilter.map((anime: ISearchAnime) => (
                 <SearchAnimeCard
                   key={anime.id}
-                  id={anime.id}
+                  id={anime.slug}
                   title={anime.title.romaji}
                   src={anime.coverImage}
                   additional={`Released: ${anime.year}`}
