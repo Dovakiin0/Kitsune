@@ -7,6 +7,7 @@ export default function useAnime() {
     popular: ANIME_URI + "/popular",
     info: ANIME_URI + "/anime",
     episode: ANIME_URI + "/watch",
+    search: ANIME_URI + "/search",
   };
 
   async function getRecent() {
@@ -49,7 +50,7 @@ export default function useAnime() {
   }
 
   async function getSearch(query: string) {
-    const data = await fetch(ANIME_URI + "/" + query);
+    const data = await fetch(API.search + "/" + query);
     return data.json();
   }
 

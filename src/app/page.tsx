@@ -1,7 +1,6 @@
 import AnimeCard from "@/components/AnimeCard";
 import Carousel from "@/components/Carousel";
 import useAnime from "@/hooks/useAnime";
-import TrendingAnimeCard from "@/components/TrendingAnimeCard";
 import NewsCard from "@/components/NewsCard";
 import useNews from "@/hooks/useNews";
 import { TNewsFeed } from "@/@types/NewsType";
@@ -36,7 +35,7 @@ export default async function Home() {
               ))}
             </div>
           }
-          {/*<ContinueWatching />*/}
+          <ContinueWatching />
           <p
             className={`text-xl mt-20 lg:mt-30 mb-10 uppercase font-bold text-pink-200 tracking-widest`}
           >
@@ -56,15 +55,6 @@ export default async function Home() {
         </div>
         <div className="lg:m-10 mt-10 flex flex-col items-center justify-center lg:items-start lg:justify-start xl:w-2/3">
           <h2 className="text-xl mb-10 uppercase font-bold text-pink-200 tracking-widest">
-            Trending Anime
-          </h2>
-          <div className="flex flex-col space-y-5 m-3 lg:m-0 w-full">
-            {/*trendingAnimes.data.map((anime: IKitsuAnime, index: number) => (
-              <TrendingAnimeCard key={index} anime={anime} index={index} />
-            ))*/}
-          </div>
-
-          <h2 className="text-xl mt-20 mb-10 uppercase font-bold text-pink-200 tracking-widest">
             Recent News
           </h2>
           <div className="flex flex-col space-y-5 m-3 lg:m-0">

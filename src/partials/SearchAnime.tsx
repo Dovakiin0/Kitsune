@@ -1,15 +1,14 @@
 "use client";
 import React, { useState, useEffect } from "react";
 import SearchAnimeCard from "@/components/SearchAnimeCard";
-import { TSearchAnime } from "@/@types/AnimeType";
 import useAnime from "@/hooks/useAnime";
 import Loading from "@/components/LoadingSingle";
 import Link from "next/link";
-import { FaSearch } from "react-icons/fa";
+import { ISearchAnime } from "@/@types/EnimeType";
 
 function Search() {
   const [search, setSearch] = useState("");
-  const [searchFilter, setSearchFilter] = useState<TSearchAnime[]>([]);
+  const [searchFilter, setSearchFilter] = useState<ISearchAnime[]>([]);
   const [loading, setLoading] = useState(false);
   const { getSearch } = useAnime();
 
@@ -18,7 +17,7 @@ function Search() {
     const delayDebounceFn = setTimeout(async () => {
       setLoading(true);
       const data = await getSearch(search);
-      setSearchFilter(data.results.slice(0, 5));
+      setSearchFilter(data.data.slice(0, 5));
       setLoading(false);
     }, 1000);
     return () => {
@@ -63,25 +62,18 @@ function Search() {
             </div>
           ) : searchFilter.length > 0 ? (
             <>
-              {searchFilter.map((anime) => (
+              {searchFilter.map((anime: ISearchAnime) => (
                 <SearchAnimeCard
                   key={anime.id}
                   id={anime.id}
-                  title={
-                    anime.title !== ""
-                      ? anime.title
-                      : anime.id.split("-").join(" ").toString()
-                  }
-                  src={anime.image}
-                  additional={
-                    anime.releaseDate + " | " + anime.subOrDub.toUpperCase() ??
-                    ""
-                  }
+                  title={anime.title.romaji}
+                  src={anime.coverImage}
+                  additional={`Released: ${anime.year}`}
                   cb={handleSearchCallback}
                 />
               ))}
               <Link
-                className="btn btn-secondary w-full"
+                className="btn btn-outline w-full"
                 href={`/search?q=${encodeURIComponent(search)}`}
                 onClick={handleSearchCallback}
               >

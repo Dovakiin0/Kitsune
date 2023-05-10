@@ -29,6 +29,16 @@ export interface IAnime {
   relations: Relation[];
 }
 
+export interface Logos {
+  aspect_ratio: number;
+  height: number;
+  iso_639_1: string;
+  file_path: string;
+  vote_average: number;
+  vote_count: number;
+  width: number;
+}
+
 export interface IRecentAnime {
   id: string;
   anime: IAnime;
@@ -41,7 +51,7 @@ export interface IRecentAnime {
   sources: Episodes[];
 }
 
-type ISearchAnime = Omit<IAnime, "episodes" | "relations">;
+export type ISearchAnime = Omit<IAnime, "episodes" | "relations">;
 
 export interface Title {
   native: string;

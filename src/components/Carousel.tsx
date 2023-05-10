@@ -1,6 +1,5 @@
 "use client";
 import { IAnime } from "@/@types/EnimeType";
-import { IKitsuAnime } from "@/@types/KitsuAnime";
 import Link from "next/link";
 import React from "react";
 import { Carousel as ReactCarousel } from "react-responsive-carousel";
@@ -65,7 +64,7 @@ function CarouselSingle({
         <div>
           <Link
             href={`/anime/${episodeId}/watch`}
-            className="btn btn-sm btn-ghost lg:btn-md"
+            className="btn btn-sm btn-outline lg:btn-md"
           >
             Watch Now
           </Link>
