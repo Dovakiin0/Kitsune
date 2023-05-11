@@ -91,5 +91,16 @@ export default function useLocalStorage() {
     }
   }
 
-  return { getKitsuneWatched, setKitsuneWatched, getKitsuneWatchedId };
+  function delKitsuneWatched(id: string) {
+    let watched = getKitsuneWatched();
+    delete watched[id];
+    localStorage.setItem("watched", JSON.stringify({ watched }));
+  }
+
+  return {
+    getKitsuneWatched,
+    setKitsuneWatched,
+    getKitsuneWatchedId,
+    delKitsuneWatched,
+  };
 }
