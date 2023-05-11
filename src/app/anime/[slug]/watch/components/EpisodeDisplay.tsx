@@ -30,7 +30,7 @@ function EpisodeDisplay({
           }`}
       />
       <div
-        className={`absolute bottom-0 m-5 p-2 ${isCurrent && "bg-base-100 rounded-md"
+        className={`absolute bottom-0 m-5 p-2 ${isCurrent && "bg-base-100 bg-opacity-60 rounded-md"
           }`}
       >
         <p className={`font-bold`}>
