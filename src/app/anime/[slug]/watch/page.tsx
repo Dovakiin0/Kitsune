@@ -47,7 +47,7 @@ async function page({ params, searchParams }: any) {
       </div>
       <div className="lg:flex mt-2 lg:mt-0">
         {/*Episode Panel*/}
-        <div className="flex-1 lg:pl-5 lg:pr-5">
+        <div className="flex-1">
           <div className="flex-col">
             <KitsunePlayer episodeInfo={episode} animeInfo={animeInfo} />
 
@@ -59,7 +59,9 @@ async function page({ params, searchParams }: any) {
 
               <FaForward size={25} className="hover:text-primary" />
             </div>
-            <EpisodeLayout animeInfo={animeInfo} episode={episode} />
+            <div className="lg:pl-5 lg:pr-5">
+              <EpisodeLayout animeInfo={animeInfo} episode={episode} />
+            </div>
           </div>
         </div>
         {/*Information Panel*/}
