@@ -23,7 +23,7 @@ export default async function Home() {
             Recent Release
           </p>
 
-          <div className="flex flex-wrap justify-between lg:justify-start xl:gap-8 lg:gap-6 gap-3 m-2 lg:m-0">
+          <div className="flex flex-wrap justify-evenly lg:justify-start xl:gap-8 lg:gap-6 gap-3 m-2 lg:m-0">
             {recentAnimes.data.map((anime: IRecentAnime, index: number) => (
               <AnimeCard
                 id={anime.anime.slug}
@@ -40,7 +40,7 @@ export default async function Home() {
           >
             Popular Release
           </p>
-          <div className="flex flex-wrap justify-between lg:justify-start xl:gap-8 lg:gap-6 gap-3 m-2 lg:m-0">
+          <div className="flex flex-wrap justify-evenly lg:justify-start xl:gap-8 lg:gap-6 gap-3 m-2 lg:m-0">
             {popularAnimes.data.map((anime: IAnime, index: number) => (
               <AnimeCard
                 id={anime.slug}

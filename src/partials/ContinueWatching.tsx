@@ -25,7 +25,7 @@ function ContinueWatching() {
         </p>
         <AiOutlineFieldTime size={35} />
       </div>
-      <div className="flex flex-wrap justify-between lg:justify-start xl:gap-8 lg:gap-6 gap-3 m-2 lg:m-0">
+      <div className="flex flex-wrap justify-evenly lg:justify-start xl:gap-8 lg:gap-6 gap-3 m-2 lg:m-0">
         {Object.keys(animes)
           .reverse()
           .map((key: string) => (
