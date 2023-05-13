@@ -54,7 +54,7 @@ function Search() {
           onChange={(e) => setSearch(e.target.value)}
         />
       </label>
-      <div className="absolute z-[99] w-full lg:w-auto">
+      <div className="absolute z-[99] w-full lg:w-[410px]">
         <div className="mt-1 bg-opacity-90 bg-base-100 shadow-lg rounded-lg w-full">
           {(searchFilter.length === 0 && search !== "") || loading ? (
             <div className="flex w-full gap-5 p-10 items-center justify-center">
