@@ -2,9 +2,10 @@
 import React, { useEffect, useState } from "react";
 import ArtPlayer from "./ArtPlayer";
 import Hls from "hls.js";
-import { Episode, EpisodeSource, IAnime } from "@/@types/EnimeType";
+import { Episode, IAnime } from "@/@types/EnimeType";
 import useAnime from "@/hooks/useAnime";
 import { TEpisodeInfo, TEpisodeSources } from "@/@types/AnimeType";
+import loading from "../assets/genkai.gif";
 
 type KitsunePlayerProps = {
   episodeInfo: Episode;
@@ -17,14 +18,18 @@ function KitsunePlayer({ episodeInfo, animeInfo }: KitsunePlayerProps) {
   const { getEpisode } = useAnime();
 
   const fetchSource = async () => {
+    if (!episodeInfo) return;
     const data = await getEpisode(episodeInfo.sources[0].target);
     setEpSource(data);
-    data.sources.map((source: TEpisodeSources) => {
-      if (source.quality === "720p") {
-        setUri("https://cors.zimjs.com/" + source.url);
-      }
-    });
+    data.sources &&
+      data.sources.map((source: TEpisodeSources) => {
+        if (source.quality === "720p") {
+          setUri("https://cors.zimjs.com/" + source.url);
+        }
+      });
   };
+
+  console.log(epSource);
 
   useEffect(() => {
     fetchSource();
@@ -44,7 +49,7 @@ function KitsunePlayer({ episodeInfo, animeInfo }: KitsunePlayerProps) {
       },
     },
     title: animeInfo.title,
-    poster: episodeInfo.image ?? "",
+    poster: episodeInfo?.image ?? "",
     volume: 1,
     isLive: false,
     muted: false,
@@ -72,23 +77,24 @@ function KitsunePlayer({ episodeInfo, animeInfo }: KitsunePlayerProps) {
     moreVideoAttr: {
       crossOrigin: "anonymous",
     },
-    quality: epSource
-      ? epSource.sources.map((source: TEpisodeSources) => ({
-        default: source.quality === "720p",
-        html: source.quality,
-        url: "https://cors.zimjs.com/" + source.url,
-      }))
-      : [],
+    quality:
+      epSource && epSource.sources
+        ? epSource.sources.map((source: TEpisodeSources) => ({
+          default: source.quality === "720p",
+          html: source.quality,
+          url: "https://cors.zimjs.com/" + source.url,
+        }))
+        : [],
     thumbnails: {
       url: animeInfo.coverImage,
       number: 60,
       column: 10,
     },
-    // icons: {
-    //   loading: '<img src="/assets/img/ploading.gif">',
-    //   state: '<img width="150" heigth="150" src="/assets/img/state.svg">',
-    //   indicator: '<img width="16" heigth="16" src="/assets/img/indicator.svg">',
-    // },
+    icons: {
+      loading: `<img width="80" height="80" src="${loading.src}">`,
+      // state: '<img width="150" heigth="150" src="/assets/img/state.svg">',
+      // indicator: '<img width="16" heigth="16" src="/assets/img/indicator.svg">',
+    },
   };
 
   return epSource ? (

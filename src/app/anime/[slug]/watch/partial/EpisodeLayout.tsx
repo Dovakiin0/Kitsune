@@ -20,6 +20,7 @@ function EpisodeLayout({ animeInfo, episode }: EpisodeLayoutProps) {
   }, {});
 
   useEffect(() => {
+    if (animeInfo.episodes.length >= 0) return;
     setWatched(getKitsuneWatchedId(animeInfo.slug));
     setKitsuneWatched({
       id: animeInfo.slug,
@@ -55,28 +56,34 @@ function EpisodeLayout({ animeInfo, episode }: EpisodeLayoutProps) {
         />
       </div>
       <div className="flex flex-wrap gap-5 max-h-[90vh] overflow-y-auto">
-        {animeInfo.episodes.map((ep: Episode, index: number) => (
-          <div
-            key={index}
-            className={"w-full lg:w-[320px]"}
-            ref={refs[ep.number]}
-          >
-            <a href={`/anime/${animeInfo.slug}/watch?ep=${ep.id}`}>
-              <EpisodeDisplay
-                ep={ep}
-                backSrc={animeInfo.coverImage}
-                isCurrent={episode.id === ep.id}
-                watched={
-                  watched
-                    ? watched.ep.some(
-                      (e: { id: string; number: number }) => e.id === ep.id
-                    )
-                    : false
-                }
-              />
-            </a>
+        {animeInfo.episodes.length > 0 ? (
+          animeInfo.episodes.map((ep: Episode, index: number) => (
+            <div
+              key={index}
+              className={"w-full lg:w-[320px]"}
+              ref={refs[ep.number]}
+            >
+              <a href={`/anime/${animeInfo.slug}/watch?ep=${ep.id}`}>
+                <EpisodeDisplay
+                  ep={ep}
+                  backSrc={animeInfo.coverImage}
+                  isCurrent={episode.id === ep.id}
+                  watched={
+                    watched
+                      ? watched.ep.some(
+                        (e: { id: string; number: number }) => e.id === ep.id
+                      )
+                      : false
+                  }
+                />
+              </a>
+            </div>
+          ))
+        ) : (
+          <div className="w-full h-[150px] flex items-center justify-center">
+            <p className="font-bold uppercase text-gray-400">No Episodes</p>
           </div>
-        ))}
+        )}
       </div>
     </div>
   );
