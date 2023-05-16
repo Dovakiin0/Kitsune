@@ -8,7 +8,7 @@ function NewsCard({ news }: { news: TNewsFeed }) {
     <motion.div
       initial={{ opacity: 0 }}
       whileInView={{ opacity: 1 }}
-      className="flex gap-5 items-center flex-col h-[400px]"
+      className="flex gap-3 xl:gap-5 items-center flex-col h-[300px] xl:h-[400px]"
     >
       <img
         src={news.thumbnail}

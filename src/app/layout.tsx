@@ -126,7 +126,7 @@ export default function RootLayout({
         <div className="lg:hidden">
           <SearchAnime />
         </div>
-        {children}
+        <div className="min-h-screen">{children}</div>
         <footer className="w-full bg-base-300 shadow-xl p-5 flex flex-col items-center space-y-5">
           <img src="/icon.png" alt="logo" width="100" height="100" />
           <div className="flex space-x-5 items-center">
