@@ -5,8 +5,24 @@ import { FaBackward, FaForward } from "react-icons/fa";
 import EpisodeLayout from "./partial/EpisodeLayout";
 import { Episode, IAnime, ITmdbImage } from "@/@types/EnimeType";
 import useTMDB from "@/hooks/useTMDB";
+import { Metadata } from "next";
 
-async function page({ params, searchParams }: any) {
+type Props = {
+  params: { slug: string };
+  searchParams: { [key: string]: string | string[] | undefined };
+};
+
+export async function generateMetadata({ params }: Props): Promise<Metadata> {
+  const id = params.slug;
+  const { getInfo } = useAnime();
+  const info: IAnime = await getInfo(id);
+
+  return {
+    title: "Kitsune | " + info.title.romaji,
+  };
+}
+
+async function page({ params, searchParams }: Props) {
   const { getInfo } = useAnime();
   const { getTMDBMap } = useTMDB();
   let animeInfo: IAnime = await getInfo(params.slug);
