@@ -1279,19 +1279,19 @@
   resolved "https://registry.yarnpkg.com/@types/trusted-types/-/trusted-types-2.0.3.tgz#a136f83b0758698df454e328759dbd3d44555311"
   integrity sha512-NfQ4gyz38SL8sDNrSixxU2Os1a5xcdFxipAFxYEuLUlvU2uDwS4NUpsImcf1//SlWItCVMMLiylsxbmNMToV/g==
 
-"@upstash/redis@1.20.2":
-  version "1.20.2"
-  resolved "https://registry.yarnpkg.com/@upstash/redis/-/redis-1.20.2.tgz#f797915c90054764b26d2289f5da5dd4b68d8480"
-  integrity sha512-9QS/SypDxeeh672H7dEEmuYOX5TtPYnaDLlhxWJEPd8LzcEQ6hohwDJuojpqGkvvvrK58mlWOkN1GrMxbXPTeQ==
+"@upstash/redis@1.20.6":
+  version "1.20.6"
+  resolved "https://registry.yarnpkg.com/@upstash/redis/-/redis-1.20.6.tgz#3d5773f2b463b19f612b6373fe516e6200a1762d"
+  integrity sha512-q1izaYEUsq/WiXNOjf4oOjFZe8fIeBSZN8d5cEyOD4nem+zxc4jccieorQQrNlEahKPE1ZYLzVEkMODRUfch2g==
   dependencies:
     isomorphic-fetch "^3.0.0"
 
-"@vercel/kv@^0.1.1":
-  version "0.1.1"
-  resolved "https://registry.yarnpkg.com/@vercel/kv/-/kv-0.1.1.tgz#e74a4c25cc5ab8b522754224a82798362b684007"
-  integrity sha512-wkhR/4okC3ZjAG66SPbSP31ToRYg4SFohl0P8WvuIjNl5EJGxdjJJ8l/yIJ2VMvxt0mMsEa442haS3GBJkRXBQ==
+"@vercel/kv@^0.2.0":
+  version "0.2.1"
+  resolved "https://registry.yarnpkg.com/@vercel/kv/-/kv-0.2.1.tgz#f66bd79dd3ab14c83bcd09f2e4c0049b46f7ee25"
+  integrity sha512-0O1CVh0maG/bduAE6DPKUTfGSnORgrcS5xBYZCb62sOU7PrVZrXhaPbUSBE4q5PXS5DC+cpN6FY2RWNlslUaWQ==
   dependencies:
-    "@upstash/redis" "1.20.2"
+    "@upstash/redis" "1.20.6"
 
 acorn@^8.5.0:
   version "8.8.2"
