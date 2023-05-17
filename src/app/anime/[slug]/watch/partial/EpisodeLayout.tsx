@@ -20,7 +20,7 @@ function EpisodeLayout({ animeInfo, episode }: EpisodeLayoutProps) {
   }, {});
 
   useEffect(() => {
-    if (animeInfo.episodes.length >= 0) return;
+    if (animeInfo.episodes.length <= 0) return;
     setWatched(getKitsuneWatchedId(animeInfo.slug));
     setKitsuneWatched({
       id: animeInfo.slug,
