@@ -2204,9 +2204,9 @@ has@^1.0.3:
     function-bind "^1.1.1"
 
 hls.js@^1.4.1:
-  version "1.4.1"
-  resolved "https://registry.yarnpkg.com/hls.js/-/hls.js-1.4.1.tgz#0792582650e5dd4517f7ebbf8cd3ca3b6f900bb9"
-  integrity sha512-7/RBLhnmWbEVj/UxkqBK3rcqr/a2QAbSdjdp74iRKaPLosJoPwLw9mcjl5EOv6jutd0yHL8yGH3pSuUjNzRMyA==
+  version "1.4.3"
+  resolved "https://registry.yarnpkg.com/hls.js/-/hls.js-1.4.3.tgz#9326a680f5905631f86344d0ae155b5ef9d1bad7"
+  integrity sha512-EE1MjIYDNO+ynbmCpAWfhUwQpyG8gUcKKuGDGgYgfRmW/g+inQUQ8sVVVY5WZaCxEGxDMGLbXhXGepkmDIMvdw==
 
 htmlparser2@^8.0.1:
   version "8.0.2"
