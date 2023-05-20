@@ -6,6 +6,7 @@ import { Episode, IAnime } from "@/@types/EnimeType";
 import useAnime from "@/hooks/useAnime";
 import { TEpisodeInfo, TEpisodeSources } from "@/@types/AnimeType";
 import loading from "../assets/genkai.gif";
+import { Source } from "@/@types/EnimeType";
 
 type KitsunePlayerProps = {
   episodeInfo: Episode;
@@ -19,17 +20,20 @@ function KitsunePlayer({ episodeInfo, animeInfo }: KitsunePlayerProps) {
 
   const fetchSource = async () => {
     if (!episodeInfo) return;
-    const data = await getEpisode(episodeInfo.sources[0].target);
-    setEpSource(data);
-    data.sources &&
-      data.sources.map((source: TEpisodeSources) => {
-        if (source.quality === "720p") {
-          setUri("https://cors.zimjs.com/" + source.url);
-        }
-      });
+    const source = episodeInfo.sources.find((ep: Source) =>
+      ep.target.startsWith("/watch")
+    )?.target;
+    if (source) {
+      const data = await getEpisode(source);
+      setEpSource(data);
+      data.sources &&
+        data.sources.map((source: TEpisodeSources) => {
+          if (source.quality === "720p") {
+            setUri("https://cors.zimjs.com/" + source.url);
+          }
+        });
+    }
   };
-
-  console.log(epSource);
 
   useEffect(() => {
     fetchSource();
@@ -89,6 +93,15 @@ function KitsunePlayer({ episodeInfo, animeInfo }: KitsunePlayerProps) {
       url: animeInfo.coverImage,
       number: 60,
       column: 10,
+    },
+    subtitle: {
+      url: epSource?.subtitles.find((sub) => sub.lang === "English")?.url,
+      type: "vtt",
+      style: {
+        color: "#fff",
+        fontSize: "40px",
+      },
+      encoding: "utf-8",
     },
     icons: {
       loading: `<img width="80" height="80" src="${loading.src}">`,
