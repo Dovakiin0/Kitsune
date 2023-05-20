@@ -6,7 +6,7 @@ export default function useAnime() {
     recent: ANIME_URI + "/recent",
     popular: ANIME_URI + "/popular",
     info: ANIME_URI + "/anime",
-    episode: BASE_URI + "/anime/gogoanime/watch",
+    episode: BASE_URI + "/anime/zoro",
     search: ANIME_URI + "/search",
   };
 
@@ -30,7 +30,7 @@ export default function useAnime() {
     return data.json();
   }
 
-  async function getEpisode(id: string, serverName: string = "vidstreaming") {
+  async function getEpisode(id: string) {
     let KV;
     if (process.env.KV_REST_API_URL && process.env.KV_REST_API_TOKEN) {
       KV = await kv.get(id);
@@ -38,7 +38,9 @@ export default function useAnime() {
         return KV;
       }
     }
-    const data = await fetch(API.episode + id + "?server=" + serverName);
+    const data = await fetch(
+      location.protocol + "//" + location.host + "/api/anime/zoro" + id
+    );
     let json = await data.json();
 
     if (KV) {

@@ -3,7 +3,7 @@ import { NEWS_URI } from "@/utils/constants";
 
 export default function useNews() {
   const API = {
-    recent: NEWS_URI + "/recent-feeds",
+    recent: NEWS_URI,
     info: NEWS_URI + "/info",
   };
 

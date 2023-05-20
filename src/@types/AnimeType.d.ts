@@ -6,6 +6,10 @@ export type TEpisodeInfo = {
   };
   sources: TEpisodeSources[];
   thumbnail?: string | null;
+  subtitles: {
+    url: string;
+    lang: string;
+  }[];
 };
 
 export type TEpisodeSources = {
