@@ -33,6 +33,12 @@ then submit a pull request
 clone the repo
 cd kitsune/
 npm install or yarn
+```
+
+rename the `.env.example` file to `.env` then set in TMDB access key and vercel KV(optional).  
+then run the app
+
+```
 npm run dev or yarn dev
 ```
 
@@ -41,6 +47,8 @@ npm run dev or yarn dev
 Kitsune uses vercel KV to cache data. However, it is optional. To use caching you can create your own KV instance.
 
 [![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https%3A%2F%2Fgithub.com%2FDovakiin0%2FKitsune)
+
+If you are deploying to vercel. Make sure to set ENVIRONMENT VARIABLE `TMDB_ACCESS_KEY` and set it your access key.
 
 ## Credits
 
