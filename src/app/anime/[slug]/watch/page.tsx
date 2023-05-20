@@ -6,6 +6,7 @@ import EpisodeLayout from "./partial/EpisodeLayout";
 import { Episode, IAnime, ITmdbImage } from "@/@types/EnimeType";
 import useTMDB from "@/hooks/useTMDB";
 import { Metadata } from "next";
+import parse from "html-react-parser";
 
 type Props = {
   params: { slug: string };
@@ -121,10 +122,9 @@ async function page({ params, searchParams }: Props) {
               <p>Episodes: {animeInfo.season}</p>
             </div>
             <div>
-              <div
-                className="max-h-[35vh] lg:max-h-full overflow-y-auto"
-                dangerouslySetInnerHTML={{ __html: animeInfo.description }}
-              ></div>
+              <div className="max-h-[35vh] lg:max-h-full overflow-y-auto">
+                {parse(animeInfo.description)}
+              </div>
             </div>
           </div>
         </div>

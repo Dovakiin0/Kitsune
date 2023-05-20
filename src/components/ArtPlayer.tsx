@@ -11,6 +11,12 @@ function ArtPlayer({ option, getInstance, ...rest }: any) {
       container: artRef.current,
     });
 
+    art.on("resize", () => {
+      art.subtitle.style({
+        fontSize: art.height * 0.05 + "px",
+      });
+    });
+
     if (getInstance && typeof getInstance === "function") {
       getInstance(art);
     }
