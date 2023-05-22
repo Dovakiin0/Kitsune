@@ -92,6 +92,14 @@ export default function RootLayout({
                 <li>
                   <a href="/waifu">Waifu</a>
                 </li>
+                <li>
+                  <a
+                    href="https://www.buymeacoffee.com/dovakiin0"
+                    target="_blank"
+                  >
+                    Donate
+                  </a>
+                </li>
               </ul>
             </div>
             <div className="flex items-center">
@@ -117,8 +125,11 @@ export default function RootLayout({
               </li>
             </ul>
           </div>
-          <div className="navbar-end">
-            <div className="w-full lg:w-1/2 hidden lg:block mr-1">
+          <div className="navbar-end gap-2 hidden lg:flex">
+            <a href="https://www.buymeacoffee.com/dovakiin0" target="_blank">
+              <button className="btn btn-primary">Donate</button>
+            </a>
+            <div className="w-full lg:w-1/2 mr-1">
               <SearchAnime />
             </div>
           </div>
