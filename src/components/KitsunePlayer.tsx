@@ -7,7 +7,6 @@ import useAnime from "@/hooks/useAnime";
 import { TEpisodeInfo, TEpisodeSources } from "@/@types/AnimeType";
 import loading from "../assets/genkai.gif";
 import { Source } from "@/@types/EnimeType";
-import parse from "html-react-parser";
 
 type KitsunePlayerProps = {
   episodeInfo: Episode;
