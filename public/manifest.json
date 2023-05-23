@@ -7,6 +7,7 @@
   "name": "Kitsune",
   "short_name": "Kitsune",
   "description": "Watch anime with ease and no ads",
+  "orientation": "portrait-primary",
   "icons": [
     {
       "src": "/icon-192x192.png",
