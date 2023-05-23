@@ -6,7 +6,6 @@ import { Episode, IAnime } from "@/@types/EnimeType";
 import useAnime from "@/hooks/useAnime";
 import { TEpisodeInfo, TEpisodeSources } from "@/@types/AnimeType";
 import loading from "../assets/genkai.gif";
-import { Source } from "@/@types/EnimeType";
 
 type KitsunePlayerProps = {
   episodeInfo: Episode;
@@ -16,15 +15,13 @@ type KitsunePlayerProps = {
 function KitsunePlayer({ episodeInfo, animeInfo }: KitsunePlayerProps) {
   const [epSource, setEpSource] = useState<TEpisodeInfo | null>(null);
   const [uri, setUri] = useState<string>("");
-  const { getEpisode } = useAnime();
+  const { getEpisodeGogo } = useAnime();
 
   const fetchSource = async () => {
     if (!episodeInfo) return;
-    const source = episodeInfo.sources.find((ep: Source) =>
-      ep.target.startsWith("/watch")
-    )?.target;
+    const source = episodeInfo.sources[0].target;
     if (source) {
-      const data = await getEpisode(source);
+      const data = await getEpisodeGogo(source);
       setEpSource(data);
       data.sources &&
         data.sources.map((source: TEpisodeSources) => {
@@ -96,7 +93,10 @@ function KitsunePlayer({ episodeInfo, animeInfo }: KitsunePlayerProps) {
       column: 10,
     },
     subtitle: {
-      url: epSource?.subtitles.find((sub) => sub.lang === "English")?.url,
+      url:
+        typeof epSource?.subtitles !== "undefined"
+          ? epSource?.subtitles.find((sub) => sub.lang === "English")?.url
+          : "",
       type: "vtt",
       style: {
         color: "#fff",

@@ -30,7 +30,7 @@ export default function useAnime() {
     return data.json();
   }
 
-  async function getEpisode(id: string) {
+  async function getEpisodeZoro(id: string) {
     let KV;
     if (process.env.KV_REST_API_URL && process.env.KV_REST_API_TOKEN) {
       KV = await kv.get(id);
@@ -49,6 +49,25 @@ export default function useAnime() {
     return json;
   }
 
+  async function getEpisodeGogo(id: string) {
+    let KV;
+    if (process.env.KV_REST_API_URL && process.env.KV_REST_API_TOKEN) {
+      KV = await kv.get(id);
+      if (KV !== null) {
+        return KV;
+      }
+    }
+    const data = await fetch(
+      location.protocol + "//" + location.host + "/api/anime/gogo/watch" + id
+    );
+    let json = await data.json();
+
+    if (KV) {
+      await kv.set(id, JSON.stringify(json));
+    }
+    return json;
+  }
+
   async function getSearch(query: string) {
     const data = await fetch(API.search + "/" + query);
     return data.json();
@@ -58,7 +77,8 @@ export default function useAnime() {
     getRecent,
     getPopular,
     getInfo,
-    getEpisode,
+    getEpisodeZoro,
+    getEpisodeGogo,
     getSearch,
   };
 }
