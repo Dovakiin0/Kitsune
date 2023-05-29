@@ -48,7 +48,7 @@ async function page({ params, searchParams }: Props) {
             "https://image.tmdb.org/t/p/original" +
             random(tmdbLogo.result.backdrops).file_path
           }
-          className="lg:h-[500px] h-[200px] w-full opacity-50"
+          className="lg:h-[500px] h-[200px] w-full opacity-50 object-cover"
         />
         {tmdbLogo.result?.logos.length > 0 && (
           <div className="absolute flex item-center justify-center top-1/4 lg:top-1/3 lg:right-20 lg:left-auto left-1/3 space-x-5">
