@@ -46,14 +46,34 @@ function EpisodeLayout({ animeInfo, episode }: EpisodeLayoutProps) {
 
   return (
     <div className="flex flex-col gap-5 mb-10 mt-10 ml-3 mr-3 lg:ml-0 lg:mr-0 lg:m-10 lg:mb-5 ">
-      <div className="flex items-center gap-10">
-        <p className="text-2xl uppercase font-bold">Episodes</p>
-        <input
-          type="text"
-          className="input input-sm"
-          placeholder="Search"
-          onChange={onSearch}
-        />
+      <div className="flex flex-col lg:flex-row justify-between items-center">
+        <div className="flex items-center gap-5 order-2 lg:order-1 w-full lg:w-1/2">
+          <p className="text-2xl uppercase font-bold">Episodes</p>
+          <input
+            type="text"
+            className="input input-sm w-full"
+            placeholder="Search"
+            onChange={onSearch}
+          />
+        </div>
+        <div className="flex items-center justify-end gap-2 w-full lg:w-1/2 order-1 lg:order-2 mb-5 lg:mb-0">
+          <p className="text-sm text-gray-400">Provider</p>
+          <select
+            className="select select-bordered w-full lg:w-[400px] max-w-xs select-sm"
+            onChange={(e) => {
+              localStorage.setItem("provider", e.target.value);
+              window.location.reload();
+            }}
+            value={
+              typeof window !== "undefined"
+                ? localStorage.getItem("provider") ?? "Gogo"
+                : ""
+            }
+          >
+            <option value="Gogo">Gogo</option>
+            <option value="Zoro">Zoro</option>
+          </select>
+        </div>
       </div>
       <div className="flex flex-wrap gap-5 max-h-[90vh] overflow-y-auto">
         {animeInfo.episodes.length > 0 ? (

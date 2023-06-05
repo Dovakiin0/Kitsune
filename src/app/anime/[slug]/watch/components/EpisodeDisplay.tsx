@@ -42,7 +42,7 @@ function EpisodeDisplay({
           className={`badge badge-primary ${!isCurrent && "badge-outline"
             } absolute top-0 right-0 m-5`}
         >
-          {isCurrent ? "Watching" : "Watched"}{" "}
+          {isCurrent ? "Watching" : "Watched"}
         </div>
       )}
     </motion.div>

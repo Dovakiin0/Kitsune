@@ -15,26 +15,32 @@ type KitsunePlayerProps = {
 function KitsunePlayer({ episodeInfo, animeInfo }: KitsunePlayerProps) {
   const [epSource, setEpSource] = useState<TEpisodeInfo | null>(null);
   const [uri, setUri] = useState<string>("");
-  const { getEpisodeGogo } = useAnime();
+  const { getEpisodeGogo, getEpisodeZoro } = useAnime();
 
   const fetchSource = async () => {
     if (!episodeInfo) return;
-    const source = episodeInfo.sources[0].target;
-    if (source) {
-      const data = await getEpisodeGogo(source);
-      setEpSource(data);
-      data.sources &&
-        data.sources.map((source: TEpisodeSources) => {
-          if (source.quality === "720p") {
-            setUri("https://cors.zimjs.com/" + source.url);
-          }
-        });
-    }
-  };
+    let source;
+    let data;
 
-  useEffect(() => {
-    fetchSource();
-  }, []);
+    if (typeof window !== "undefined") {
+      if (localStorage?.getItem("provider") === "Gogo") {
+        source = episodeInfo.sources[0].target;
+        data = await getEpisodeGogo(source);
+      }
+      if (localStorage?.getItem("provider") === "Zoro") {
+        source = episodeInfo.sources[1].target;
+        data = await getEpisodeZoro(source);
+      }
+    }
+
+    setEpSource(data);
+    data.sources &&
+      data.sources.map((source: TEpisodeSources) => {
+        if (source.quality === "720p") {
+          setUri("https://cors.zimjs.com/" + source.url);
+        }
+      });
+  };
 
   let options = {
     container: ".artplayer-app",
@@ -109,6 +115,10 @@ function KitsunePlayer({ episodeInfo, animeInfo }: KitsunePlayerProps) {
       // indicator: '<img width="16" heigth="16" src="/assets/img/indicator.svg">',
     },
   };
+
+  useEffect(() => {
+    fetchSource();
+  }, []);
 
   return epSource ? (
     <ArtPlayer option={options} className="md:h-[800px] h-[250px] w-full" />

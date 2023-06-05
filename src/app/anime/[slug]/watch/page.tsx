@@ -1,12 +1,10 @@
-import KitsunePlayer from "@/components/KitsunePlayer";
 import useAnime from "@/hooks/useAnime";
 import React from "react";
-import { FaBackward, FaForward } from "react-icons/fa";
-import EpisodeLayout from "./partial/EpisodeLayout";
 import { Episode, IAnime, ITmdbImage } from "@/@types/EnimeType";
 import useTMDB from "@/hooks/useTMDB";
 import { Metadata } from "next";
 import parse from "html-react-parser";
+import EpisodeFrame from "./partial/EpisodeFrame";
 
 type Props = {
   params: { slug: string };
@@ -66,19 +64,7 @@ async function page({ params, searchParams }: Props) {
         {/*Episode Panel*/}
         <div className="flex-1">
           <div className="flex-col">
-            <KitsunePlayer episodeInfo={episode} animeInfo={animeInfo} />
-
-            <div className="flex justify-between items-center lg:p-5 p-2 gap-5">
-              <FaBackward size={25} className="hover:text-primary" />
-              <p className="text-xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-gray-200 to-pink-400">
-                Episode {episode?.number} - {episode?.title}
-              </p>
-
-              <FaForward size={25} className="hover:text-primary" />
-            </div>
-            <div className="lg:pl-5 lg:pr-5">
-              <EpisodeLayout animeInfo={animeInfo} episode={episode} />
-            </div>
+            <EpisodeFrame episode={episode} animeInfo={animeInfo} />
           </div>
         </div>
         {/*Information Panel*/}

@@ -41,7 +41,6 @@ export default function useLocalStorage() {
       if (watched) {
         let result = JSON.parse(watched);
         if (result.watched[id]) {
-          console.log(result.watched[id], ep);
           let toSave: TWatchedAnime = result.watched[id];
           if (!toSave.ep.some((anime) => anime.id === ep.id)) {
             toSave.ep.push(ep);
