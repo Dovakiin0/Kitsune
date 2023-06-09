@@ -6,7 +6,6 @@ import useNews from "@/hooks/useNews";
 import { TNewsFeed } from "@/@types/NewsType";
 import ContinueWatching from "@/partials/ContinueWatching";
 import { IAnime, IRecentAnime } from "@/@types/EnimeType";
-import Script from "next/script";
 
 export default async function Home() {
   const { getRecent, getPopular } = useAnime();
@@ -61,23 +60,6 @@ export default async function Home() {
             {recentNews.splice(0, 5).map((news: TNewsFeed, index: number) => (
               <NewsCard news={news} key={index} />
             ))}
-            <Script
-              strategy="afterInteractive"
-              src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-6976508775648408"
-            ></Script>
-            <Script id="google-ads" strategy="afterInteractive">
-              {`
-<ins class="adsbygoogle"
-     style="display:block"
-     data-ad-client="ca-pub-6976508775648408"
-     data-ad-slot="5888714671"
-     data-ad-format="auto"
-     data-full-width-responsive="true"></ins>
-<script>
-     (adsbygoogle = window.adsbygoogle || []).push({});
-</script>
-`}
-            </Script>
           </div>
         </div>
       </div>
