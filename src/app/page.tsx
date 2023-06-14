@@ -58,18 +58,6 @@ export default async function Home() {
             Recent News
           </h2>
           <div className="flex flex-col space-y-5 m-3 lg:m-0">
-            <Script type="text/javascript" id="show-banner">
-              {`
-              atOptions = {
-                'key' : '5a8f69ac613772c8d1445a00d4ee12d5',
-              'format' : 'iframe',
-              'height' : 250,
-              'width' : 300,
-              'params' : {}
-	            };
-              document.write('<scr' + 'ipt type="text/javascript" src="http' + (location.protocol === 'https:' ? 's' : '') + '://www.profitabledisplaynetwork.com/5a8f69ac613772c8d1445a00d4ee12d5/invoke.js"></scr' + 'ipt>');
-          `}
-            </Script>
             {recentNews.splice(0, 5).map((news: TNewsFeed, index: number) => (
               <NewsCard news={news} key={index} />
             ))}
