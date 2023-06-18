@@ -6,8 +6,6 @@ import useNews from "@/hooks/useNews";
 import { TNewsFeed } from "@/@types/NewsType";
 import ContinueWatching from "@/partials/ContinueWatching";
 import { IAnime, IRecentAnime } from "@/@types/EnimeType";
-import Script from "next/script";
-import AdBlock from "@/components/AdBlock";
 
 export default async function Home() {
   const { getRecent, getPopular } = useAnime();
@@ -59,7 +57,6 @@ export default async function Home() {
             Recent News
           </h2>
           <div className="flex flex-col space-y-5 m-3 lg:m-0">
-            <AdBlock />
             {recentNews.splice(0, 5).map((news: TNewsFeed, index: number) => (
               <NewsCard news={news} key={index} />
             ))}
