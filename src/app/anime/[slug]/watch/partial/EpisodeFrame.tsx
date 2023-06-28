@@ -4,6 +4,7 @@ import KitsunePlayer from "@/components/KitsunePlayer";
 import { FaBackward, FaForward } from "react-icons/fa";
 import EpisodeLayout from "./EpisodeLayout";
 import { Episode, IAnime } from "@/@types/EnimeType";
+import dmcaJSON from "@/assets/dmca.json";
 
 type Props = {
   episode: Episode;
@@ -25,8 +26,13 @@ function EpisodeFrame({ episode, animeInfo }: Props) {
 
   return (
     <>
-      <KitsunePlayer episodeInfo={episode} animeInfo={animeInfo} />
-
+      {dmcaJSON.animes.includes(animeInfo.slug) ? (
+        <div className="md:h-[800px] h-[250px] w-full bg-black text-white flex items-center justify-center">
+          This content has been removed due to a DMCA takedown notice.
+        </div>
+      ) : (
+        <KitsunePlayer episodeInfo={episode} animeInfo={animeInfo} />
+      )}
       <div className="flex justify-between items-center lg:p-5 p-2 gap-5">
         <FaBackward
           size={25}

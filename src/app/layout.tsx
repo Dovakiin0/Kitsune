@@ -26,7 +26,6 @@ export const metadata: Metadata = {
     type: "website",
     siteName: APP_NAME,
     title: APP_DEFAULT_TITLE,
-
     description: APP_DESCRIPTION,
   },
   twitter: {
