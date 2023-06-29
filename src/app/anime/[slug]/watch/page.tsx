@@ -19,7 +19,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   return {
     title: "Kitsune | " + info.title.romaji,
     openGraph: {
-      title: "Watch " + info.title.romaji + " free with no Ads",
+      title: "Watch " + info.title.romaji + " free with no Ads on Kitsune",
       images: [info.coverImage, info.bannerImage],
     },
   };
