@@ -6,7 +6,6 @@ import useNews from "@/hooks/useNews";
 import { TNewsFeed } from "@/@types/NewsType";
 import ContinueWatching from "@/partials/ContinueWatching";
 import { IAnime, IRecentAnime } from "@/@types/EnimeType";
-import AdBlock from "@/components/AdBlock";
 
 export default async function Home() {
   const { getRecent, getPopular } = useAnime();
