@@ -60,7 +60,7 @@ function KitsunePlayer({ episodeInfo, animeInfo }: KitsunePlayerProps) {
     volume: 1,
     isLive: false,
     muted: false,
-    autoplay: false,
+    autoplay: true,
     autoOrientation: true,
     pip: true,
     autoSize: false,
