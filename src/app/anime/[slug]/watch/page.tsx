@@ -30,7 +30,7 @@ async function page({ params, searchParams }: Props) {
   const { getTMDBMap } = useTMDB();
   let animeInfo: IAnime = await getInfo(params.slug);
   const tmdbLogo: { result: ITmdbImage } = await getTMDBMap(
-    animeInfo.title.romaji
+    animeInfo.title.romaji,
   );
 
   let episode = searchParams.ep
@@ -48,7 +48,7 @@ async function page({ params, searchParams }: Props) {
           src={
             animeInfo.bannerImage ??
             "https://image.tmdb.org/t/p/original" +
-            random(tmdbLogo.result.backdrops).file_path
+              random(tmdbLogo.result.backdrops).file_path
           }
           className="lg:h-[500px] h-[200px] w-full opacity-50 object-cover"
         />
