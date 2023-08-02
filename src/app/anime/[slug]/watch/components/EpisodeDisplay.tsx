@@ -8,6 +8,7 @@ type EpisodeDisplayProps = {
   backSrc: string;
   isCurrent: boolean;
   watched?: boolean;
+  mini?: boolean;
 };
 
 function EpisodeDisplay({
@@ -15,8 +16,19 @@ function EpisodeDisplay({
   backSrc,
   isCurrent,
   watched = false,
+  mini = false,
 }: EpisodeDisplayProps) {
-  return (
+  return mini ? (
+    <motion.div
+      initial={{ opacity: 0 }}
+      whileInView={{ opacity: 1, transition: { delay: 0.05 } }}
+      whileHover={{ scale: 1.1 }}
+      whileTap={{ scale: 0.9 }}
+      className="w-20 h-20 bg-gray-700 rounded-lg relative hover:cursor-pointer flex items-center justify-center"
+    >
+      <p> EP {ep.number} </p>
+    </motion.div>
+  ) : (
     <motion.div
       initial={{ opacity: 0 }}
       whileInView={{ opacity: 1, transition: { delay: 0.05 } }}

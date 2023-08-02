@@ -57,11 +57,7 @@ function EpisodeLayout({ animeInfo, episode }: EpisodeLayoutProps) {
     if (!refs[ep]) return;
     curRef.current = refs[ep].current;
     if (curRef.current) {
-      curRef.current.scrollIntoView({
-        behavior: "smooth",
-        block: "start",
-        inline: "start",
-      });
+      curRef.current.scrollIntoView();
     }
   };
 
@@ -101,7 +97,9 @@ function EpisodeLayout({ animeInfo, episode }: EpisodeLayoutProps) {
           animeInfo.episodes.map((ep: Episode, index: number) => (
             <div
               key={index}
-              className={"w-full lg:w-[320px]"}
+              className={
+                animeInfo.episodes.length > 300 ? "" : "w-full lg:w-[320px]"
+              }
               ref={refs[ep.number]}
             >
               <a href={`/anime/${animeInfo.slug}/watch?ep=${ep.id}`}>
@@ -109,6 +107,7 @@ function EpisodeLayout({ animeInfo, episode }: EpisodeLayoutProps) {
                   ep={ep}
                   backSrc={animeInfo.coverImage}
                   isCurrent={episode.id === ep.id}
+                  mini={animeInfo.episodes.length > 300 ? true : false}
                   watched={
                     watched
                       ? watched.ep.some(

@@ -41,7 +41,7 @@ function EpisodeFrame({ episode, animeInfo }: Props) {
         />
 
         <p className="text-xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-gray-200 to-pink-400">
-          Episode {episode?.number}
+          Episode {episode?.number} - {episode?.title}
         </p>
 
         <FaForward
