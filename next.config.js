@@ -6,10 +6,7 @@ const nextConfig = {
   images: {
     domains: ["i.waifu.pics"],
   },
-};
-
-module.exports = {
   output: 'standalone',
-}
+};
 
 module.exports = withPWA(nextConfig);
