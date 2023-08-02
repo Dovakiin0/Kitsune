@@ -5,6 +5,7 @@ import useTMDB from "@/hooks/useTMDB";
 import { Metadata } from "next";
 import parse from "html-react-parser";
 import EpisodeFrame from "./partial/EpisodeFrame";
+import KitsuneCover from "@/assets/cover.png";
 
 type Props = {
   params: { slug: string };
@@ -20,7 +21,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
     title: "Kitsune | " + info.title.romaji,
     openGraph: {
       title: "Watch " + info.title.romaji + " free with no Ads on Kitsune",
-      images: [info.coverImage, info.bannerImage],
+      images: [info.coverImage],
     },
   };
 }
@@ -38,6 +39,7 @@ async function page({ params, searchParams }: Props) {
     : animeInfo.episodes[0];
 
   const random = (arr: any[]) => {
+    if (typeof arr === "undefined") return;
     return arr[Math.floor(Math.random() * arr.length)];
   };
 
@@ -45,11 +47,7 @@ async function page({ params, searchParams }: Props) {
     <div className="flex flex-col h-full">
       <div className="relative w-full">
         <img
-          src={
-            animeInfo.bannerImage ??
-            "https://image.tmdb.org/t/p/original" +
-              random(tmdbLogo.result.backdrops).file_path
-          }
+          src={animeInfo.bannerImage ?? KitsuneCover.src}
           className="lg:h-[500px] h-[200px] w-full opacity-50 object-cover"
         />
         {tmdbLogo.result?.logos.length > 0 && (
@@ -57,7 +55,7 @@ async function page({ params, searchParams }: Props) {
             <img
               src={
                 "https://image.tmdb.org/t/p/w500" +
-                random(tmdbLogo.result.logos).file_path
+                random(tmdbLogo.result.logos)?.file_path
               }
               className="lg:h-[250px] lg:w-[500px] w-[250px] h-[150px]"
             />
