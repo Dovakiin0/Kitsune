@@ -50,6 +50,10 @@ Kitsune uses vercel KV to cache data. However, it is optional. To use caching yo
 
 If you are deploying to vercel. Make sure to set ENVIRONMENT VARIABLE `TMDB_ACCESS_KEY` and set it your access key.
 
+#### Docker
+
+You can use docker to build and deploy kitsune. Check this repo [KitsuneDocker](https://github.com/Ve-Ka/KitsuneDocker)
+
 ## Credits
 
 [Consumet](https://github.com/consumet/consumet.ts)
@@ -58,4 +62,4 @@ If you are deploying to vercel. Make sure to set ENVIRONMENT VARIABLE `TMDB_ACCE
 
 ## Support
 
-Join the Discord server: https://discord.gg/6yAJ3XDHTt
+Join the Discord server: <https://discord.gg/6yAJ3XDHTt>
