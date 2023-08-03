@@ -38,7 +38,8 @@ function EpisodeLayout({ animeInfo, episode }: EpisodeLayoutProps) {
     if (!provider) {
       localStorage.setItem("provider", "Gogo");
     }
-    let ep = episode.number;
+    console.log(episode);
+    let ep = episode?.number;
     if (!refs[ep]) return;
     curRef.current = refs[ep].current;
     if (curRef.current) {
