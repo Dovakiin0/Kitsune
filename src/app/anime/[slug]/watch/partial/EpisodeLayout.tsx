@@ -38,17 +38,6 @@ function EpisodeLayout({ animeInfo, episode }: EpisodeLayoutProps) {
     if (!provider) {
       localStorage.setItem("provider", "Gogo");
     }
-    console.log(episode);
-    let ep = episode?.number;
-    if (!refs[ep]) return;
-    curRef.current = refs[ep].current;
-    if (curRef.current) {
-      curRef.current.scrollIntoView({
-        behavior: "smooth",
-        block: "start",
-        inline: "start",
-      });
-    }
   }, []);
 
   const onSearch = (e: any) => {
@@ -59,6 +48,10 @@ function EpisodeLayout({ animeInfo, episode }: EpisodeLayoutProps) {
     curRef.current = refs[ep].current;
     if (curRef.current) {
       curRef.current.scrollIntoView();
+      curRef.current.classList.add("animate-bounce");
+      setTimeout(() => {
+        curRef.current?.classList.remove("animate-bounce");
+      }, 5000);
     }
   };
 
