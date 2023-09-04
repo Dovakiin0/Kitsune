@@ -15,23 +15,21 @@ type KitsunePlayerProps = {
 function KitsunePlayer({ episodeInfo, animeInfo }: KitsunePlayerProps) {
   const [epSource, setEpSource] = useState<TEpisodeInfo | null>(null);
   const [uri, setUri] = useState<string>("");
-  const { getEpisodeGogo, getEpisodeZoro } = useAnime();
+  const { getEpisodeGogo } = useAnime();
 
   const fetchSource = async () => {
     if (!episodeInfo) return;
-    let source;
-    let data;
-
-    if (typeof window !== "undefined") {
-      if (localStorage?.getItem("provider") === "Gogo") {
-        source = episodeInfo.sources[0].target;
-        data = await getEpisodeGogo(source);
-      }
-      if (localStorage?.getItem("provider") === "Zoro") {
-        source = episodeInfo.sources[1].target;
-        data = await getEpisodeZoro(source);
-      }
-    }
+    let source = episodeInfo.sources[0].target;
+    let data = await getEpisodeGogo(source);
+    //
+    // if (typeof window !== "undefined") {
+    //   if (localStorage?.getItem("provider") === "Gogo") {
+    //           }
+    //   if (localStorage?.getItem("provider") === "Zoro") {
+    //     source = episodeInfo.sources[1].target;
+    //     data = await getEpisodeZoro(source);
+    //   }
+    // }
 
     setEpSource(data);
     data.sources &&
