@@ -5,18 +5,18 @@ import NewsCard from "@/components/NewsCard";
 import useNews from "@/hooks/useNews";
 import { TNewsFeed } from "@/@types/NewsType";
 import ContinueWatching from "@/partials/ContinueWatching";
-import { IAnime, IRecentAnime } from "@/@types/EnimeType";
+import { IAnimePopular, IAnimeRecent } from "@/@types/AnimeType";
 
 export default async function Home() {
   const { getRecent, getPopular } = useAnime();
   const { getRecentNews } = useNews();
-  const recentAnimes: { data: IRecentAnime[] } = await getRecent();
-  const popularAnimes: { data: IAnime[] } = await getPopular();
+  const recentAnimes: IAnimeRecent[] = await getRecent();
+  const popularAnimes: IAnimePopular[] = await getPopular();
   const recentNews: TNewsFeed[] = await getRecentNews();
 
   return (
     <div>
-      <Carousel spotlightInfo={popularAnimes.data.slice(0, 10)} />
+      <Carousel spotlightInfo={popularAnimes.slice(0, 10)} />
       <div className="xl:flex justify-between">
         <div className="lg:m-10 mt-10 flex flex-col items-center justify-center lg:items-start lg:justify-start">
           <p className="text-xl mb-10 uppercase font-bold text-pink-200 tracking-widest">
@@ -24,13 +24,13 @@ export default async function Home() {
           </p>
 
           <div className="flex flex-wrap justify-between lg:justify-start xl:gap-8 lg:gap-6 gap-3 m-2 lg:m-0">
-            {recentAnimes.data.map((anime: IRecentAnime, index: number) => (
+            {recentAnimes.map((anime: IAnimeRecent, index: number) => (
               <AnimeCard
-                id={anime.anime.slug}
+                id={anime.id}
                 key={index}
-                title={anime.anime.title.romaji}
-                src={anime.anime.coverImage}
-                additional={`Episode: ${anime.number}`}
+                title={anime.title}
+                src={anime.image}
+                additional={`Episode: ${anime.episodeNumber}`}
               />
             ))}
           </div>
@@ -41,13 +41,13 @@ export default async function Home() {
             Popular Release
           </p>
           <div className="flex flex-wrap justify-between lg:justify-start xl:gap-8 lg:gap-6 gap-3 m-2 lg:m-0">
-            {popularAnimes.data.map((anime: IAnime, index: number) => (
+            {popularAnimes.map((anime: IAnimePopular, index: number) => (
               <AnimeCard
-                id={anime.slug}
+                id={anime.id}
                 key={index}
-                title={anime.title.romaji}
-                src={anime.coverImage}
-                additional={anime.status}
+                title={anime.title}
+                src={anime.image}
+                additional={""}
               />
             ))}
           </div>

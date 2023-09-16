@@ -5,7 +5,6 @@ import Image from "next/image";
 import Link from "next/link";
 
 function error({ error, reset }: any) {
-  console.log(error);
   return (
     <div className="fixed w-screen h-screen top-0 bg-base-300">
       <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 flex flex-col space-y-5 items-center justify-center">

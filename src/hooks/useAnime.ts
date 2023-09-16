@@ -3,9 +3,9 @@ import { ANIME_URI, BASE_URI } from "@/utils/constants";
 
 export default function useAnime() {
   let API = {
-    recent: ANIME_URI + "/recent",
-    popular: ANIME_URI + "/popular",
-    info: ANIME_URI + "/anime",
+    recent: BASE_URI + "/anime/recent",
+    popular: BASE_URI + "/anime/popular",
+    info: BASE_URI + "/anime/info",
     episode: BASE_URI + "/anime/zoro",
     search: ANIME_URI + "/search",
   };
@@ -39,7 +39,7 @@ export default function useAnime() {
       }
     }
     const data = await fetch(
-      location.protocol + "//" + location.host + "/api/anime/zoro" + id
+      location.protocol + "//" + location.host + "/api/anime/zoro" + id,
     );
     let json = await data.json();
 
@@ -58,7 +58,7 @@ export default function useAnime() {
       }
     }
     const data = await fetch(
-      location.protocol + "//" + location.host + "/api/anime/gogo/watch" + id
+      location.protocol + "//" + location.host + "/api/anime/gogo/watch/" + id,
     );
     let json = await data.json();
 

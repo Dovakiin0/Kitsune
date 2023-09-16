@@ -1,13 +1,12 @@
 "use client";
 import React, { createRef, useRef, useEffect, useState } from "react";
-import { TWatchedAnime } from "@/@types/AnimeType";
+import { IAnimeInfo, IEpisodes, TWatchedAnime } from "@/@types/AnimeType";
 import EpisodeDisplay from "../components/EpisodeDisplay";
 import useLocalStorage from "@/hooks/useLocalStorage";
-import { Episode, IAnime } from "@/@types/EnimeType";
 
 type EpisodeLayoutProps = {
-  animeInfo: IAnime;
-  episode: Episode;
+  animeInfo: IAnimeInfo;
+  episode: IEpisodes;
 };
 
 function EpisodeLayout({ animeInfo, episode }: EpisodeLayoutProps) {
@@ -21,11 +20,11 @@ function EpisodeLayout({ animeInfo, episode }: EpisodeLayoutProps) {
 
   useEffect(() => {
     if (animeInfo.episodes.length <= 0) return;
-    setWatched(getKitsuneWatchedId(animeInfo.slug));
+    setWatched(getKitsuneWatchedId(animeInfo.id));
     setKitsuneWatched({
-      id: animeInfo.slug,
-      title: animeInfo.title.romaji,
-      image: animeInfo.coverImage,
+      id: animeInfo.id,
+      title: animeInfo.title,
+      image: animeInfo.image,
       ep: {
         id: episode.id,
         number: episode.number,
@@ -88,27 +87,13 @@ function EpisodeLayout({ animeInfo, episode }: EpisodeLayoutProps) {
       </div>
       <div className="flex flex-wrap gap-5 max-h-[90vh] overflow-y-auto">
         {animeInfo.episodes.length > 0 ? (
-          animeInfo.episodes.map((ep: Episode, index: number) => (
-            <div
-              key={index}
-              className={
-                animeInfo.episodes.length > 300 ? "" : "w-full lg:w-[320px]"
-              }
-              ref={refs[ep.number]}
-            >
-              <a href={`/anime/${animeInfo.slug}/watch?ep=${ep.id}`}>
+          animeInfo.episodes.map((ep: IEpisodes, index: number) => (
+            <div key={index} ref={refs[ep.number]}>
+              <a href={`/anime/${animeInfo.id}/watch?ep=${ep.id}`}>
                 <EpisodeDisplay
                   ep={ep}
-                  backSrc={animeInfo.coverImage}
+                  backSrc={animeInfo.image}
                   isCurrent={episode.id === ep.id}
-                  mini={animeInfo.episodes.length > 300 ? true : false}
-                  watched={
-                    watched
-                      ? watched.ep.some(
-                        (e: { id: string; number: number }) => e.id === ep.id,
-                      )
-                      : false
-                  }
                 />
               </a>
             </div>

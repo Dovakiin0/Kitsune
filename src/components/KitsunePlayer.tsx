@@ -2,14 +2,18 @@
 import React, { useEffect, useState } from "react";
 import ArtPlayer from "./ArtPlayer";
 import Hls from "hls.js";
-import { Episode, IAnime } from "@/@types/EnimeType";
 import useAnime from "@/hooks/useAnime";
-import { TEpisodeInfo, TEpisodeSources } from "@/@types/AnimeType";
+import {
+  IAnimeInfo,
+  IEpisodes,
+  TEpisodeInfo,
+  TEpisodeSources,
+} from "@/@types/AnimeType";
 import loading from "../assets/genkai.gif";
 
 type KitsunePlayerProps = {
-  episodeInfo: Episode;
-  animeInfo: IAnime;
+  episodeInfo: IEpisodes;
+  animeInfo: IAnimeInfo;
 };
 
 function KitsunePlayer({ episodeInfo, animeInfo }: KitsunePlayerProps) {
@@ -19,7 +23,7 @@ function KitsunePlayer({ episodeInfo, animeInfo }: KitsunePlayerProps) {
 
   const fetchSource = async () => {
     if (!episodeInfo) return;
-    let source = episodeInfo.sources[0].target;
+    let source = episodeInfo.id;
     let data = await getEpisodeGogo(source);
     //
     // if (typeof window !== "undefined") {
@@ -44,7 +48,7 @@ function KitsunePlayer({ episodeInfo, animeInfo }: KitsunePlayerProps) {
     container: ".artplayer-app",
     url: uri,
     customType: {
-      m3u8: function(video: any, url: string) {
+      m3u8: function (video: any, url: string) {
         let hls = new Hls();
         hls.loadSource(url);
         hls.attachMedia(video);
@@ -54,7 +58,7 @@ function KitsunePlayer({ episodeInfo, animeInfo }: KitsunePlayerProps) {
       },
     },
     title: animeInfo.title,
-    poster: episodeInfo?.image ?? "",
+    poster: animeInfo.image,
     volume: 1,
     isLive: false,
     muted: false,
@@ -86,13 +90,13 @@ function KitsunePlayer({ episodeInfo, animeInfo }: KitsunePlayerProps) {
     quality:
       epSource && epSource.sources
         ? epSource.sources.map((source: TEpisodeSources) => ({
-          default: source.quality === "720p",
-          html: source.quality,
-          url: "https://cors.zimjs.com/" + source.url,
-        }))
+            default: source.quality === "720p",
+            html: source.quality,
+            url: "https://cors.zimjs.com/" + source.url,
+          }))
         : [],
     thumbnails: {
-      url: animeInfo.coverImage,
+      url: animeInfo.image,
       number: 60,
       column: 10,
     },
@@ -124,7 +128,7 @@ function KitsunePlayer({ episodeInfo, animeInfo }: KitsunePlayerProps) {
     <div
       className={`rounded-lg p-5 md:h-[800px] h-[250px] w-full`}
       style={{
-        backgroundImage: `url(${animeInfo.bannerImage})`,
+        backgroundImage: `url(${animeInfo.image})`,
         backgroundRepeat: "no-repeat",
         backgroundSize: "cover",
         filter: "blur(20px)",

@@ -1,12 +1,13 @@
 "use client";
-import { IAnime } from "@/@types/EnimeType";
+import { IAnimePopular } from "@/@types/AnimeType";
+import { IAnimeResult, ITitle } from "@consumet/extensions";
 import Link from "next/link";
 import React from "react";
 import { Carousel as ReactCarousel } from "react-responsive-carousel";
 import "react-responsive-carousel/lib/styles/carousel.min.css";
 
 type CarouselProps = {
-  spotlightInfo: IAnime[];
+  spotlightInfo: IAnimePopular[];
 };
 
 function Carousel({ spotlightInfo }: CarouselProps) {
@@ -18,14 +19,14 @@ function Carousel({ spotlightInfo }: CarouselProps) {
       dynamicHeight
       stopOnHover
     >
-      {spotlightInfo.map((anime: IAnime, index: number) => (
+      {spotlightInfo.map((anime: IAnimePopular, index: number) => (
         <CarouselSingle
           key={index}
           id={index}
-          src={anime.bannerImage}
-          title={anime.title.english}
-          description={anime.description}
-          episodeId={anime.slug}
+          src={anime.image}
+          title={anime.title}
+          description={""}
+          episodeId={anime.id}
         />
       ))}
     </ReactCarousel>
