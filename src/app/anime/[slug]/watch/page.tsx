@@ -11,20 +11,20 @@ type Props = {
   params: { slug: string };
   searchParams: { [key: string]: string | string[] | undefined };
 };
-//
-// export async function generateMetadata({ params }: Props): Promise<Metadata> {
-//   const id = params.slug;
-//   const { getInfo } = useAnime();
-//   // const info: IAnime = await getInfo(id);
-//
-//   return {
-//     title: "Kitsune | " + info.title.romaji,
-//     openGraph: {
-//       title: "Watch " + info.title.romaji + " free with no Ads on Kitsune",
-//       images: [info.coverImage],
-//     },
-//   };
-// }
+
+export async function generateMetadata({ params }: Props): Promise<Metadata> {
+  const id = params.slug;
+  const { getInfo } = useAnime();
+  const info: IAnimeInfo = await getInfo(id);
+
+  return {
+    title: "Kitsune | " + info.title,
+    openGraph: {
+      title: "Watch " + info.title + " free with no Ads on Kitsune",
+      images: [info.image],
+    },
+  };
+}
 
 async function page({ params, searchParams }: Props) {
   const { getInfo } = useAnime();

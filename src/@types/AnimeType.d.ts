@@ -73,3 +73,12 @@ export interface ITmdbImage {
   logos: Logos[];
   poster: Logos[];
 }
+
+export interface ISearchAnime {
+  id: string;
+  title: string;
+  url: string;
+  image: string;
+  releaseDate: string;
+  subOrDub: string;
+}

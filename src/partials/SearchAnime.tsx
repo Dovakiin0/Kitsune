@@ -4,7 +4,7 @@ import SearchAnimeCard from "@/components/SearchAnimeCard";
 import useAnime from "@/hooks/useAnime";
 import Loading from "@/components/LoadingSingle";
 import Link from "next/link";
-import { ISearchAnime } from "@/@types/EnimeType";
+import { ISearchAnime } from "@/@types/AnimeType";
 
 function Search() {
   const [search, setSearch] = useState("");
@@ -17,7 +17,7 @@ function Search() {
     const delayDebounceFn = setTimeout(async () => {
       setLoading(true);
       const data = await getSearch(search);
-      setSearchFilter(data.data.slice(0, 5));
+      setSearchFilter(data.slice(0, 5));
       setLoading(false);
     }, 1000);
     return () => {
@@ -66,10 +66,10 @@ function Search() {
                 {searchFilter.map((anime: ISearchAnime) => (
                   <SearchAnimeCard
                     key={anime.id}
-                    id={anime.slug}
-                    title={anime.title.romaji}
-                    src={anime.coverImage}
-                    additional={`Released: ${anime.year}`}
+                    id={anime.id}
+                    title={anime.title}
+                    src={anime.image}
+                    additional={`${anime.subOrDub}`}
                     cb={handleSearchCallback}
                   />
                 ))}

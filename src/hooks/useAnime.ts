@@ -7,7 +7,7 @@ export default function useAnime() {
     popular: BASE_URI + "/anime/popular",
     info: BASE_URI + "/anime/info",
     episode: BASE_URI + "/anime/zoro",
-    search: ANIME_URI + "/search",
+    search: BASE_URI + "/anime/search",
   };
 
   async function getRecent() {
@@ -69,7 +69,9 @@ export default function useAnime() {
   }
 
   async function getSearch(query: string) {
-    const data = await fetch(API.search + "/" + query);
+    const data = await fetch(
+      location.protocol + "//" + location.host + "/api/anime/search/" + query,
+    );
     return data.json();
   }
 
