@@ -1,5 +1,5 @@
 import kv from "@vercel/kv";
-import { ANIME_URI, BASE_URI } from "@/utils/constants";
+import { BASE_URI } from "@/utils/constants";
 
 export default function useAnime() {
   let API = {
