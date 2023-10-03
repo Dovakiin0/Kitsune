@@ -34,8 +34,8 @@ async function page({ params, searchParams }: Props) {
 
   let episode = searchParams.ep
     ? animeInfo.episodes?.filter(
-        (ep: IEpisodes) => ep.id === searchParams.ep,
-      )[0]
+      (ep: IEpisodes) => ep.id === searchParams.ep,
+    )[0]
     : animeInfo.episodes[0];
 
   const random = (arr: any[]) => {
@@ -48,8 +48,10 @@ async function page({ params, searchParams }: Props) {
       <div className="relative w-full">
         <img
           src={
-            "https://image.tmdb.org/t/p/original" +
-            random(tmdbLogo.result.backdrops)?.file_path
+            tmdbLogo.result.backdrops?.length > 0
+              ? "https://image.tmdb.org/t/p/original" +
+              random(tmdbLogo.result.backdrops)?.file_path
+              : KitsuneCover.src
           }
           className="lg:h-[500px] h-[200px] w-full opacity-50 object-cover"
         />
