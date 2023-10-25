@@ -43,6 +43,8 @@ async function page({ params, searchParams }: Props) {
     return arr[Math.floor(Math.random() * arr.length)];
   };
 
+  console.log(tmdbLogo);
+
   return (
     <div className="flex flex-col h-full">
       <div className="relative w-full">

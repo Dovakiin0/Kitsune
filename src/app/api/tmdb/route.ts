@@ -15,11 +15,14 @@ export async function GET(req: NextRequest) {
     },
   });
 
-  const infoData = await res.json();
+  let infoData = await res.json();
+  infoData.results = infoData.results.filter(
+    (data: any) => data.original_language === "ja",
+  );
   if (infoData.results.length <= 0)
     return NextResponse.json(
       { message: "Empty", result: { logos: [] } },
-      { status: 404 }
+      { status: 404 },
     );
   const result = await getTMDBLogo(infoData.results[0].id);
   return NextResponse.json({ result }, { status: 200 });
