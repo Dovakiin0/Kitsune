@@ -48,7 +48,7 @@ async function page({ params, searchParams }: Props) {
       <div className="relative w-full">
         <img
           src={
-            tmdbLogo.result.backdrops?.length > 0
+            tmdbLogo.result?.backdrops?.length > 0
               ? "https://image.tmdb.org/t/p/original" +
               random(tmdbLogo.result.backdrops)?.file_path
               : KitsuneCover.src
