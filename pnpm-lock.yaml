@@ -6,8 +6,8 @@ settings:
 
 dependencies:
   '@consumet/extensions':
-    specifier: ^1.5.1
-    version: 1.5.2
+    specifier: git+https://github.com/consumet/consumet.ts.git
+    version: github.com/consumet/consumet.ts/ee81eca4f4c0bf849cd481658f9821cc4e645137
   '@ducanh2912/next-pwa':
     specifier: ^8.3.0
     version: 8.7.1(next@13.4.1)(webpack@5.89.0)
@@ -68,9 +68,6 @@ dependencies:
   sharp:
     specifier: ^0.32.1
     version: 0.32.6
-  string-similarity:
-    specifier: ^4.0.4
-    version: 4.0.4
   tailwindcss:
     specifier: 3.3.2
     version: 3.3.2
@@ -82,9 +79,6 @@ devDependencies:
   '@types/react-responsive-masonry':
     specifier: ^2.1.0
     version: 2.1.2
-  '@types/string-similarity':
-    specifier: ^4.0.0
-    version: 4.0.1
 
 packages:
 
@@ -1267,18 +1261,6 @@ packages:
       to-fast-properties: 2.0.0
     dev: false
 
-  /@consumet/extensions@1.5.2:
-    resolution: {integrity: sha512-6HSTatWrPBp6k/g2extohMMtpIskjfPCnTVmqkc/1v+82K+M3FY2j/uKZOzx3eMqSrX3Vm6XFqIvrfo/PGbd/Q==}
-    dependencies:
-      ascii-url-encoder: 1.2.0
-      axios: 0.27.2
-      cheerio: 1.0.0-rc.12
-      crypto-js: 4.2.0
-      form-data: 4.0.0
-    transitivePeerDependencies:
-      - debug
-    dev: false
-
   /@ducanh2912/next-pwa@8.7.1(next@13.4.1)(webpack@5.89.0):
     resolution: {integrity: sha512-VELj7dWHMPJPqMjmY6X0xzINo/r/SLZbDRncPNMVd91cVEnvq0SJDIG7s9m/TxlPt+7MEQlQKYgl3sQk7rPiMQ==}
     peerDependencies:
@@ -1714,10 +1696,6 @@ packages:
 
   /@types/scheduler@0.16.5:
     resolution: {integrity: sha512-s/FPdYRmZR8SjLWGMCuax7r3qCWQw9QKHzXVukAuuIJkXkDRwp+Pu5LMIVFi0Fxbav35WURicYr8u1QsoybnQw==}
-
-  /@types/string-similarity@4.0.1:
-    resolution: {integrity: sha512-aUPUr+8RUgQH33o+DKPecDCJg1Z967Xwsqgjqfz6ZFpy6d8VDayMT7JmVMKaVAekGgRZpZmxxLS/jGQqk1kzTg==}
-    dev: true
 
   /@types/trusted-types@2.0.5:
     resolution: {integrity: sha512-I3pkr8j/6tmQtKV/ZzHtuaqYSQvyjGRKH4go60Rr0IDLlFxuRT5V32uvB1mecM5G1EVAUyF/4r4QZ1GHgz+mxA==}
@@ -4083,11 +4061,6 @@ packages:
       queue-tick: 1.0.1
     dev: false
 
-  /string-similarity@4.0.4:
-    resolution: {integrity: sha512-/q/8Q4Bl4ZKAPjj8WerIBJWALKkaPRfrvhfF8k/B23i4nzrlRj2/go1m90In7nG/3XDSbOo0+pu6RvCTM9RGMQ==}
-    deprecated: Package no longer supported. Contact Support at https://www.npmjs.com/support for more info.
-    dev: false
-
   /string.prototype.matchall@4.0.10:
     resolution: {integrity: sha512-rGXbGmOEosIQi6Qva94HUjgPs9vKW+dkG7Y8Q5O2OYkWL6wFaTRZO8zM4mhP94uX55wgyrXzfS2aGtGzUL7EJQ==}
     dependencies:
@@ -4827,4 +4800,20 @@ packages:
 
   /zod@3.21.4:
     resolution: {integrity: sha512-m46AKbrzKVzOzs/DZgVnG5H55N1sv1M8qZU3A8RIKbs3mrACDNeIOeilDymVb2HdmP8uwshOCF4uJ8uM9rCqJw==}
+    dev: false
+
+  github.com/consumet/consumet.ts/ee81eca4f4c0bf849cd481658f9821cc4e645137:
+    resolution: {tarball: https://codeload.github.com/consumet/consumet.ts/tar.gz/ee81eca4f4c0bf849cd481658f9821cc4e645137}
+    name: '@consumet/extensions'
+    version: 1.5.3
+    prepare: true
+    requiresBuild: true
+    dependencies:
+      ascii-url-encoder: 1.2.0
+      axios: 0.27.2
+      cheerio: 1.0.0-rc.12
+      crypto-js: 4.2.0
+      form-data: 4.0.0
+    transitivePeerDependencies:
+      - debug
     dev: false

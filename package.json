@@ -9,7 +9,7 @@
     "lint": "next lint"
   },
   "dependencies": {
-    "@consumet/extensions": "^1.5.1",
+    "@consumet/extensions": "git+https://github.com/consumet/consumet.ts.git",
     "@ducanh2912/next-pwa": "^8.3.0",
     "@types/node": "20.1.0",
     "@types/react": "18.2.6",
@@ -30,12 +30,10 @@
     "react-responsive-masonry": "^2.1.7",
     "rss-parser": "^3.13.0",
     "sharp": "^0.32.1",
-    "string-similarity": "^4.0.4",
     "tailwindcss": "3.3.2",
     "typescript": "5.0.4"
   },
   "devDependencies": {
-    "@types/react-responsive-masonry": "^2.1.0",
-    "@types/string-similarity": "^4.0.0"
+    "@types/react-responsive-masonry": "^2.1.0"
   }
 }
