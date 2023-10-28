@@ -39,7 +39,7 @@ function KitsunePlayer({ episodeInfo, animeInfo }: KitsunePlayerProps) {
     data.sources &&
       data.sources.map((source: TEpisodeSources) => {
         if (source.quality === "720p") {
-          setUri("https://cors.zimjs.com/" + source.url);
+          setUri(source.url);
         }
       });
   };
@@ -48,7 +48,7 @@ function KitsunePlayer({ episodeInfo, animeInfo }: KitsunePlayerProps) {
     container: ".artplayer-app",
     url: uri,
     customType: {
-      m3u8: function (video: any, url: string) {
+      m3u8: function(video: any, url: string) {
         let hls = new Hls();
         hls.loadSource(url);
         hls.attachMedia(video);
@@ -90,10 +90,10 @@ function KitsunePlayer({ episodeInfo, animeInfo }: KitsunePlayerProps) {
     quality:
       epSource && epSource.sources
         ? epSource.sources.map((source: TEpisodeSources) => ({
-            default: source.quality === "720p",
-            html: source.quality,
-            url: "https://cors.zimjs.com/" + source.url,
-          }))
+          default: source.quality === "720p",
+          html: source.quality,
+          url: source.url,
+        }))
         : [],
     thumbnails: {
       url: animeInfo.image,
