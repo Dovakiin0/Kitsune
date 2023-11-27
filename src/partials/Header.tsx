@@ -1,6 +1,7 @@
 import React from "react";
 import SearchAnime from "@/partials/SearchAnime";
 import { nightTokyo } from "@/utils/fonts";
+import Image from "next/image";
 
 function Header() {
   return (
@@ -48,7 +49,7 @@ function Header() {
             </ul>
           </div>
           <div className="flex items-center">
-            <img src="/icon.png" alt="logo" width="80" height="80" />
+            <Image src="/icon.png" alt="logo" width="80" height="80" />
             <a
               href="/"
               className={`${nightTokyo.className} btn btn-ghost font-extrabold text-3xl text-transparent bg-clip-text bg-gradient-to-r from-gray-200 to-pink-600 tracking-widest`}
