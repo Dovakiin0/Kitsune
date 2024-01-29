@@ -34,6 +34,6 @@ jobs:
             cat <<EOF > .env
             ${{secrets.ENV_PROD}}
             EOF
-            npm ci
-            npm run build
-            pm2 reload Kitsunee
+            pnpm install --frozen-lockfile
+            pnpm build
+            pm2 startOrReload ecosystem.config.cjs
