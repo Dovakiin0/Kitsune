@@ -35,7 +35,7 @@ cd kitsune/
 npm install or yarn
 ```
 
-rename the `.env.example` file to `.env` then set in TMDB access key and vercel KV(optional).  
+rename the `.env.example` file to `.env` then set in TMDB access key (READ ACCESS TOKEN) and vercel KV(optional).  
 then run the app
 
 ```
