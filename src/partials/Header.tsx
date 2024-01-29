@@ -30,15 +30,6 @@ function Header() {
               className="menu menu-compact dropdown-content mt-3 p-2 shadow bg-base-100 rounded-box w-52"
             >
               <li>
-                <a href="/">HOME</a>
-              </li>
-              <li>
-                <a href="/manga">MANGA</a>
-              </li>
-              <li>
-                <a href="/waifu">WAIFU</a>
-              </li>
-              <li>
                 <a
                   href="https://www.buymeacoffee.com/dovakiin0"
                   target="_blank"
@@ -57,19 +48,6 @@ function Header() {
               KITSUNE
             </a>
           </div>
-        </div>
-        <div className="navbar-center hidden lg:flex">
-          <ul className="menu menu-horizontal px-1">
-            <li>
-              <a href="/">HOME</a>
-            </li>
-            <li>
-              <a href="/manga">MANGA</a>
-            </li>
-            <li>
-              <a href="/waifu">WAIFU</a>
-            </li>
-          </ul>
         </div>
         <div className="navbar-end gap-2 hidden lg:flex">
           <a href="https://www.buymeacoffee.com/dovakiin0" target="_blank">

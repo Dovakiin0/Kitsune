@@ -25,15 +25,6 @@ function KitsunePlayer({ episodeInfo, animeInfo }: KitsunePlayerProps) {
     if (!episodeInfo) return;
     let source = episodeInfo.id;
     let data = await getEpisodeGogo(source);
-    //
-    // if (typeof window !== "undefined") {
-    //   if (localStorage?.getItem("provider") === "Gogo") {
-    //           }
-    //   if (localStorage?.getItem("provider") === "Zoro") {
-    //     source = episodeInfo.sources[1].target;
-    //     data = await getEpisodeZoro(source);
-    //   }
-    // }
 
     setEpSource(data);
     data.sources &&
@@ -48,12 +39,18 @@ function KitsunePlayer({ episodeInfo, animeInfo }: KitsunePlayerProps) {
     container: ".artplayer-app",
     url: uri,
     customType: {
-      m3u8: function(video: any, url: string) {
-        let hls = new Hls();
-        hls.loadSource(url);
-        hls.attachMedia(video);
-        if (!video.src) {
+      m3u8: function(video: any, url: string, art: any) {
+        if (Hls.isSupported()) {
+          if (art.hls) art.hls.destroy();
+          const hls = new Hls();
+          hls.loadSource(url);
+          hls.attachMedia(video);
+          art.hls = hls;
+          art.on("destroy", () => hls.destroy());
+        } else if (video.canPlayType("application/vnd.apple.mpegurl")) {
           video.src = url;
+        } else {
+          art.notice.show = "Unsupported playback format";
         }
       },
     },
@@ -113,14 +110,14 @@ function KitsunePlayer({ episodeInfo, animeInfo }: KitsunePlayerProps) {
     },
     icons: {
       loading: `<img width="80" height="80" src="${loading.src}">`,
-      // state: '<img width="150" heigth="150" src="/assets/img/state.svg">',
-      // indicator: '<img width="16" heigth="16" src="/assets/img/indicator.svg">',
     },
   };
 
   useEffect(() => {
     fetchSource();
   }, []);
+
+  console.log(epSource);
 
   return epSource ? (
     <ArtPlayer option={options} className="md:h-[800px] h-[250px] w-full" />
