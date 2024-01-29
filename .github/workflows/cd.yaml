@@ -1,0 +1,39 @@
+name: Kitsunee CD
+
+# Controls when the action will run.
+on:
+  # workflow_run:
+  #   workflows: ["TMpro CI"]
+  #   types:
+  #     - "completed"
+  # Triggers the workflow on push or pull request events but only for the master branch
+  push:
+    branches: [ master ]
+
+# A workflow run is made up of one or more jobs that can run sequentially or in parallel
+jobs:
+  # This workflow contains a single job called "build"
+  build:
+    # The type of runner that the job will run on
+    runs-on: ubuntu-latest
+
+    # Steps represent a sequence of tasks that will be executed as part of the job
+    steps:
+      - name: Deploy using ssh
+        uses: appleboy/ssh-action@master
+        with:
+          host: ${{ secrets.HOST }}
+          username: ${{ secrets.USERNAME }}
+          key: ${{ secrets.SSH_PRIVATE_KEY }}
+          port: 22
+          script: |
+            cd ~/Kitsune
+            git pull origin master
+            git status
+            cat <<EOF > .env
+            ${{secrets.ENV_PROD}}
+            EOF
+            rm pnpm-lock.yaml
+            yarn
+            yarn build
+            yarn start

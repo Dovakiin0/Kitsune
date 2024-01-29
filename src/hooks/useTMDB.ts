@@ -1,8 +1,8 @@
-import { DOMAIN_URL } from "@/utils/constants";
+import { DOMAIN_URI } from "@/utils/constants";
 
 export default function useTMDB() {
   const API = {
-    search: DOMAIN_URL + "/api/tmdb?query=",
+    search: DOMAIN_URI + "/api/tmdb?query=",
   };
 
   async function getTMDBMap(query: string) {
