@@ -27,13 +27,13 @@ jobs:
           key: ${{ secrets.SSH_PRIVATE_KEY }}
           port: 22
           script: |
+            export PATH=$PATH:/home/${{ secrets.USERNAME }}/.nvm/versions/node/v18.16.0/bin
             cd ~/Kitsune
             git pull origin master
             git status
             cat <<EOF > .env
             ${{secrets.ENV_PROD}}
             EOF
-            rm pnpm-lock.yaml
-            yarn
-            yarn build
-            yarn start
+            pnpm install
+            pnpm build
+            pm2 reload kitsune
