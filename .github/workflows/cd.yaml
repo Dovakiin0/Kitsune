@@ -27,6 +27,7 @@ jobs:
           key: ${{ secrets.SSH_PRIVATE_KEY }}
           port: 22
           script: |
+            export PATH=$PATH:/home/${{ secrets.USERNAME }}/.nvm/versions/node/v18.16.0/bin
             cd ~/Kitsune
             git pull origin master
             git status
