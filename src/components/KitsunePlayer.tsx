@@ -117,8 +117,6 @@ function KitsunePlayer({ episodeInfo, animeInfo }: KitsunePlayerProps) {
     fetchSource();
   }, []);
 
-  console.log(epSource);
-
   return epSource ? (
     <ArtPlayer option={options} className="md:h-[800px] h-[250px] w-full" />
   ) : (

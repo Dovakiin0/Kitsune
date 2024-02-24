@@ -32,13 +32,6 @@ function EpisodeLayout({ animeInfo, episode }: EpisodeLayoutProps) {
     });
   }, []);
 
-  // useEffect(() => {
-  //   const provider = localStorage.getItem("provider");
-  //   if (!provider) {
-  //     localStorage.setItem("provider", "Gogo");
-  //   }
-  // }, []);
-
   const onSearch = (e: any) => {
     e.preventDefault();
     let ep = Number(e.target.value);
@@ -66,24 +59,6 @@ function EpisodeLayout({ animeInfo, episode }: EpisodeLayoutProps) {
             onChange={onSearch}
           />
         </div>
-        {/* <div className="flex items-center justify-end gap-2 w-full lg:w-1/2 order-1 lg:order-2 mb-5 lg:mb-0"> */}
-        {/*   <p className="text-sm text-gray-400">Provider</p> */}
-        {/*   <select */}
-        {/*     className="select select-bordered w-full lg:w-[400px] max-w-xs select-sm" */}
-        {/*     onChange={(e) => { */}
-        {/*       localStorage.setItem("provider", e.target.value); */}
-        {/*       window.location.reload(); */}
-        {/*     }} */}
-        {/*     value={ */}
-        {/*       typeof window !== "undefined" */}
-        {/*         ? localStorage.getItem("provider") ?? "Gogo" */}
-        {/*         : "" */}
-        {/*     } */}
-        {/*   > */}
-        {/*     <option value="Gogo">Gogo</option> */}
-        {/*     <option value="Zoro">Zoro</option> */}
-        {/*   </select> */}
-        {/* </div> */}
       </div>
       <div className="flex flex-wrap gap-5 max-h-[90vh] overflow-y-auto">
         {animeInfo.episodes.length > 0 ? (
@@ -94,6 +69,7 @@ function EpisodeLayout({ animeInfo, episode }: EpisodeLayoutProps) {
                   ep={ep}
                   backSrc={animeInfo.image}
                   isCurrent={episode.id === ep.id}
+                  watched={watched?.ep.some((e) => e.number === ep.number)}
                 />
               </a>
             </div>
