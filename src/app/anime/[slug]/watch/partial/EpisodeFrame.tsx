@@ -14,14 +14,14 @@ type Props = {
 function EpisodeFrame({ episode, animeInfo }: Props) {
   const onNext = () => {
     if (animeInfo.episodes.at(-1)?.number === episode.number) return;
-    window.location.href = `/anime/${animeInfo.id}/watch?ep=${animeInfo
-      .episodes[episode.number - 1 + 1]?.id}`;
+    window.location.href = `/anime/${animeInfo.id}/watch?ep=${animeInfo.episodes[episode.number - 1 + 1]?.id
+      }`;
   };
 
   const onPrev = () => {
     if (episode.number === 1) return;
-    window.location.href = `/anime/${animeInfo.id}/watch?ep=${animeInfo
-      .episodes[episode.number - 1 - 1]?.id}`;
+    window.location.href = `/anime/${animeInfo.id}/watch?ep=${animeInfo.episodes[episode.number - 1 - 1]?.id
+      }`;
   };
 
   return (

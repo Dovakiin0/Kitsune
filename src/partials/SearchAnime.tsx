@@ -75,7 +75,7 @@ function Search() {
                 ))}
                 <Link
                   className="btn btn-outline w-full"
-                  href={`/search?q=${encodeURIComponent(search)}`}
+                  href={`/search?q=${search}`}
                   onClick={handleSearchCallback}
                 >
                   See More

@@ -38,9 +38,7 @@ export default function useAnime() {
         return KV;
       }
     }
-    const data = await fetch(
-      location.protocol + "//" + location.host + "/api/anime/zoro" + id,
-    );
+    const data = await fetch(location.origin + "/api/anime/zoro" + id);
     let json = await data.json();
 
     if (KV) {
@@ -57,9 +55,7 @@ export default function useAnime() {
         return KV;
       }
     }
-    const data = await fetch(
-      location.protocol + "//" + location.host + "/api/anime/gogo/watch/" + id,
-    );
+    const data = await fetch(location.origin + "/api/anime/gogo/watch/" + id);
     let json = await data.json();
 
     if (KV) {
@@ -69,9 +65,7 @@ export default function useAnime() {
   }
 
   async function getSearch(query: string) {
-    const data = await fetch(
-      location.protocol + "//" + location.host + "/api/anime/search/" + query,
-    );
+    const data = await fetch(location.origin + "/api/anime/search/" + query);
     return data.json();
   }
 
