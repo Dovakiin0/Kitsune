@@ -7,7 +7,7 @@ settings:
 dependencies:
   '@consumet/extensions':
     specifier: github:consumet/consumet.ts
-    version: github.com/consumet/consumet.ts/c958ef485f812dfde3eee4b8d54def9ee0153164
+    version: github.com/consumet/consumet.ts/4b341efa3cf8b4f7437a364ef42a81548550f1b3
   '@ducanh2912/next-pwa':
     specifier: ^8.7.1
     version: 8.7.1(next@13.4.1)(webpack@5.90.0)
@@ -5032,10 +5032,10 @@ packages:
     resolution: {integrity: sha512-m46AKbrzKVzOzs/DZgVnG5H55N1sv1M8qZU3A8RIKbs3mrACDNeIOeilDymVb2HdmP8uwshOCF4uJ8uM9rCqJw==}
     dev: false
 
-  github.com/consumet/consumet.ts/c958ef485f812dfde3eee4b8d54def9ee0153164:
-    resolution: {tarball: https://codeload.github.com/consumet/consumet.ts/tar.gz/c958ef485f812dfde3eee4b8d54def9ee0153164}
+  github.com/consumet/consumet.ts/4b341efa3cf8b4f7437a364ef42a81548550f1b3:
+    resolution: {tarball: https://codeload.github.com/consumet/consumet.ts/tar.gz/4b341efa3cf8b4f7437a364ef42a81548550f1b3}
     name: '@consumet/extensions'
-    version: 1.5.5
+    version: 1.5.6
     prepare: true
     requiresBuild: true
     dependencies:
