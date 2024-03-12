@@ -73,7 +73,7 @@ function KitsunePlayer({ episodeInfo, animeInfo }: KitsunePlayerProps) {
     fullscreen: true,
     fullscreenWeb: false,
     subtitleOffset: false,
-    miniProgressBar: true,
+    miniProgressBar: false,
     mutex: true,
     backdrop: true,
     playsInline: true,
