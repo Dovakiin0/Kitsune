@@ -15,23 +15,21 @@ Also checkout the mobile app: [Android](https://github.com/Dovakiin0/animeworldz
 
 ## Contributing
 
+Firstly, fork the repo.
 ```
-fork the repo
-
 git clone <forked-repo>
 git checkout -b <new-feature>
 git add <changed-file>
 git commit -m "New feature"
 git push origin <new-feature>
-
-then submit a pull request
 ```
+Then submit a pull request
 
 ## Local Development
 
 ```
-clone the repo
-cd kitsune/
+clone https://github.com/Dovakiin0/Kitsune.git
+cd Kitsune/
 npm install or yarn
 ```
 
