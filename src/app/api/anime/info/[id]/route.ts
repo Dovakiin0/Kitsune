@@ -17,3 +17,5 @@ export async function GET(
   let infoData = { ...info, id };
   return NextResponse.json(infoData);
 }
+
+export const revalidate = 0

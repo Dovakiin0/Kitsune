@@ -38,3 +38,5 @@ async function getTMDBLogo(id: number) {
   const infoData = await res.json();
   return infoData;
 }
+
+export const revalidate = 0

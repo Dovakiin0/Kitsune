@@ -10,3 +10,5 @@ export async function GET(
   const popular = await gogo.fetchTopAiring();
   return NextResponse.json(popular.results);
 }
+
+export const revalidate = 0

@@ -10,3 +10,5 @@ export async function GET(
   const search = await gogo.search(params.query);
   return NextResponse.json(search.results);
 }
+
+export const revalidate = 0

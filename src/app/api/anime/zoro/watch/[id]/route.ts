@@ -13,3 +13,5 @@ export async function GET(
   const episode = await zoro.fetchEpisodeSources(id);
   return NextResponse.json(episode);
 }
+
+export const revalidate = 0

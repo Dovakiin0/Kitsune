@@ -7,3 +7,5 @@ export async function GET(req: Request) {
   const news = await ann.fetchNewsFeeds(Topics.ANIME);
   return NextResponse.json(news, { status: 200 });
 }
+
+export const revalidate = 0
