@@ -10,3 +10,5 @@ export async function GET(
   const episode = await gogo.fetchEpisodeSources(params.id);
   return NextResponse.json(episode);
 }
+
+export const revalidate = 0

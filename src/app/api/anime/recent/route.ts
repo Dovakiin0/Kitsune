@@ -10,3 +10,5 @@ export async function GET(
   const recent = await gogo.fetchRecentEpisodes();
   return NextResponse.json(recent.results);
 }
+
+export const revalidate = 0
