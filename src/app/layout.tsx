@@ -4,6 +4,8 @@ import { Metadata } from "next";
 import Script from "next/script";
 import Header from "@/partials/Header";
 import { Footer } from "@/partials/Footer";
+import { Suspense } from "react";
+import ProgressBar from "@/components/Progress";
 
 const APP_NAME = "Kitsune";
 const APP_DEFAULT_TITLE = "Kitsune | Anime Streaming";
@@ -57,6 +59,9 @@ export default function RootLayout({
   gtag('config', 'G-X9RZ58XPH1');`}
       </Script>
       <body>
+        <Suspense>
+          <ProgressBar/>
+        </Suspense>
         <Header />
         <div className="min-h-screen">{children}</div>
         <Footer />

@@ -4,6 +4,7 @@ import { FaPlay } from "react-icons/fa";
 import { RxCross1 } from "react-icons/rx";
 import { motion } from "framer-motion";
 import { useRouter } from "next/navigation";
+import Link from "next/link";
 
 type AnimeProps = {
   id: string;
@@ -41,32 +42,28 @@ function AnimeCard({
         </div>
       )}
 
-      <motion.div
-        whileTap={{ scale: 0.9 }}
-        onClick={() =>
-          router.push(
-            `/anime/${encodeURIComponent(id)}/watch${episodeId ? "?ep=" + episodeId : ""
-            }`
-          )
-        }
-      >
-        <div className="flex flex-col space-y-2 justify-between bg-base-300 shadow-xl relative">
-          <img
-            src={src}
-            alt={title}
-            className="w-full h-[250px] lg:h-[300px] delay-50 object-cover rounded-lg"
-          />
-          <div className="absolute bottom-0 p-2 flex flex-col w-full bg-gradient-to-b from-transparent to-pink-900">
-            <p className="font-extrabold text-sm capitalize truncate">
-              {title}
-            </p>
-            <div className="flex item-center justify-between">
-              <p className="text-xs">{additional}</p>
-              <FaPlay />
+      <Link href={`/anime/${encodeURIComponent(id)}/watch${episodeId ? "?ep=" + episodeId : ""}`} >
+        <motion.div
+          whileTap={{ scale: 0.9 }}
+        >
+          <div className="flex flex-col space-y-2 justify-between bg-base-300 shadow-xl relative">
+            <img
+              src={src}
+              alt={title}
+              className="w-full h-[250px] lg:h-[300px] delay-50 object-cover rounded-lg"
+            />
+            <div className="absolute bottom-0 p-2 flex flex-col w-full bg-gradient-to-b from-transparent to-pink-900">
+              <p className="font-extrabold text-sm capitalize truncate">
+                {title}
+              </p>
+              <div className="flex item-center justify-between">
+                <p className="text-xs">{additional}</p>
+                <FaPlay />
+              </div>
             </div>
           </div>
-        </div>
-      </motion.div>
+        </motion.div>
+      </Link>
     </motion.div>
   );
 }
