@@ -8,4 +8,4 @@ export async function GET(req: Request) {
   return NextResponse.json(news, { status: 200 });
 }
 
-export const revalidate = 0
+export const revalidate = 18000;

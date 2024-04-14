@@ -11,4 +11,4 @@ export async function GET(
   return NextResponse.json(popular.results);
 }
 
-export const revalidate = 0
+export const revalidate = 18000;

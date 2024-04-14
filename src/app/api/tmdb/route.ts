@@ -39,4 +39,4 @@ async function getTMDBLogo(id: number) {
   return infoData;
 }
 
-export const revalidate = 0
+export const revalidate = 18000;
