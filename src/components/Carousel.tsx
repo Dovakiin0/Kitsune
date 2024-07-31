@@ -1,6 +1,5 @@
 "use client";
 import { IAnimePopular } from "@/@types/AnimeType";
-import { IAnimeResult, ITitle } from "@consumet/extensions";
 import Link from "next/link";
 import React from "react";
 import { Carousel as ReactCarousel } from "react-responsive-carousel";

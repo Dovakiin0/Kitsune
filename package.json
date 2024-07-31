@@ -9,7 +9,7 @@
     "lint": "next lint"
   },
   "dependencies": {
-    "@consumet/extensions": "github:consumet/consumet.ts",
+    "@consumet/extensions": "^1.7.0",
     "@ducanh2912/next-pwa": "^8.7.1",
     "@types/node": "20.1.0",
     "@types/react": "18.2.6",
