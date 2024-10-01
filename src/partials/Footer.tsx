@@ -14,15 +14,6 @@ export const Footer = (props: {}) => {
           <FaDiscord size={25} />
         </a>
       </div>
-      <div className="flex space-x-5">
-        <Link href="/tos" className="text-gray-300" shallow>
-          Terms of Service
-        </Link>
-        <p>&#9671;</p>
-        <Link href="/dmca" className="text-gray-300" shallow>
-          DMCA
-        </Link>
-      </div>
       <p className="text-sm text-gray-300">
         Kitsune does not store any files on our server, we only linked to the
         media which is hosted on 3rd party services.
