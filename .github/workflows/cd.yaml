@@ -8,7 +8,7 @@ on:
   #     - "completed"
   # Triggers the workflow on push or pull request events but only for the master branch
   push:
-    branches: [ master ]
+    branches: [master]
 
 # A workflow run is made up of one or more jobs that can run sequentially or in parallel
 jobs:
@@ -27,7 +27,7 @@ jobs:
           key: ${{ secrets.SSH_PRIVATE_KEY }}
           port: 22
           script: |
-            export PATH=$PATH:/home/${{ secrets.USERNAME }}/.nvm/versions/node/v18.16.0/bin
+            export PATH=$PATH:/home/${{ secrets.USERNAME }}/.nvm/versions/node/v20.17.0/bin
             cd ~/Kitsune
             git pull origin master
             git status
