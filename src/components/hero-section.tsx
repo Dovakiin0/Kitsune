@@ -5,7 +5,7 @@ import { Button } from "./ui/button";
 const HeroSection = () => {
   return (
     <div className='w-full bg-[url("https://wallpapers.com/images/high/chainsaw-man-background-s09zo4emiqa1lcva.webp")] bg-cover bg-no-repeat bg-center h-[80vh]'>
-      <div className="w-full h-[calc(100%-4.25rem)] mt-[4.25rem] backdrop-blur-[.125rem]">
+      <div className="w-full h-[calc(100%-5.25rem)] mt-[5.25rem]">
         <Container className="w-full  h-full flex flex-col justify-end md:justify-center pb-10">
           <div className="space-y-2 lg:w-[20vw]">
             <h1 className="text-4xl font-black">Chainsaw Man</h1>
