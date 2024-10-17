@@ -1,9 +1,12 @@
+import "./globals.css";
 import type { Metadata } from "next";
 import localFont from "next/font/local";
-import "./globals.css";
-import { ThemeProvider } from "@/components/theme-provider";
+
 import NavBar from "@/components/navbar";
+import Footer from "@/components/footer";
 import QueryProvider from "@/providers/query-provider";
+
+import { ThemeProvider } from "@/components/theme-provider";
 
 const geistSans = localFont({
   src: "./fonts/GeistVF.woff",
@@ -40,6 +43,7 @@ export default function RootLayout({
           <QueryProvider>
             <NavBar />
             {children}
+            <Footer />
           </QueryProvider>
         </ThemeProvider>
       </body>

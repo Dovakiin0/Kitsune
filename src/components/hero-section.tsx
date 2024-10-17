@@ -1,18 +1,23 @@
 "use client";
 
-import React, { useState } from "react";
-import Container from "./container";
-import { Button } from "./ui/button";
-import { useGetTrendingAnime } from "@/query/get-trending-anime";
-import parse from "html-react-parser";
 import {
   Carousel,
   CarouselApi,
   CarouselContent,
   CarouselItem,
 } from "./ui/carousel";
+
+import Container from "./container";
+import { Button } from "./ui/button";
+import parse from "html-react-parser";
+
 import { IAnime } from "@/types/anime";
+import React, { useState } from "react";
 import { ArrowLeft, ArrowRight } from "lucide-react";
+
+import { ROUTES } from "@/constants/routes";
+import { useGetTrendingAnime } from "@/query/get-trending-anime";
+import { ButtonLink } from "./common/button-link";
 
 const HeroSection = () => {
   const { data, isLoading } = useGetTrendingAnime();
@@ -87,7 +92,12 @@ const HeroCarouselItem = ({ anime }: { anime: IAnime }) => {
               {parse(anime?.description as string)}
             </p>
             <div className="flex items-center gap-5">
-              <Button className="h-10 text-md">Learn More</Button>
+              <ButtonLink
+                href={`${ROUTES.ANIME_DETAILS}/${anime.id}`}
+                className="h-10 text-md"
+              >
+                Learn More
+              </ButtonLink>
               <Button className="h-10 text-md" variant={"secondary"}>
                 To Watch
               </Button>

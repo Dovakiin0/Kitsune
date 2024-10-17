@@ -3,6 +3,7 @@
 import React from "react";
 import Container from "./container";
 import AnimeCard from "./anime-card";
+
 import { useGetTrendingAnime } from "@/query/get-trending-anime";
 
 const TrendingSection = () => {

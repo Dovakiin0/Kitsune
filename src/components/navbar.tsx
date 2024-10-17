@@ -1,20 +1,25 @@
 "use client";
 
 import Link from "next/link";
+import Image from "next/image";
+import { cn } from "@/lib/utils";
+
 import { Input } from "./ui/input";
 import Container from "./container";
 import { Separator } from "./ui/separator";
-import React, { ReactNode, useState } from "react";
-import { MenuIcon, Search, X } from "lucide-react";
-import { Sheet, SheetClose, SheetContent, SheetTrigger } from "./ui/sheet";
-import { cn } from "@/lib/utils";
-import { nightTokyo } from "@/utils/fonts";
-import Image from "next/image";
-import useScrollPosition from "@/hooks/use-scroll-position";
 
-const menuItems: Array<{ title: string }> = [
+import { nightTokyo } from "@/utils/fonts";
+import { ROUTES } from "@/constants/routes";
+import React, { ReactNode, useState } from "react";
+
+import { MenuIcon, Search, X } from "lucide-react";
+import useScrollPosition from "@/hooks/use-scroll-position";
+import { Sheet, SheetClose, SheetContent, SheetTrigger } from "./ui/sheet";
+
+const menuItems: Array<{ title: string; href?: string }> = [
   {
     title: "Home",
+    href: ROUTES.HOME,
   },
   {
     title: "Catalog",
@@ -29,11 +34,8 @@ const menuItems: Array<{ title: string }> = [
 
 const NavBar = () => {
   const { y } = useScrollPosition();
-  console.log(y);
   const isHeaderFixed = true;
   const isHeaderSticky = y > 0;
-
-  console.log(isHeaderSticky);
 
   return (
     <div
@@ -41,7 +43,7 @@ const NavBar = () => {
         "h-fit w-full bg-transparent",
         "sticky top-0 z-50 duration-300",
         isHeaderFixed
-          ? "fixed bg-gradient-to-b from-slate-800 to-transparent"
+          ? "fixed bg-gradient-to-b from-slate-700 to-transparent"
           : "",
         isHeaderSticky
           ? "bg-clip-padding backdrop-filter backdrop-blur-md bg-opacity-10"
@@ -49,7 +51,10 @@ const NavBar = () => {
       ])}
     >
       <Container className="flex items-center justify-between py-2 gap-20 ">
-        <div className="flex items-center gap-1 cursor-pointer">
+        <Link
+          href={ROUTES.HOME}
+          className="flex items-center gap-1 cursor-pointer"
+        >
           <Image src="/icon.png" alt="logo" width="80" height="80" />
           <h1
             className={cn([
@@ -59,10 +64,10 @@ const NavBar = () => {
           >
             Kitsunee
           </h1>
-        </div>
+        </Link>
         <div className="hidden lg:flex items-center gap-10 ml-20">
           {menuItems.map((menu, idx) => (
-            <Link href={"#"} key={idx}>
+            <Link href={menu.href || "#"} key={idx}>
               {menu.title}
             </Link>
           ))}
@@ -95,7 +100,11 @@ const MobileMenuSheet = ({ trigger }: { trigger: ReactNode }) => {
           </SheetClose>
           <div className="flex flex-col gap-5">
             {menuItems.map((menu, idx) => (
-              <Link href={"#"} key={idx}>
+              <Link
+                href={menu.href || "#"}
+                key={idx}
+                onClick={() => setOpen(false)}
+              >
                 {menu.title}
               </Link>
             ))}

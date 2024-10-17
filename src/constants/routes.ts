@@ -1,0 +1,1 @@
+export const ROUTES = { HOME: '/', ANIME_DETAILS: '/anime' }

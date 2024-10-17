@@ -1,7 +1,7 @@
-import Footer from "@/components/footer";
 import HeroSection from "@/components/hero-section";
 import PopularSection from "@/components/popular-section";
 import SpecialSection from "@/components/special-section";
+
 import TrendingSection from "@/components/trending-section";
 
 export default function Home() {
@@ -12,7 +12,6 @@ export default function Home() {
       {/* <FeaturedCollection /> */}
       <TrendingSection />
       <PopularSection />
-      <Footer />
     </div>
   );
 }
