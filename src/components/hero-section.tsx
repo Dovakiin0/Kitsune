@@ -10,31 +10,14 @@ import {
   CarouselApi,
   CarouselContent,
   CarouselItem,
-  CarouselNext,
-  CarouselPrevious,
 } from "./ui/carousel";
 import { IAnime } from "@/types/anime";
-import { ArrowLeft, ArrowRight, ChevronLeft, ChevronRight } from "lucide-react";
+import { ArrowLeft, ArrowRight } from "lucide-react";
 
 const HeroSection = () => {
   const { data, isLoading } = useGetTrendingAnime();
 
   const [api, setApi] = React.useState<CarouselApi>();
-  const [current, setCurrent] = React.useState(0);
-  const [count, setCount] = React.useState(0);
-
-  React.useEffect(() => {
-    if (!api) {
-      return;
-    }
-
-    setCount(api.scrollSnapList().length);
-    setCurrent(api.selectedScrollSnap() + 1);
-
-    api.on("select", () => {
-      setCurrent(api.selectedScrollSnap() + 1);
-    });
-  }, [api]);
 
   if (isLoading) return <>Loading</>;
 
@@ -44,7 +27,7 @@ const HeroSection = () => {
         <CarouselContent className="">
           {data?.results.map((anime, index) => (
             <CarouselItem key={index}>
-              <HeroCarouselItem anime={anime} api={api} />
+              <HeroCarouselItem anime={anime} />
             </CarouselItem>
           ))}
         </CarouselContent>
@@ -69,13 +52,7 @@ const HeroSection = () => {
   );
 };
 
-const HeroCarouselItem = ({
-  anime,
-  api,
-}: {
-  anime: IAnime;
-  api: CarouselApi;
-}) => {
+const HeroCarouselItem = ({ anime }: { anime: IAnime }) => {
   const [isHovered, setIsHovered] = useState(false);
 
   return (
