@@ -10,6 +10,7 @@ import { Sheet, SheetClose, SheetContent, SheetTrigger } from "./ui/sheet";
 import { cn } from "@/lib/utils";
 import { nightTokyo } from "@/utils/fonts";
 import Image from "next/image";
+import useScrollPosition from "@/hooks/use-scroll-position";
 
 const menuItems: Array<{ title: string }> = [
   {
@@ -27,9 +28,27 @@ const menuItems: Array<{ title: string }> = [
 ];
 
 const NavBar = () => {
+  const { y } = useScrollPosition();
+  console.log(y);
+  const isHeaderFixed = true;
+  const isHeaderSticky = y > 0;
+
+  console.log(isHeaderSticky);
+
   return (
-    <div className="h-fit w-full bg-gray-400 rounded-md bg-clip-padding backdrop-filter backdrop-blur-md bg-opacity-10 fixed top-0 z-50">
-      <Container className="flex items-center justify-between py-2 gap-20">
+    <div
+      className={cn([
+        "h-fit w-full bg-transparent",
+        "sticky top-0 z-50 duration-300",
+        isHeaderFixed
+          ? "fixed bg-gradient-to-b from-slate-800 to-transparent"
+          : "",
+        isHeaderSticky
+          ? "bg-clip-padding backdrop-filter backdrop-blur-md bg-opacity-10"
+          : "",
+      ])}
+    >
+      <Container className="flex items-center justify-between py-2 gap-20 ">
         <div className="flex items-center gap-1 cursor-pointer">
           <Image src="/icon.png" alt="logo" width="80" height="80" />
           <h1

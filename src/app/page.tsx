@@ -1,4 +1,3 @@
-import FeaturedCollection from "@/components/featured-collection";
 import Footer from "@/components/footer";
 import HeroSection from "@/components/hero-section";
 import PopularSection from "@/components/popular-section";
@@ -10,7 +9,7 @@ export default function Home() {
     <div className="flex flex-col bg-[#121212]">
       <HeroSection />
       <SpecialSection />
-      <FeaturedCollection />
+      {/* <FeaturedCollection /> */}
       <TrendingSection />
       <PopularSection />
       <Footer />

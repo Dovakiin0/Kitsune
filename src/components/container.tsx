@@ -13,7 +13,7 @@ const Container = (props: Props) => {
         "mx-auto w-full",
         "px-4",
         "md:px-6 lg:px-8",
-        "max-w-[1400px] 5xl:max-w-[1832px]",
+        "max-w-[1400px] 2xl:max-w-[1600px]",
         props.className,
       ])}
     >
