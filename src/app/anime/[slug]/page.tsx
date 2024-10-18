@@ -11,19 +11,17 @@ import { IAnimeResponse } from "@/types/anime-api-response";
 import { CirclePlay, EyeIcon, Sparkles } from "lucide-react";
 
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import CharacterCard from "@/components/common/character-card";
+import AnimeEpisodes from "@/components/anime-episodes";
+import { api } from "@/lib/api";
 
 export const revalidate = 60;
 export const dynamicParams = true;
 
 export async function generateStaticParams() {
   try {
-    const anime: IAnimeResponse = await fetch(
-      "https://api.kitsunee.me/recent"
-    ).then((res) => {
-      if (!res.ok) {
-        throw new Error(`Failed to fetch, status: ${res.status}`);
-      }
-      return res.json();
+    const anime: IAnimeResponse = await api.get("/anime/recent").then((res) => {
+      return res.data;
     });
     return anime.results.map((anime) => ({
       slug: String(anime.id),
@@ -36,15 +34,11 @@ export async function generateStaticParams() {
 
 const Page = async ({ params }: { params: { slug: string } }) => {
   try {
-    const anime: IAnimeDetails = await fetch(
-      `https://api.kitsunee.me/anime/${params.slug}`
-    ).then((res) => {
-      if (!res.ok) {
-        throw new Error(`Failed to fetch anime details, status: ${res.status}`);
-      }
-      return res.json();
-    });
-
+    const anime: IAnimeDetails = await api
+      .get(`/anime/${params.slug}`)
+      .then((res) => {
+        return res.data;
+      });
 
     return (
       <div className="w-full z-50">
@@ -93,16 +87,31 @@ const Page = async ({ params }: { params: { slug: string } }) => {
               >
                 Overview
               </TabsTrigger>
+
               <TabsTrigger
-                value="password"
+                value="episodes"
+                className="md:text-2xl text-lg font-semibold"
+              >
+                Episodes
+              </TabsTrigger>
+
+              <TabsTrigger
+                value="relations"
                 className="md:text-2xl text-lg font-semibold"
               >
                 Relations
               </TabsTrigger>
+
+              <TabsTrigger
+                value="characters"
+                className="md:text-2xl text-lg font-semibold"
+              >
+                Characters
+              </TabsTrigger>
             </TabsList>
             <TabsContent
               value="overview"
-              className="w-full grid md:grid-cols-5 grid-cols-1 gap-x-20 gap-y-5 mt-10"
+              className="w-full grid md:grid-cols-5 grid-cols-1 gap-x-20 gap-y-5 md:mt-10 mt-5"
             >
               <div className="col-span-1 flex flex-col gap-5 w-full">
                 <h3 className="text-xl font-semibold">Details</h3>
@@ -140,6 +149,31 @@ const Page = async ({ params }: { params: { slug: string } }) => {
                 <p className="md:text-lg text-base">
                   {parse(anime?.description as string)}
                 </p>
+              </div>
+            </TabsContent>
+
+            <TabsContent
+              value="episodes"
+              className="flex flex-col md:mt-10 mt-5 gap-5"
+            >
+              <AnimeEpisodes episodes={anime.episodes} animeId={anime.id} />
+            </TabsContent>
+
+            <TabsContent
+              value="characters"
+              className="w-full flex flex-col md:mt-10 gap-5 mt-5"
+            >
+              <h3 className="text-xl font-semibold">Anime Characters</h3>
+              <div className="grid lg:grid-cols-5 grid-cols-2 sm:grid-cols-3 md:grid-cols-4 xl:grid-cols-6 2xl:grid-cols-7 w-full gap-5 content-center">
+                {anime.characters.map((character, idx) => {
+                  return (
+                    <CharacterCard
+                      key={idx}
+                      character={character}
+                      className="self-center justify-self-center"
+                    />
+                  );
+                })}
               </div>
             </TabsContent>
           </Tabs>

@@ -41,7 +41,7 @@ const NavBar = () => {
     <div
       className={cn([
         "h-fit w-full bg-transparent",
-        "sticky top-0 z-50 duration-300",
+        "sticky top-0 z-[100] duration-300",
         isHeaderFixed
           ? "fixed bg-gradient-to-b from-slate-700 to-transparent"
           : "",
@@ -93,7 +93,7 @@ const MobileMenuSheet = ({ trigger }: { trigger: ReactNode }) => {
   return (
     <Sheet open={open} onOpenChange={setOpen}>
       <SheetTrigger>{trigger}</SheetTrigger>
-      <SheetContent className="flex flex-col w-[80vw]" hideCloseButton>
+      <SheetContent className="flex flex-col w-[80vw] z-[150]" hideCloseButton>
         <div className="w-full h-full relative">
           <SheetClose className="absolute top-3 -left-16">
             <X />

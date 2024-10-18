@@ -1,1 +1,1 @@
-export const ROUTES = { HOME: '/', ANIME_DETAILS: '/anime' }
+export const ROUTES = { HOME: '/', ANIME_DETAILS: '/anime', WATCH: '/anime/watch' }
