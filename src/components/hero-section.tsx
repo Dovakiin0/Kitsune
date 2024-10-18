@@ -24,7 +24,7 @@ const HeroSection = () => {
 
   const [api, setApi] = React.useState<CarouselApi>();
 
-  if (isLoading) return <>Loading</>;
+  if (isLoading) return <LoadingSkeleton />;
 
   return (
     <div className="h-[80vh] w-full relative">
@@ -37,7 +37,7 @@ const HeroSection = () => {
           ))}
         </CarouselContent>
       </Carousel>
-      <div className="absolute hidden md:flex items-center gap-5 right-10 bottom-0 z-50 isolate">
+      <div className="absolute hidden md:flex items-center gap-5 right-10 bottom-10 z-50 isolate">
         <Button
           onClick={() => {
             api?.scrollPrev();
@@ -60,12 +60,27 @@ const HeroSection = () => {
 const HeroCarouselItem = ({ anime }: { anime: IAnime }) => {
   const [isHovered, setIsHovered] = useState(false);
 
+  const hoverTimeoutRef = React.useRef<NodeJS.Timeout | null>(null); // Use ref to store the timeout ID
+
+  const handleMouseEnter = () => {
+    hoverTimeoutRef.current = setTimeout(() => {
+      setIsHovered(true);
+    }, 1500);
+  };
+
+  const handleMouseLeave = () => {
+    if (hoverTimeoutRef.current) {
+      clearTimeout(hoverTimeoutRef.current); // Clear the timeout when mouse leaves
+    }
+    setIsHovered(false);
+  };
+
   return (
     <div
       className={`w-full bg-cover bg-no-repeat bg-center h-[80vh] relative`}
       style={{ backgroundImage: `url(${anime?.cover})` }}
-      onMouseEnter={() => setIsHovered(true)}
-      onMouseLeave={() => setIsHovered(false)}
+      onMouseEnter={handleMouseEnter}
+      onMouseLeave={handleMouseLeave}
     >
       {isHovered && (
         <div className="absolute inset-0 z-0">
@@ -83,7 +98,7 @@ const HeroCarouselItem = ({ anime }: { anime: IAnime }) => {
       <div className="absolute h-full w-full inset-0 m-auto bg-gradient-to-r from-slate-900 to-transparent z-10"></div>
 
       {/* Content Section (remains outside the hover area) */}
-      <div className="w-full h-[calc(100%-5.25rem)] mt-[5.25rem] relative z-20">
+      <div className="w-full h-[calc(100%-5.25rem)]  relative z-20">
         <Container className="w-full h-full flex flex-col justify-end md:justify-center pb-10">
           <div className="space-y-2 lg:w-[40vw]">
             {/* Title and description moved inside the hover area */}
@@ -109,5 +124,27 @@ const HeroCarouselItem = ({ anime }: { anime: IAnime }) => {
   );
 };
 
+const LoadingSkeleton = () => {
+  return (
+    <div className="h-[80vh] w-full relative">
+      <div className="w-full h-[calc(100%-5.25rem)] mt-[5.25rem] relative z-20">
+        <Container className="w-full h-full flex flex-col justify-end md:justify-center pb-10">
+          <div className="space-y-2 lg:w-[40vw]">
+            <div className="h-16 animate-pulse bg-slate-700 w-[75%]"></div>
+            <div className="h-40 animate-pulse w-full bg-slate-700"></div>
+            <div className="flex items-center gap-5">
+              <span className="h-10 w-[7.5rem] animate-pulse bg-slate-700"></span>
+              <span className="h-10 w-[7.5rem] animate-pulse bg-slate-700"></span>
+            </div>
+          </div>
+        </Container>
+      </div>
+      <div className="absolute hidden md:flex items-center gap-5 right-10 bottom-0 z-50 isolate">
+        <span className="h-10 w-10 rounded-full animate-pulse bg-slate-700"></span>
+        <span className="h-10 w-10 rounded-full animate-pulse bg-slate-700"></span>
+      </div>
+    </div>
+  );
+};
 export default HeroSection;
 

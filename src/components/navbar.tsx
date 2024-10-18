@@ -40,11 +40,9 @@ const NavBar = () => {
   return (
     <div
       className={cn([
-        "h-fit w-full bg-transparent",
+        "h-fit w-full",
         "sticky top-0 z-[100] duration-300",
-        isHeaderFixed
-          ? "fixed bg-gradient-to-b from-slate-700 to-transparent"
-          : "",
+        isHeaderFixed ? "fixed bg-gradient-to-b from-slate-700" : "",
         isHeaderSticky
           ? "bg-clip-padding backdrop-filter backdrop-blur-md bg-opacity-10"
           : "",
