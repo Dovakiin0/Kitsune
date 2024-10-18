@@ -5,6 +5,7 @@ import React, { useEffect, useRef } from "react";
 import ArtPlayer from "./art-player";
 import Hls from "hls.js";
 import { IEpisodes, Source } from "@/types/episodes";
+import loadingImage from "@/assets/genkai.gif";
 
 type KitsunePlayerProps = {
   episodeInfo: IEpisodes;
@@ -113,7 +114,7 @@ const KitsunePlayer = ({ episodeInfo, animeInfo }: KitsunePlayerProps) => {
     //   encoding: "utf-8",
     // },
     icons: {
-      //   loading: `<img width="80" height="80" src="${loading.src}">`,
+      loading: `<img width="50" height="50" src="${loadingImage.src}">`,
     },
   };
 

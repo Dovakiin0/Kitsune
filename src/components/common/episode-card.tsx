@@ -24,7 +24,6 @@ const EpisodeCard = ({
   ...props
 }: Props) => {
   const pathName = usePathname();
-  console.log(pathName);
 
   if (showCard && variant === "card") {
     return (
