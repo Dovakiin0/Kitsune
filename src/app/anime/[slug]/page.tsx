@@ -7,30 +7,12 @@ import AnimeCard from "@/components/anime-card";
 import { IAnimeDetails } from "@/types/anime-details";
 
 import Button from "@/components/common/custom-button";
-import { IAnimeResponse } from "@/types/anime-api-response";
 import { CirclePlay, EyeIcon, Sparkles } from "lucide-react";
 
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import CharacterCard from "@/components/common/character-card";
 import AnimeEpisodes from "@/components/anime-episodes";
 import { api } from "@/lib/api";
-
-export const revalidate = 60;
-export const dynamicParams = true;
-
-export async function generateStaticParams() {
-  try {
-    const anime: IAnimeResponse = await api.get("/anime/recent").then((res) => {
-      return res.data;
-    });
-    return anime.results.map((anime) => ({
-      slug: String(anime.id),
-    }));
-  } catch (error) {
-    console.error("Error fetching anime data:", error);
-    return [];
-  }
-}
 
 const Page = async ({ params }: { params: { slug: string } }) => {
   const anime: IAnimeDetails = await api
