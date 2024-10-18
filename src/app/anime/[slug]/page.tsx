@@ -180,9 +180,10 @@ const Page = async ({ params }: { params: { slug: string } }) => {
         </Container>
       </div>
     );
+    //eslint-disable-next-line
   } catch (error) {
-    console.error("Error fetching anime details:", error);
-    return <div className="h-20vh w-full"></div>;
+    // console.error("Error fetching anime details:", error);
+    return <div className="h-20vh w-full">{}</div>;
   }
 };
 
