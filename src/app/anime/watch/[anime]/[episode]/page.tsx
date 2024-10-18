@@ -18,12 +18,8 @@ async function FetchAnimeAndEpisodes(animeId: string, episodeId: string) {
   return { anime, episodeData };
 }
 
-const Page = ({
-  params: { anime, episode },
-}: {
-  params: { anime: string; episode: string };
-}) => {
-  const dataPromise = FetchAnimeAndEpisodes(anime, episode);
+const Page = ({ params }: { params: { anime: string; episode: string } }) => {
+  const dataPromise = FetchAnimeAndEpisodes(params.anime, params.episode);
 
   return (
     <Suspense fallback={<Loading />}>
