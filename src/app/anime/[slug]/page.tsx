@@ -13,6 +13,8 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import CharacterCard from "@/components/common/character-card";
 import AnimeEpisodes from "@/components/anime-episodes";
 import { api } from "@/lib/api";
+import { ButtonLink } from "@/components/common/button-link";
+import { ROUTES } from "@/constants/routes";
 
 const Page = async ({ params }: { params: { slug: string } }) => {
   const anime: IAnimeDetails = await api
@@ -53,9 +55,13 @@ const Page = async ({ params }: { params: { slug: string } }) => {
                 {anime.rating / 10}
               </h4>
             </div>
-            <Button className="max-w-fit mt-5" LeftIcon={EyeIcon}>
+            <ButtonLink
+              href={`${ROUTES.WATCH}?anime=${anime.id}&episode=${anime.episodes[0].id}`}
+              className="max-w-fit mt-5"
+              LeftIcon={EyeIcon}
+            >
               Start Watching
-            </Button>
+            </ButtonLink>
           </div>
         </div>
         <Tabs defaultValue="overview" className="w-full">

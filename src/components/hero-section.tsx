@@ -113,9 +113,9 @@ const HeroCarouselItem = ({ anime }: { anime: IAnime }) => {
               >
                 Learn More
               </ButtonLink>
-              <Button className="h-10 text-md" variant={"secondary"}>
-                To Watch
-              </Button>
+              {/* <ButtonLink href={`${ROUTES.WATCH}?anime=${anime.id}&episode=${}`} className="h-10 text-md" variant={"secondary"}>
+                Watch
+              </ButtonLink> */}
             </div>
           </div>
         </Container>

@@ -1,6 +1,5 @@
 "use client";
 
-import { IAnimeDetails } from "@/types/anime-details";
 import React, { useEffect, useRef } from "react";
 import ArtPlayer from "./art-player";
 import Hls from "hls.js";
@@ -9,7 +8,7 @@ import loadingImage from "@/assets/genkai.gif";
 
 type KitsunePlayerProps = {
   episodeInfo: IEpisodes;
-  animeInfo: IAnimeDetails;
+  animeInfo: { title: string; image: string };
 };
 
 const KitsunePlayer = ({ episodeInfo, animeInfo }: KitsunePlayerProps) => {
@@ -64,7 +63,7 @@ const KitsunePlayer = ({ episodeInfo, animeInfo }: KitsunePlayerProps) => {
     volume: 1,
     isLive: false,
     muted: false,
-    autoplay: false,
+    autoplay: true,
     autoOrientation: true,
     pip: true,
     autoSize: false,

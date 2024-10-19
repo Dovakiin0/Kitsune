@@ -32,6 +32,7 @@ function ArtPlayer({ option, getInstance, ...rest }: any) {
         art.destroy(false);
       }
     };
+    //eslint-disable-next-line
   }, []);
 
   return <div ref={artRef} {...rest}></div>;

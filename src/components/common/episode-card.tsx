@@ -8,7 +8,7 @@ import { cn } from "@/lib/utils";
 import Link from "next/link";
 import { ROUTES } from "@/constants/routes";
 import { Episode } from "@/types/anime-details";
-import { usePathname } from "next/navigation";
+import { useAnimeStore } from "@/store/anime-store";
 
 type Props = {
   className?: string;
@@ -23,7 +23,7 @@ const EpisodeCard = ({
   variant = "card",
   ...props
 }: Props) => {
-  const pathName = usePathname();
+  const { selectedEpisode } = useAnimeStore();
 
   if (showCard && variant === "card") {
     return (
@@ -53,7 +53,9 @@ const EpisodeCard = ({
     );
   } else if (!showCard && variant === "card") {
     return (
-      <Link href={ROUTES.WATCH + "/" + props.animeId + "/" + props.episode.id}>
+      <Link
+        href={`${ROUTES.WATCH}?anime=${props.animeId}&episode=${props.episode.id}`}
+      >
         <div className="h-[6.25rem] rounded-2xl cursor-pointer w-full flex items-center justify-center bg-secondary">
           {props.episode.title}
         </div>
@@ -61,12 +63,13 @@ const EpisodeCard = ({
     );
   } else {
     return (
-      <Link href={ROUTES.WATCH + "/" + props.animeId + "/" + props.episode.id}>
+      <Link
+        href={`${ROUTES.WATCH}?anime=${props.animeId}&episode=${props.episode.id}`}
+      >
         <div
-          className="flex gap-5 items-center w-full relative h-fit rounded-md p-2 "
+          className="flex gap-5 items-center w-full relative h-fit rounded-md p-2 hover:!bg-slate-600"
           style={
-            pathName.split("/")[pathName.split("/").length - 1] ===
-            props.episode.id
+            selectedEpisode === props.episode.id
               ? { backgroundColor: "#18181a" }
               : {}
           }
@@ -82,8 +85,7 @@ const EpisodeCard = ({
             />
           </figure>
           <h3>{props.episode.title}</h3>
-          {pathName.split("/")[pathName.split("/").length - 1] ===
-            props.episode.id && (
+          {selectedEpisode === props.episode.id && (
             <span className="absolute bottom-2 right-3 text-xs font-thin">
               Now Playing
             </span>
