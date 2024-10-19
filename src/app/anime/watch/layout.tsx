@@ -71,7 +71,7 @@ const Layout = (props: Props) => {
       }
     }
     //eslint-disable-next-line
-  }, []);
+  }, [anime]);
 
   if (isLoading) return <Loading />;
 
