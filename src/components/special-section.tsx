@@ -4,6 +4,7 @@ import React from "react";
 import Container from "./container";
 import AnimeCard from "./anime-card";
 import { useGetRecentAnime } from "@/query/get-recent-anime";
+import { ROUTES } from "@/constants/routes";
 
 const SpecialSection = () => {
   const { data, isLoading } = useGetRecentAnime();
@@ -17,6 +18,9 @@ const SpecialSection = () => {
             anime={anime}
             key={idx}
             className="self-center justify-self-center"
+            href={`${ROUTES.WATCH}?anime=${
+              anime.id
+            }&episode=${anime.episodeId?.replace("/", "")}`}
           />
         ))}
       </div>

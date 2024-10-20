@@ -7,14 +7,15 @@ import AnimeCard from "@/components/anime-card";
 import { IAnimeDetails } from "@/types/anime-details";
 
 import Button from "@/components/common/custom-button";
-import { CirclePlay, EyeIcon, Sparkles } from "lucide-react";
+import { CirclePlay, Sparkles } from "lucide-react";
 
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import CharacterCard from "@/components/common/character-card";
 import AnimeEpisodes from "@/components/anime-episodes";
 import { api } from "@/lib/api";
-import { ButtonLink } from "@/components/common/button-link";
-import { ROUTES } from "@/constants/routes";
+
+import Recommendations from "@/components/recommendation";
+import WatchButton from "@/components/watch-button";
 
 const Page = async ({ params }: { params: { slug: string } }) => {
   const anime: IAnimeDetails = await api
@@ -46,7 +47,7 @@ const Page = async ({ params }: { params: { slug: string } }) => {
         <div className="flex md:mt-[-9.375rem] mt-[-6.25rem] md:flex-row flex-col md:items-end md:gap-20 gap-10 ">
           <AnimeCard anime={anime} displayDetails={false} variant="lg" />
           <div className="flex flex-col md:gap-5 gap-2 pb-16">
-            <h1 className="md:text-5xl text-2xl md:font-black font-extrabold">
+            <h1 className="md:text-5xl text-2xl md:font-black font-extrabold z-[100]">
               {!!anime.title.english ? anime.title.english : anime.title.romaji}
             </h1>
             <div className="flex items-center gap-2">
@@ -55,13 +56,7 @@ const Page = async ({ params }: { params: { slug: string } }) => {
                 {anime.rating / 10}
               </h4>
             </div>
-            <ButtonLink
-              href={`${ROUTES.WATCH}?anime=${anime.id}&episode=${anime.episodes[0].id}`}
-              className="max-w-fit mt-5"
-              LeftIcon={EyeIcon}
-            >
-              Start Watching
-            </ButtonLink>
+            <WatchButton />
           </div>
         </div>
         <Tabs defaultValue="overview" className="w-full">
@@ -78,13 +73,6 @@ const Page = async ({ params }: { params: { slug: string } }) => {
               className="md:text-2xl text-lg font-semibold"
             >
               Episodes
-            </TabsTrigger>
-
-            <TabsTrigger
-              value="relations"
-              className="md:text-2xl text-lg font-semibold"
-            >
-              Relations
             </TabsTrigger>
 
             <TabsTrigger
@@ -141,7 +129,7 @@ const Page = async ({ params }: { params: { slug: string } }) => {
             value="episodes"
             className="flex flex-col md:mt-10 mt-5 gap-5"
           >
-            <AnimeEpisodes episodes={anime.episodes} animeId={anime.id} />
+            <AnimeEpisodes animeId={anime.id} />
           </TabsContent>
 
           <TabsContent
@@ -162,6 +150,7 @@ const Page = async ({ params }: { params: { slug: string } }) => {
             </div>
           </TabsContent>
         </Tabs>
+        <Recommendations recommendations={anime.recommendations} />
       </Container>
     </div>
   );

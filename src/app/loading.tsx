@@ -6,7 +6,7 @@ const Loading = () => {
     <div className="h-screen w-screen flex items-center justify-center">
       <div className="h-[6.25rem] w-auto">
         <Image
-          src={"/nezuko-running-loader-unscreen.gif"}
+          src={"/loader.gif"}
           height={100}
           width={100}
           unoptimized

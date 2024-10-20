@@ -1,30 +1,40 @@
 "use client";
 
 import { Episode } from "@/types/anime-details";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import EpisodeCard from "./common/episode-card";
 import { Input } from "./ui/input";
 import { Search } from "lucide-react";
+import { useGetAllEpisodes } from "@/query/get-all-episodes";
+import { cn } from "@/lib/utils";
 
 type Props = {
-  episodes: Episode[];
-  animeId:string
+  animeId: string;
 };
 
 const AnimeEpisodes = (props: Props) => {
-  const [episodes, setEpisodes] = useState<Episode[]>(props.episodes);
+  const [episodes, setEpisodes] = useState<Episode[]>([]);
+
+  const { data, isLoading } = useGetAllEpisodes(props.animeId);
+
+  useEffect(() => {
+    if (data) {
+      setEpisodes(data);
+    }
+  }, [data]);
 
   const handleSearch = (e: React.ChangeEvent<HTMLInputElement>) => {
     const query = e.target.value;
     if (!query) {
-      setEpisodes(props.episodes);
+      setEpisodes(episodes);
     } else {
-      const filteredEpisodes = props.episodes.filter((episode) =>
+      const filteredEpisodes = episodes.filter((episode) =>
         episode.title.toLowerCase().includes(query)
       );
       setEpisodes(filteredEpisodes);
     }
   };
+
   return (
     <>
       <div className="flex w-full items-center justify-between">
@@ -49,6 +59,19 @@ const AnimeEpisodes = (props: Props) => {
             />
           );
         })}
+
+        {isLoading &&
+          [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14].map((_, idx) => {
+            return (
+              <div
+                key={idx}
+                className={cn([
+                  "h-[6.25rem] rounded-lg cursor-pointer w-full flex items-center justify-center animate-pulse bg-slate-800",
+                  "self-center justify-self-center",
+                ])}
+              ></div>
+            );
+          })}
       </div>
     </>
   );

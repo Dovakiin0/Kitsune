@@ -1,8 +1,10 @@
-import HeroSection from "@/components/hero-section";
-import PopularSection from "@/components/popular-section";
-import SpecialSection from "@/components/special-section";
+import dynamic from "next/dynamic";
 
-import TrendingSection from "@/components/trending-section";
+// Dynamically import components
+const HeroSection = dynamic(() => import("@/components/hero-section"));
+const SpecialSection = dynamic(() => import("@/components/special-section"));
+const TrendingSection = dynamic(() => import("@/components/trending-section"));
+const PopularSection = dynamic(() => import("@/components/popular-section"));
 
 export default function Home() {
   return (

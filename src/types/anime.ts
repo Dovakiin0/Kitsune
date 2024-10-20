@@ -26,4 +26,6 @@ export interface IAnime {
     totalEpisodes: number;
     duration: number;
     type: string;
+    episodeTitle?: string,
+    episodeId?: string
 }

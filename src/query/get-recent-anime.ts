@@ -4,7 +4,9 @@ import { GET_RECENT_ANIME } from "@/constants/query-keys";
 import { IAnimeResponse } from "@/types/anime-api-response";
 
 const getRecentAnime = async () => {
-    const res = await api.get('/anime/recent');
+    const res = await api.get('/anime/recent', {
+        params: { limit: 28 }
+    });
     return res.data as IAnimeResponse;
 }
 

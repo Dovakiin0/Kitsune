@@ -5,6 +5,7 @@ import {
 } from "@/components/ui/button";
 import { LucideIcon } from "lucide-react";
 import { cn } from "@/lib/utils";
+import { SpinnerIcon } from "@/icons/spinner";
 
 interface ButtonProps extends IButtonProps {
   disabled?: boolean;
@@ -41,6 +42,8 @@ const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
         ])}
         {...props}
       >
+        {loading && <SpinnerIcon className="mr-2 h-5 w-5" />}
+
         {LeftIcon && (
           <LeftIcon className={cn("mr-1", iconClass)} color={iconColor} />
         )}

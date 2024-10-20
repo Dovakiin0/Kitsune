@@ -9,6 +9,7 @@ import Link from "next/link";
 import { ROUTES } from "@/constants/routes";
 import { Episode } from "@/types/anime-details";
 import { useAnimeStore } from "@/store/anime-store";
+import { useHasAnimeWatched } from "@/hooks/use-is-anime-watched";
 
 type Props = {
   className?: string;
@@ -24,6 +25,10 @@ const EpisodeCard = ({
   ...props
 }: Props) => {
   const { selectedEpisode } = useAnimeStore();
+  const { hasWatchedEpisode } = useHasAnimeWatched(
+    props.animeId,
+    props.episode.id
+  );
 
   if (showCard && variant === "card") {
     return (
@@ -46,7 +51,7 @@ const EpisodeCard = ({
 
         <div className="absolute inset-0 m-auto h-full w-full bg-gradient-to-t from-[#000000a9] to-transparent"></div>
         <div className="absolute bottom-0 flex flex-col gap-1 px-4 pb-3">
-          <h5 className="line-clamp-2">{props.episode.title}</h5>
+          <h5 className="line-clamp-2">{`Epi - ${props.episode.number}`}</h5>
           <p className="line-clamp-2">{props.episode.airDate}</p>
         </div>
       </div>
@@ -56,8 +61,14 @@ const EpisodeCard = ({
       <Link
         href={`${ROUTES.WATCH}?anime=${props.animeId}&episode=${props.episode.id}`}
       >
-        <div className="h-[6.25rem] rounded-2xl cursor-pointer w-full flex items-center justify-center bg-secondary">
-          {props.episode.title}
+        <div
+          className={cn([
+            "h-[6.25rem] rounded-lg cursor-pointer w-full flex items-center justify-center bg-secondary",
+
+            hasWatchedEpisode && "bg-slate-900",
+          ])}
+        >
+          {`Epi - ${props.episode.number}`}
         </div>
       </Link>
     );
@@ -71,20 +82,24 @@ const EpisodeCard = ({
           style={
             selectedEpisode === props.episode.id
               ? { backgroundColor: "#18181a" }
+              : hasWatchedEpisode
+              ? {
+                  backgroundColor: "#0f172a",
+                }
               : {}
           }
         >
           <figure className="h-[3.125rem] w-[4.375rem] rounded-md overflow-hidden">
             <Image
               src={props.episode.image}
-              alt={props.episode.title}
+              alt={`Epi - ${props.episode.number}`}
               height={100}
               width={150}
               unoptimized
               className="h-full w-full object-cover"
             />
           </figure>
-          <h3>{props.episode.title}</h3>
+          <h3>{`Epi - ${props.episode.number}`}</h3>
           {selectedEpisode === props.episode.id && (
             <span className="absolute bottom-2 right-3 text-xs font-thin">
               Now Playing
