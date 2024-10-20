@@ -1,12 +1,14 @@
 "use client";
 
-import { Episode } from "@/types/anime-details";
-import React, { useEffect, useState } from "react";
-import EpisodeCard from "./common/episode-card";
+import { cn } from "@/lib/utils";
 import { Input } from "./ui/input";
 import { Search } from "lucide-react";
+
+import { Episode } from "@/types/anime-details";
+import EpisodeCard from "./common/episode-card";
+
+import React, { useEffect, useState } from "react";
 import { useGetAllEpisodes } from "@/query/get-all-episodes";
-import { cn } from "@/lib/utils";
 
 type Props = {
   animeId: string;
@@ -26,12 +28,15 @@ const AnimeEpisodes = (props: Props) => {
   const handleSearch = (e: React.ChangeEvent<HTMLInputElement>) => {
     const query = e.target.value;
     if (!query) {
-      setEpisodes(episodes);
+      setEpisodes(data as Episode[]);
     } else {
-      const filteredEpisodes = episodes.filter((episode) =>
-        episode.title.toLowerCase().includes(query)
-      );
-      setEpisodes(filteredEpisodes);
+      const filteredEpisodes = data?.filter((episode) => {
+        return (
+          episode.title.toLowerCase().includes(query) ||
+          query.includes(episode.number.toString())
+        );
+      });
+      setEpisodes(filteredEpisodes as Episode[]);
     }
   };
 
@@ -59,6 +64,7 @@ const AnimeEpisodes = (props: Props) => {
             />
           );
         })}
+        {!episodes.length && !isLoading && "No Episodes"}
 
         {isLoading &&
           [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14].map((_, idx) => {

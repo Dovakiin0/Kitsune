@@ -25,6 +25,7 @@ const PopularSection = () => {
               key={idx}
               anime={ani}
               className="self-center justify-self-center"
+              showGenre={false}
             />
           ))
         )}

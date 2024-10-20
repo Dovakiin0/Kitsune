@@ -18,6 +18,7 @@ const TrendingSection = () => {
             key={idx}
             anime={anime}
             className="self-center justify-self-center"
+            showGenre={false}
           />
         ))}
       </div>

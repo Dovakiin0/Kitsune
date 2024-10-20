@@ -45,7 +45,12 @@ const Page = async ({ params }: { params: { slug: string } }) => {
       </div>
       <Container className="z-50 md:space-y-10 pb-20">
         <div className="flex md:mt-[-9.375rem] mt-[-6.25rem] md:flex-row flex-col md:items-end md:gap-20 gap-10 ">
-          <AnimeCard anime={anime} displayDetails={false} variant="lg" />
+          <AnimeCard
+            anime={anime}
+            displayDetails={false}
+            variant="lg"
+            className="shrink-0"
+          />
           <div className="flex flex-col md:gap-5 gap-2 pb-16">
             <h1 className="md:text-5xl text-2xl md:font-black font-extrabold z-[100]">
               {!!anime.title.english ? anime.title.english : anime.title.romaji}

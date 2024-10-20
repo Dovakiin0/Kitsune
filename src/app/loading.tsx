@@ -4,7 +4,7 @@ import Image from "next/image";
 const Loading = () => {
   return (
     <div className="h-screen w-screen flex items-center justify-center">
-      <div className="h-[6.25rem] w-auto">
+      <div className="h-[10.25rem] w-auto">
         <Image
           src={"/loader.gif"}
           height={100}

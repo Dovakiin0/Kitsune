@@ -51,7 +51,7 @@ const EpisodeCard = ({
 
         <div className="absolute inset-0 m-auto h-full w-full bg-gradient-to-t from-[#000000a9] to-transparent"></div>
         <div className="absolute bottom-0 flex flex-col gap-1 px-4 pb-3">
-          <h5 className="line-clamp-2">{`Epi - ${props.episode.number}`}</h5>
+          <h5 className="line-clamp-2">{`Episode ${props.episode.number}`}</h5>
           <p className="line-clamp-2">{props.episode.airDate}</p>
         </div>
       </div>
@@ -68,7 +68,7 @@ const EpisodeCard = ({
             hasWatchedEpisode && "bg-slate-900",
           ])}
         >
-          {`Epi - ${props.episode.number}`}
+          {`Episode ${props.episode.number}`}
         </div>
       </Link>
     );
@@ -92,14 +92,14 @@ const EpisodeCard = ({
           <figure className="h-[3.125rem] w-[4.375rem] rounded-md overflow-hidden">
             <Image
               src={props.episode.image}
-              alt={`Epi - ${props.episode.number}`}
+              alt={`Episode ${props.episode.number}`}
               height={100}
               width={150}
               unoptimized
               className="h-full w-full object-cover"
             />
           </figure>
-          <h3>{`Epi - ${props.episode.number}`}</h3>
+          <h3>{`Episode ${props.episode.number}`}</h3>
           {selectedEpisode === props.episode.id && (
             <span className="absolute bottom-2 right-3 text-xs font-thin">
               Now Playing

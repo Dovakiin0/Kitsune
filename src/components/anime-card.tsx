@@ -14,6 +14,7 @@ type Props = {
   displayDetails?: boolean;
   variant?: "sm" | "lg";
   href?: string;
+  showGenre?: boolean;
 };
 
 function isAnime(anime: IAnime | IAnimeDetails): anime is IAnime {
@@ -22,6 +23,7 @@ function isAnime(anime: IAnime | IAnimeDetails): anime is IAnime {
 
 const AnimeCard = ({
   displayDetails = true,
+  showGenre = true,
   variant = "sm",
   ...props
 }: Props) => {
@@ -34,7 +36,7 @@ const AnimeCard = ({
             "h-[15.625rem] min-w-[10.625rem] max-w-[12.625rem] md:h-[18.75rem] md:max-w-[12.5rem]",
           ,
           variant === "lg" &&
-            "max-w-[12.625rem] md:max-w-[18.75rem] h-auto md:h-[25rem]",
+            "max-w-[12.625rem] md:max-w-[18.75rem] h-auto md:h-[25rem] shrink-0 lg:w-[18.75rem]",
           props.className,
         ])}
       >
@@ -60,7 +62,8 @@ const AnimeCard = ({
               ) : (
                 props.anime.releaseDate && (
                   <p className="line-clamp-2">
-                    {props.anime.releaseDate}, {props.anime.genres?.join(", ")}
+                    {props.anime.releaseDate}{" "}
+                    {showGenre && `, ${props.anime.genres?.join(", ")}`}
                   </p>
                 )
               )}
