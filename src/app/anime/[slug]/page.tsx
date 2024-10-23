@@ -14,8 +14,8 @@ import CharacterCard from "@/components/common/character-card";
 import AnimeEpisodes from "@/components/anime-episodes";
 import { api } from "@/lib/api";
 
-import Recommendations from "@/components/recommendation";
 import WatchButton from "@/components/watch-button";
+import AnimeCarousel from "@/components/anime-carousel";
 
 const Page = async ({ params }: { params: { slug: string } }) => {
   const anime: IAnimeDetails = await api
@@ -86,10 +86,17 @@ const Page = async ({ params }: { params: { slug: string } }) => {
             >
               Characters
             </TabsTrigger>
+            <TabsTrigger
+              value="relations"
+              className="md:text-2xl text-lg font-semibold"
+            >
+              Relations
+            </TabsTrigger>
           </TabsList>
+
           <TabsContent
             value="overview"
-            className="w-full grid md:grid-cols-5 grid-cols-1 gap-x-20 gap-y-5 md:mt-10 mt-5"
+            className="w-full grid md:grid-cols-5 grid-cols-1 gap-x-20 gap-y-5 mt-10"
           >
             <div className="col-span-1 flex flex-col gap-5 w-full">
               <h3 className="text-xl font-semibold">Details</h3>
@@ -130,16 +137,13 @@ const Page = async ({ params }: { params: { slug: string } }) => {
             </div>
           </TabsContent>
 
-          <TabsContent
-            value="episodes"
-            className="flex flex-col md:mt-10 mt-5 gap-5"
-          >
+          <TabsContent value="episodes" className="flex flex-col  gap-5">
             <AnimeEpisodes animeId={anime.id} />
           </TabsContent>
 
           <TabsContent
             value="characters"
-            className="w-full flex flex-col md:mt-10 gap-5 mt-5"
+            className="w-full flex flex-col gap-5 "
           >
             <h3 className="text-xl font-semibold">Anime Characters</h3>
             <div className="grid lg:grid-cols-5 grid-cols-2 sm:grid-cols-3 md:grid-cols-4 xl:grid-cols-6 2xl:grid-cols-7 w-full gap-5 content-center">
@@ -154,8 +158,31 @@ const Page = async ({ params }: { params: { slug: string } }) => {
               })}
             </div>
           </TabsContent>
+          <TabsContent
+            value="relations"
+            className="w-full flex flex-col gap-5 "
+          >
+            <h3 className="text-xl font-semibold">Relations</h3>
+            <div className="grid lg:grid-cols-5 grid-cols-2 sm:grid-cols-3 md:grid-cols-4 xl:grid-cols-6 2xl:grid-cols-7 w-full gap-5 content-center">
+              {anime.relations.map((relation, idx) => {
+                return (
+                  <AnimeCard
+                    key={idx}
+                    anime={relation as unknown as IAnimeDetails}
+                    className="self-center justify-self-center"
+                  />
+                );
+              })}
+            </div>
+          </TabsContent>
         </Tabs>
-        <Recommendations recommendations={anime.recommendations} />
+        {!!anime.recommendations.length && (
+          <AnimeCarousel
+            anime={anime.recommendations}
+            title="Recommended"
+            className="pt-20"
+          />
+        )}
       </Container>
     </div>
   );

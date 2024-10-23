@@ -1,10 +1,11 @@
 "use client";
 
-import { useGetAllEpisodes } from "@/query/get-all-episodes";
-import { useSearchParams } from "next/navigation";
-import React, { useEffect, useRef } from "react";
 import EpisodeCard from "./common/episode-card";
+import React, { useEffect, useRef } from "react";
+import { useSearchParams } from "next/navigation";
+
 import { useAnimeStore } from "@/store/anime-store";
+import { useGetAllEpisodes } from "@/query/get-all-episodes";
 
 type Props = {
   animeId: string;
@@ -26,8 +27,6 @@ const EpisodePlaylist = ({ animeId, title }: Props) => {
   useEffect(() => {
     if (!episodeId && episodes && !!episodes.length) {
       setSelectedEpisode(episodes[0].id as string);
-    } else {
-      setSelectedEpisode("");
     }
     //eslint-disable-next-line
   }, [episodes]);

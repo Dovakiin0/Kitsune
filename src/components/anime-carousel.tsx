@@ -12,18 +12,22 @@ import {
 } from "./ui/carousel";
 import Button from "./common/custom-button";
 import { ArrowLeft, ArrowRight } from "lucide-react";
+import { cn } from "@/lib/utils";
+import BlurFade from "./ui/blur-fade";
 
 type Props = {
-  recommendations: Ation[];
+  anime: Ation[];
+  title: string;
+  className?: string;
 };
 
-const Recommendations = (props: Props) => {
+const AnimeCarousel = (props: Props) => {
   const [api, setApi] = React.useState<CarouselApi>();
 
   return (
-    <div className="flex flex-col gap-5">
+    <div className={cn(["flex flex-col gap-5", props.className])}>
       <div className="w-full flex items-center justify-between">
-        <h5 className="text-2xl font-bold">Recommended</h5>
+        <h5 className="text-2xl font-bold">{props.title}</h5>
         <div className="flex items-center gap-5">
           <Button
             onClick={() => {
@@ -43,17 +47,19 @@ const Recommendations = (props: Props) => {
       </div>
       <Carousel className="w-full" setApi={setApi} opts={{}}>
         <CarouselContent className="w-full">
-          {props.recommendations?.map((anime, idx) => (
-            <CarouselItem
-              key={idx}
-              className="lg:basis-[1/5] basis-[1/2] sm:basis-[1/3] md:basis-[1/4] xl:basis-[1/6] 2xl:basis-[1/7]"
-            >
-              <AnimeCard
+          {props.anime?.map((ani, idx) => (
+            <BlurFade key={idx} delay={idx * 0.05} inView>
+              <CarouselItem
                 key={idx}
-                anime={anime as unknown as IAnime}
-                className="self-center justify-self-center"
-              />
-            </CarouselItem>
+                className="lg:basis-[1/5] basis-[1/2] sm:basis-[1/3] md:basis-[1/4] xl:basis-[1/6] 2xl:basis-[1/7]"
+              >
+                <AnimeCard
+                  key={idx}
+                  anime={ani as unknown as IAnime}
+                  className="self-center justify-self-center"
+                />
+              </CarouselItem>
+            </BlurFade>
           ))}
         </CarouselContent>
       </Carousel>
@@ -61,5 +67,5 @@ const Recommendations = (props: Props) => {
   );
 };
 
-export default Recommendations;
+export default AnimeCarousel;
 

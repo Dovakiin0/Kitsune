@@ -7,6 +7,7 @@ import { useGetPopularAnime } from "@/query/get-popular-anime";
 import { LIMIT } from "@/constants/requests";
 import Button from "./common/custom-button";
 import { cn } from "@/lib/utils";
+import BlurFade from "./ui/blur-fade";
 
 const PopularSection = () => {
   const { data, isLoading, fetchNextPage, isFetchingNextPage } =
@@ -20,13 +21,15 @@ const PopularSection = () => {
       <h5 className="text-2xl font-bold">Most Popular</h5>
       <div className="grid lg:grid-cols-5 grid-cols-2 sm:grid-cols-3 md:grid-cols-4 xl:grid-cols-6 2xl:grid-cols-7 w-full gap-5 content-center">
         {data?.pages.map((anime, idx) =>
-          anime.results.map((ani) => (
-            <AnimeCard
-              key={idx}
-              anime={ani}
-              className="self-center justify-self-center"
-              showGenre={false}
-            />
+          anime.results.map((ani, index) => (
+            <BlurFade key={index} delay={index * 0.05} inView>
+              <AnimeCard
+                key={idx}
+                anime={ani}
+                className="self-center justify-self-center"
+                showGenre={false}
+              />
+            </BlurFade>
           ))
         )}
       </div>

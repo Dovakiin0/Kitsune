@@ -4,7 +4,6 @@ import Link from "next/link";
 import Image from "next/image";
 import { cn } from "@/lib/utils";
 
-import { Input } from "./ui/input";
 import Container from "./container";
 import { Separator } from "./ui/separator";
 
@@ -12,7 +11,8 @@ import { nightTokyo } from "@/utils/fonts";
 import { ROUTES } from "@/constants/routes";
 import React, { ReactNode, useState } from "react";
 
-import { MenuIcon, Search, X } from "lucide-react";
+import SearchBar from "./search-bar";
+import { MenuIcon, X } from "lucide-react";
 import useScrollPosition from "@/hooks/use-scroll-position";
 import { Sheet, SheetClose, SheetContent, SheetTrigger } from "./ui/sheet";
 
@@ -44,7 +44,7 @@ const NavBar = () => {
         "sticky top-0 z-[100] duration-300",
         isHeaderFixed ? "fixed bg-gradient-to-b from-slate-700" : "",
         isHeaderSticky
-          ? "bg-clip-padding backdrop-filter backdrop-blur-md bg-opacity-10"
+          ? "bg-clip-padding backdrop-filter backdrop-blur-md bg-opacity-10 bg-slate-900"
           : "",
       ])}
     >
@@ -53,7 +53,7 @@ const NavBar = () => {
           href={ROUTES.HOME}
           className="flex items-center gap-1 cursor-pointer"
         >
-          <Image src="/icon.png" alt="logo" width="80" height="80" />
+          <Image src="/icon.png" alt="logo" width={70} height={70} />
           <h1
             className={cn([
               nightTokyo.className,
@@ -70,13 +70,7 @@ const NavBar = () => {
             </Link>
           ))}
         </div>
-        <div className="hidden lg:flex relative w-full min-h-fit">
-          <Search className="absolute inset-y-0 left-2 m-auto h-4 w-4" />
-          <Input
-            className="w-full h-10 pl-8 text-black border-white"
-            placeholder="Enter your keywords to search..."
-          />
-        </div>
+        <SearchBar className="hidden lg:flex" />
 
         <div className="lg:hidden">
           <MobileMenuSheet trigger={<MenuIcon />} />
@@ -91,12 +85,17 @@ const MobileMenuSheet = ({ trigger }: { trigger: ReactNode }) => {
   return (
     <Sheet open={open} onOpenChange={setOpen}>
       <SheetTrigger>{trigger}</SheetTrigger>
-      <SheetContent className="flex flex-col w-[80vw] z-[150]" hideCloseButton>
+      <SheetContent
+        className="flex flex-col w-[80vw] z-[150]"
+        hideCloseButton
+        onOpenAutoFocus={(e) => e.preventDefault()}
+        onCloseAutoFocus={(e) => e.preventDefault()}
+      >
         <div className="w-full h-full relative">
-          <SheetClose className="absolute top-3 -left-16">
+          <SheetClose className="absolute top-0 right-0">
             <X />
           </SheetClose>
-          <div className="flex flex-col gap-5">
+          <div className="flex flex-col gap-5 mt-10">
             {menuItems.map((menu, idx) => (
               <Link
                 href={menu.href || "#"}
@@ -107,13 +106,7 @@ const MobileMenuSheet = ({ trigger }: { trigger: ReactNode }) => {
               </Link>
             ))}
             <Separator />
-            <div className="relative w-full min-h-fit">
-              <Search className="absolute inset-y-0 left-2 m-auto h-4 w-4" />
-              <Input
-                className="w-full h-10 pl-8"
-                placeholder="Enter your keywords to search..."
-              />
-            </div>
+            <SearchBar onAnimeClick={() => setOpen(false)} />
           </div>
         </div>
       </SheetContent>

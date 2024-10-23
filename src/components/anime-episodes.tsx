@@ -64,7 +64,11 @@ const AnimeEpisodes = (props: Props) => {
             />
           );
         })}
-        {!episodes.length && !isLoading && "No Episodes"}
+        {!episodes.length && !isLoading && (
+          <div className="lg:col-span-5 col-span-2 sm:col-span-3 md:col-span-4 xl:col-span-6 2xl:col-span-7 flex items-center justify-center py-10 bg-slate-900 rounded-md">
+            No Episodes
+          </div>
+        )}
 
         {isLoading &&
           [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14].map((_, idx) => {

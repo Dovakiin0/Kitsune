@@ -4,7 +4,7 @@ const nextConfig = {
     remotePatterns: [
       {
         protocol: "https",
-        hostname: "tradejapanstore.com",
+        hostname: "**",
       },
     ],
   },

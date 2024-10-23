@@ -5,6 +5,7 @@ import Container from "./container";
 import AnimeCard from "./anime-card";
 import { useGetRecentAnime } from "@/query/get-recent-anime";
 import { ROUTES } from "@/constants/routes";
+import BlurFade from "./ui/blur-fade";
 
 const SpecialSection = () => {
   const { data, isLoading } = useGetRecentAnime();
@@ -14,14 +15,15 @@ const SpecialSection = () => {
       <h5 className="text-2xl font-bold">Recent Releases</h5>
       <div className="grid lg:grid-cols-5 grid-cols-2 sm:grid-cols-3 md:grid-cols-4 xl:grid-cols-6 2xl:grid-cols-7 w-full gap-5 content-center">
         {data?.results.map((anime, idx) => (
-          <AnimeCard
-            anime={anime}
-            key={idx}
-            className="self-center justify-self-center"
-            href={`${ROUTES.WATCH}?anime=${
-              anime.id
-            }&episode=${anime.episodeId?.replace("/", "")}`}
-          />
+          <BlurFade key={idx} delay={idx * 0.05} inView>
+            <AnimeCard
+              anime={anime}
+              className="self-center justify-self-center"
+              href={`${ROUTES.WATCH}?anime=${
+                anime.id
+              }&episode=${anime.episodeId?.replace("/", "")}`}
+            />
+          </BlurFade>
         ))}
       </div>
     </Container>

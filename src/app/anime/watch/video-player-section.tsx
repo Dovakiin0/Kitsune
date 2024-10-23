@@ -1,11 +1,12 @@
 "use client";
 
+import { IEpisodes } from "@/types/episodes";
+import React, { useEffect, useState } from "react";
+import { useAnimeStore } from "@/store/anime-store";
+
+import { IWatchedAnime } from "@/types/watched-anime";
 import KitsunePlayer from "@/components/kitsune-player";
 import { useGetEpisodeData } from "@/query/get-episode-data";
-import { useAnimeStore } from "@/store/anime-store";
-import { IEpisodes } from "@/types/episodes";
-import { IWatchedAnime } from "@/types/watched-anime";
-import React, { useEffect, useState } from "react";
 
 const VideoPlayerSection = () => {
   const { selectedEpisode, anime } = useAnimeStore();

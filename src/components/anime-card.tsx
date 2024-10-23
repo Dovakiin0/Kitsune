@@ -31,7 +31,7 @@ const AnimeCard = ({
     <Link href={props.href || `${ROUTES.ANIME_DETAILS}/${props.anime.id}`}>
       <div
         className={cn([
-          "rounded-xl overflow-hidden relative cursor-pointer ",
+          "rounded-xl overflow-hidden relative cursor-pointer hover:scale-105 duration-300",
           variant === "sm" &&
             "h-[15.625rem] min-w-[10.625rem] max-w-[12.625rem] md:h-[18.75rem] md:max-w-[12.5rem]",
           ,

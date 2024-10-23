@@ -1,18 +1,20 @@
 "use client";
 
 import Loading from "@/app/loading";
-import AnimeCard from "@/components/anime-card";
-import Container from "@/components/container";
-import EpisodePlaylist from "@/components/episode-playlist";
-import Recommendations from "@/components/recommendation";
-import { ROUTES } from "@/constants/routes";
-import { useGetAnimeDetails } from "@/query/get-anime-details";
-import { useAnimeStore } from "@/store/anime-store";
-import { Ation, IAnimeDetails } from "@/types/anime-details";
-import { useRouter, useSearchParams } from "next/navigation";
-import React, { ReactNode, useEffect, useMemo, useState } from "react";
-
 import parse from "html-react-parser";
+import { ROUTES } from "@/constants/routes";
+
+import Container from "@/components/container";
+import AnimeCard from "@/components/anime-card";
+import { useAnimeStore } from "@/store/anime-store";
+
+import AnimeCarousel from "@/components/anime-carousel";
+import EpisodePlaylist from "@/components/episode-playlist";
+import { Ation, IAnimeDetails } from "@/types/anime-details";
+
+import { useRouter, useSearchParams } from "next/navigation";
+import { useGetAnimeDetails } from "@/query/get-anime-details";
+import React, { ReactNode, useEffect, useMemo, useState } from "react";
 
 type Props = {
   children: ReactNode;
@@ -90,7 +92,11 @@ const Layout = (props: Props) => {
           <p>{parse(anime?.description as string)}</p>
         </div>
       </div>
-      <Recommendations recommendations={anime?.recommendations as Ation[]} />
+      <AnimeCarousel title={"Also Watch"} anime={anime?.relations as Ation[]} />
+      <AnimeCarousel
+        title={"Recommended"}
+        anime={anime?.recommendations as Ation[]}
+      />
     </Container>
   );
 };

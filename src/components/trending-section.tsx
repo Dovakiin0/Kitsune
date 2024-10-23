@@ -5,6 +5,7 @@ import Container from "./container";
 import AnimeCard from "./anime-card";
 
 import { useGetTrendingAnime } from "@/query/get-trending-anime";
+import BlurFade from "./ui/blur-fade";
 
 const TrendingSection = () => {
   const { data, isLoading } = useGetTrendingAnime();
@@ -14,12 +15,13 @@ const TrendingSection = () => {
       <h5 className="text-2xl font-bold">Trending Anime</h5>
       <div className="grid lg:grid-cols-5 grid-cols-2 sm:grid-cols-3 md:grid-cols-4 xl:grid-cols-6 2xl:grid-cols-7 w-full gap-5 content-center">
         {data?.results.map((anime, idx) => (
-          <AnimeCard
-            key={idx}
-            anime={anime}
-            className="self-center justify-self-center"
-            showGenre={false}
-          />
+          <BlurFade key={idx} delay={idx * 0.05} inView>
+            <AnimeCard
+              anime={anime}
+              className="self-center justify-self-center"
+              showGenre={false}
+            />
+          </BlurFade>
         ))}
       </div>
     </Container>
