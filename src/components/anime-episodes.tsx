@@ -4,11 +4,11 @@ import { cn } from "@/lib/utils";
 import { Input } from "./ui/input";
 import { Search } from "lucide-react";
 
-import { Episode } from "@/types/anime-details";
 import EpisodeCard from "./common/episode-card";
 
 import React, { useEffect, useState } from "react";
 import { useGetAllEpisodes } from "@/query/get-all-episodes";
+import { Episode } from "@/types/episodes";
 
 type Props = {
   animeId: string;
@@ -19,21 +19,24 @@ const AnimeEpisodes = (props: Props) => {
 
   const { data, isLoading } = useGetAllEpisodes(props.animeId);
 
+  console.log(data);
+
   useEffect(() => {
     if (data) {
-      setEpisodes(data);
+      setEpisodes(data.episodes);
     }
   }, [data]);
 
   const handleSearch = (e: React.ChangeEvent<HTMLInputElement>) => {
     const query = e.target.value;
     if (!query) {
-      setEpisodes(data as Episode[]);
+      setEpisodes(data?.episodes as Episode[]);
     } else {
-      const filteredEpisodes = data?.filter((episode) => {
+      const filteredEpisodes = data?.episodes.filter((episode) => {
         return (
           episode.title.toLowerCase().includes(query) ||
-          query.includes(episode.number.toString())
+          query.includes(episode.number.toString()) ||
+          "episode".includes(query.trim())
         );
       });
       setEpisodes(filteredEpisodes as Episode[]);

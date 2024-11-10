@@ -11,26 +11,28 @@ import Container from "./container";
 import { Button } from "./ui/button";
 import parse from "html-react-parser";
 
-import { IAnime } from "@/types/anime";
-import React, { useState } from "react";
+import React from "react";
 import { ArrowLeft, ArrowRight } from "lucide-react";
 
 import { ROUTES } from "@/constants/routes";
-import { useGetTrendingAnime } from "@/query/get-trending-anime";
 import { ButtonLink } from "./common/button-link";
+import { SpotlightAnime } from "@/types/anime";
 
-const HeroSection = () => {
-  const { data, isLoading } = useGetTrendingAnime();
+type IHeroSectionProps = {
+  spotlightAnime: SpotlightAnime[];
+  isDataLoading: boolean;
+};
 
+const HeroSection = (props: IHeroSectionProps) => {
   const [api, setApi] = React.useState<CarouselApi>();
 
-  if (isLoading) return <LoadingSkeleton />;
+  if (props.isDataLoading) return <LoadingSkeleton />;
 
   return (
     <div className="h-[80vh] w-full relative">
       <Carousel className="w-full" setApi={setApi} opts={{}}>
         <CarouselContent className="">
-          {data?.results.map((anime, index) => (
+          {props?.spotlightAnime.map((anime, index) => (
             <CarouselItem key={index}>
               <HeroCarouselItem anime={anime} />
             </CarouselItem>
@@ -57,32 +59,32 @@ const HeroSection = () => {
   );
 };
 
-const HeroCarouselItem = ({ anime }: { anime: IAnime }) => {
-  const [isHovered, setIsHovered] = useState(false);
+const HeroCarouselItem = ({ anime }: { anime: SpotlightAnime }) => {
+  // const [isHovered, setIsHovered] = useState(false);
 
-  const hoverTimeoutRef = React.useRef<NodeJS.Timeout | null>(null); // Use ref to store the timeout ID
+  // const hoverTimeoutRef = React.useRef<NodeJS.Timeout | null>(null); // Use ref to store the timeout ID
 
-  const handleMouseEnter = () => {
-    hoverTimeoutRef.current = setTimeout(() => {
-      setIsHovered(true);
-    }, 1500);
-  };
+  // const handleMouseEnter = () => {
+  //   hoverTimeoutRef.current = setTimeout(() => {
+  //     setIsHovered(true);
+  //   }, 1500);
+  // };
 
-  const handleMouseLeave = () => {
-    if (hoverTimeoutRef.current) {
-      clearTimeout(hoverTimeoutRef.current); // Clear the timeout when mouse leaves
-    }
-    setIsHovered(false);
-  };
+  // const handleMouseLeave = () => {
+  //   if (hoverTimeoutRef.current) {
+  //     clearTimeout(hoverTimeoutRef.current); // Clear the timeout when mouse leaves
+  //   }
+  //   setIsHovered(false);
+  // };
 
   return (
     <div
       className={`w-full bg-cover bg-no-repeat bg-center h-[80vh] relative`}
-      style={{ backgroundImage: `url(${anime?.cover})` }}
-      onMouseEnter={handleMouseEnter}
-      onMouseLeave={handleMouseLeave}
+      style={{ backgroundImage: `url(${anime?.poster})` }}
+      // onMouseEnter={handleMouseEnter}
+      // onMouseLeave={handleMouseLeave}
     >
-      {isHovered && (
+      {/* {isHovered && (
         <div className="absolute inset-0 z-0">
           <iframe
             className="w-full h-full object-cover"
@@ -92,7 +94,7 @@ const HeroCarouselItem = ({ anime }: { anime: IAnime }) => {
             allowFullScreen
           ></iframe>
         </div>
-      )}
+      )} */}
 
       {/* Gradient Overlay */}
       <div className="absolute h-full w-full inset-0 m-auto bg-gradient-to-r from-slate-900 to-transparent z-10"></div>
@@ -102,7 +104,7 @@ const HeroCarouselItem = ({ anime }: { anime: IAnime }) => {
         <Container className="w-full h-full flex flex-col justify-end md:justify-center pb-10">
           <div className="space-y-2 lg:w-[40vw]">
             {/* Title and description moved inside the hover area */}
-            <h1 className="text-4xl font-black">{anime?.title.english}</h1>
+            <h1 className="text-4xl font-black">{anime?.name}</h1>
             <p className="text-lg line-clamp-4">
               {parse(anime?.description as string)}
             </p>

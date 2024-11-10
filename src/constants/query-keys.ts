@@ -5,3 +5,5 @@ export const GET_ANIME_DETAILS = 'get-anime-details'
 export const GET_EPISODE_DATA = 'get-episode-data'
 export const GET_ALL_EPISODES = 'get-all-episodes'
 export const SEARCH_ANIME = 'search-anime'
+
+export const GET_HOME_PAGE_DATA = 'get-home-page-data'

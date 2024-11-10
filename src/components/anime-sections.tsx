@@ -3,25 +3,28 @@
 import React from "react";
 import Container from "./container";
 import AnimeCard from "./anime-card";
-import { useGetRecentAnime } from "@/query/get-recent-anime";
-import { ROUTES } from "@/constants/routes";
-import BlurFade from "./ui/blur-fade";
 
-const SpecialSection = () => {
-  const { data, isLoading } = useGetRecentAnime();
-  if (isLoading) return <LoadingSkeleton />;
+import BlurFade from "./ui/blur-fade";
+import { IAnime } from "@/types/anime";
+
+type Props = {
+  trendingAnime: IAnime[];
+  loading: boolean;
+  title: string;
+};
+
+const AnimeSections = (props: Props) => {
+  if (props.loading) return <LoadingSkeleton />;
   return (
-    <Container className="flex flex-col gap-5 py-10 items-center lg:items-start lg:mt-[-10.125rem] z-20 ">
-      <h5 className="text-2xl font-bold">Recent Releases</h5>
+    <Container className="flex flex-col gap-5 py-10 items-center lg:items-start ">
+      <h5 className="text-2xl font-bold">{props.title}</h5>
       <div className="grid lg:grid-cols-5 grid-cols-2 sm:grid-cols-3 md:grid-cols-4 xl:grid-cols-6 2xl:grid-cols-7 w-full gap-5 content-center">
-        {data?.results.map((anime, idx) => (
+        {props.trendingAnime.map((anime, idx) => (
           <BlurFade key={idx} delay={idx * 0.05} inView>
             <AnimeCard
               anime={anime}
               className="self-center justify-self-center"
-              href={`${ROUTES.WATCH}?anime=${
-                anime.id
-              }&episode=${anime.episodeId?.replace("/", "")}`}
+              showGenre={false}
             />
           </BlurFade>
         ))}
@@ -32,7 +35,7 @@ const SpecialSection = () => {
 
 const LoadingSkeleton = () => {
   return (
-    <Container className="flex flex-col gap-5 py-10 items-center lg:items-start lg:mt-[-10.125rem] z-20 ">
+    <Container className="flex flex-col gap-5 py-10 items-center lg:items-start ">
       <div className="h-10 w-[15.625rem] animate-pulse bg-slate-700"></div>
       <div className="grid lg:grid-cols-5 grid-cols-2 sm:grid-cols-3 md:grid-cols-4 xl:grid-cols-6 2xl:grid-cols-7 w-full gap-5 content-center">
         {[1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1].map((_, idx) => {
@@ -48,5 +51,5 @@ const LoadingSkeleton = () => {
   );
 };
 
-export default SpecialSection;
+export default AnimeSections;
 

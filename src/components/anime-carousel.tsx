@@ -1,6 +1,5 @@
 "use client";
 
-import { Ation } from "@/types/anime-details";
 import React from "react";
 import AnimeCard from "./anime-card";
 import { IAnime } from "@/types/anime";
@@ -16,7 +15,7 @@ import { cn } from "@/lib/utils";
 import BlurFade from "./ui/blur-fade";
 
 type Props = {
-  anime: Ation[];
+  anime: IAnime[];
   title: string;
   className?: string;
 };

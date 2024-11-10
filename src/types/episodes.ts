@@ -1,15 +1,11 @@
 export interface IEpisodes {
-    headers: Headers;
-    sources: Source[];
-    download: string;
+    totalEpisodes: number;
+    episodes: Episode[];
 }
 
-export interface Headers {
-    Referer: string;
-}
-
-export interface Source {
-    url: string;
-    isM3U8: boolean;
-    quality: string;
+export interface Episode {
+    title: string;
+    episodeId: string;
+    number: number;
+    isFiller: boolean;
 }

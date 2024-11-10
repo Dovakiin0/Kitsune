@@ -3,23 +3,27 @@
 import React from "react";
 import Container from "./container";
 import AnimeCard from "./anime-card";
-
-import { useGetTrendingAnime } from "@/query/get-trending-anime";
+import { ROUTES } from "@/constants/routes";
 import BlurFade from "./ui/blur-fade";
+import { LatestCompletedAnime } from "@/types/anime";
 
-const TrendingSection = () => {
-  const { data, isLoading } = useGetTrendingAnime();
-  if (isLoading) return <LoadingSkeleton />;
+type Props = {
+  latestEpisodes: LatestCompletedAnime[];
+  loading: boolean;
+};
+
+const LatestEpisodesAnime = (props: Props) => {
+  if (props.loading) return <LoadingSkeleton />;
   return (
-    <Container className="flex flex-col gap-5 py-10 items-center lg:items-start ">
-      <h5 className="text-2xl font-bold">Trending Anime</h5>
+    <Container className="flex flex-col gap-5 py-10 items-center lg:items-start lg:mt-[-10.125rem] z-20 ">
+      <h5 className="text-2xl font-bold">Recent Releases</h5>
       <div className="grid lg:grid-cols-5 grid-cols-2 sm:grid-cols-3 md:grid-cols-4 xl:grid-cols-6 2xl:grid-cols-7 w-full gap-5 content-center">
-        {data?.results.map((anime, idx) => (
+        {props.latestEpisodes?.map((anime, idx) => (
           <BlurFade key={idx} delay={idx * 0.05} inView>
             <AnimeCard
               anime={anime}
               className="self-center justify-self-center"
-              showGenre={false}
+              href={`${ROUTES.WATCH}?anime=${anime.id}&episode=${anime.id}`}
             />
           </BlurFade>
         ))}
@@ -30,7 +34,7 @@ const TrendingSection = () => {
 
 const LoadingSkeleton = () => {
   return (
-    <Container className="flex flex-col gap-5 py-10 items-center lg:items-start ">
+    <Container className="flex flex-col gap-5 py-10 items-center lg:items-start lg:mt-[-10.125rem] z-20 ">
       <div className="h-10 w-[15.625rem] animate-pulse bg-slate-700"></div>
       <div className="grid lg:grid-cols-5 grid-cols-2 sm:grid-cols-3 md:grid-cols-4 xl:grid-cols-6 2xl:grid-cols-7 w-full gap-5 content-center">
         {[1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1].map((_, idx) => {
@@ -46,5 +50,5 @@ const LoadingSkeleton = () => {
   );
 };
 
-export default TrendingSection;
+export default LatestEpisodesAnime;
 

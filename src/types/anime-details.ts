@@ -1,154 +1,74 @@
 export interface IAnimeDetails {
+    anime: Anime;
+    seasons: unknown[];
+    mostPopularAnimes: unknown[];
+    relatedAnimes: RelatedAnime[];
+    recommendedAnimes: RecommendedAnime[];
+}
+
+export interface Anime {
+    info: Info;
+    moreInfo: MoreInfo;
+}
+
+export interface Info {
     id: string;
-    title: Title;
+    anilistId: number;
     malId: number;
-    synonyms: string[];
-    isLicensed: boolean;
-    isAdult: boolean;
-    countryOfOrigin: string;
-    trailer: Trailer;
-    image: string;
-    imageHash: Hash;
-    popularity: number;
-    color: string;
-    cover: string;
-    coverHash: Hash;
+    name: string;
+    poster: string;
     description: string;
-    status: Status;
-    releaseDate: number;
-    startDate: EndDateClass;
-    endDate: EndDateClass;
-    nextAiringEpisode: NextAiringEpisode;
-    totalEpisodes: number;
-    currentEpisode: number;
-    rating: number;
-    duration: number;
-    genres: string[];
-    season: string;
-    studios: string[];
-    subOrDub: string;
-    type: RecommendationType;
-    recommendations: Ation[];
-    characters: Character[];
-    relations: Ation[];
-    mappings: Mapping[];
-    artwork: Artwork[];
-    episodes: Episode[];
+    stats: Stats;
+    promotionalVideos: unknown[];
+    charactersVoiceActors: unknown[];
 }
 
-export interface Artwork {
-    img: string;
-    type: string;
-    providerId: string;
+export interface Stats {
+    rating: string;
+    quality: string;
+    episodes: Episodes;
+    type: Type;
+    duration: string;
 }
 
-
-
-export interface Character {
-    id: number;
-    role: Role;
-    name: Name;
-    image: string;
-    imageHash: Hash;
-    voiceActors: VoiceActor[];
+export interface Episodes {
+    sub: number;
+    dub: number | null;
 }
 
-export enum Hash {
-    Hash = "hash",
-}
-
-export interface Name {
-    first: string;
-    last: null | string;
-    full: string;
-    native: string;
-    userPreferred: string;
-}
-
-export enum Role {
-    Main = "MAIN",
-    Supporting = "SUPPORTING",
-}
-
-export interface VoiceActor {
-    id: number;
-    language: Language;
-    name: Name;
-    image: string;
-    imageHash: Hash;
-}
-
-export enum Language {
-    Japanese = "Japanese",
-}
-
-export interface EndDateClass {
-    year: number;
-    month: number;
-    day: number;
-}
-
-export interface Episode {
-    id: string;
-    title: string;
-    description: null;
-    number: number;
-    image: string;
-    imageHash: Hash;
-    airDate: null;
-}
-
-export interface Mapping {
-    id: string;
-    providerId: string;
-    similarity: number;
-    providerType: string;
-}
-
-export interface NextAiringEpisode {
-    airingTime: number;
-    timeUntilAiring: number;
-    episode: number;
-}
-
-export interface Ation {
-    id: number;
-    malId: number;
-    title: Title;
-    status: Status;
-    episodes: number | null;
-    image: string;
-    imageHash: Hash;
-    cover: string;
-    coverHash: Hash;
-    rating: number;
-    type: RecommendationType;
-    relationType?: string;
-    color?: string;
-}
-
-export enum Status {
-    Completed = "Completed",
-    Ongoing = "Ongoing",
-}
-
-export interface Title {
-    romaji: string;
-    english: string;
-    native: string;
-    userPreferred?: string;
-}
-
-export enum RecommendationType {
-    Manga = "MANGA",
-    Novel = "NOVEL",
-    Ona = "ONA",
+export enum Type {
     Tv = "TV",
 }
 
-export interface Trailer {
+export interface MoreInfo {
+    japanese: string;
+    synonyms: string;
+    aired: string;
+    premiered: string;
+    duration: string;
+    status: string;
+    malscore: string;
+    genres: string[];
+    studios: string;
+    producers: string[];
+}
+
+export interface RecommendedAnime {
     id: string;
-    site: string;
-    thumbnail: string;
-    thumbnailHash: Hash;
+    name: string;
+    jname: string;
+    poster: string;
+    duration: string;
+    type: string;
+    rating: null | string;
+    episodes: Episodes;
+}
+
+export interface RelatedAnime {
+    id: string;
+    name: string;
+    jname: string;
+    poster: string;
+    episodes: Episodes;
+    type: Type;
 }
