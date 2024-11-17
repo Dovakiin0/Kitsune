@@ -15,6 +15,8 @@ import WatchButton from "@/components/watch-button";
 import { IAnime } from "@/types/anime";
 import AnimeCarousel from "@/components/anime-carousel";
 import AnimeEpisodes from "@/components/anime-episodes";
+import CharacterCard from "@/components/common/character-card";
+import { ROUTES } from "@/constants/routes";
 
 const Page = async ({ params }: { params: { slug: string } }) => {
   const anime: IAnimeDetails = await api
@@ -22,8 +24,6 @@ const Page = async ({ params }: { params: { slug: string } }) => {
     .then((res) => {
       return res.data.data;
     });
-
-  console.log(JSON.stringify(anime, null, 2));
 
   return (
     <div className="w-full z-50">
@@ -47,7 +47,9 @@ const Page = async ({ params }: { params: { slug: string } }) => {
       <Container className="z-50 md:space-y-10 pb-20">
         <div className="flex md:mt-[-9.375rem] mt-[-6.25rem] md:flex-row flex-col md:items-end md:gap-20 gap-10 ">
           <AnimeCard
-            anime={anime.anime.info as unknown as IAnime}
+            title={anime.anime.info.name}
+            poster={anime.anime.info.poster}
+            href={`${ROUTES.ANIME_DETAILS}/${anime.anime.info.id}`}
             displayDetails={false}
             variant="lg"
             className="shrink-0"
@@ -75,13 +77,14 @@ const Page = async ({ params }: { params: { slug: string } }) => {
             >
               Episodes
             </TabsTrigger>
-
-            <TabsTrigger
-              value="characters"
-              className="md:text-2xl text-lg font-semibold"
-            >
-              Characters
-            </TabsTrigger>
+            {anime.anime.info.charactersVoiceActors.length > 0 && (
+              <TabsTrigger
+                value="characters"
+                className="md:text-2xl text-lg font-semibold"
+              >
+                Characters
+              </TabsTrigger>
+            )}
             {anime.seasons.length > 0 && (
               <TabsTrigger
                 value="relations"
@@ -137,19 +140,45 @@ const Page = async ({ params }: { params: { slug: string } }) => {
             <div className="grid lg:grid-cols-5 grid-cols-2 sm:grid-cols-3 md:grid-cols-4 xl:grid-cols-6 2xl:grid-cols-7 w-full gap-5 content-center">
               {anime.seasons.map((relation, idx) => {
                 return (
-                  <AnimeCard
-                    key={idx}
-                    anime={relation as unknown as IAnime}
-                    className="self-center justify-self-center"
-                  />
+                  !relation.isCurrent && (
+                    <AnimeCard
+                      key={idx}
+                      title={relation.name}
+                      subTitle={relation.title}
+                      poster={relation.poster}
+                      className="self-center justify-self-center"
+                      href={`${ROUTES.ANIME_DETAILS}/${relation.id}`}
+                    />
+                  )
                 );
               })}
             </div>
           </TabsContent>
 
-          <TabsContent value="episodes" className="flex flex-col  gap-5">
+          <TabsContent value="episodes" className="flex flex-col gap-5">
             <AnimeEpisodes animeId={anime.anime.info.id} />
           </TabsContent>
+          {!!anime.anime.info.charactersVoiceActors.length && (
+            <TabsContent
+              value="characters"
+              className="w-full flex flex-col gap-5 "
+            >
+              <h3 className="text-xl font-semibold">Anime Characters</h3>
+              <div className="grid lg:grid-cols-5 grid-cols-2 sm:grid-cols-3 md:grid-cols-4 xl:grid-cols-6 2xl:grid-cols-7 w-full gap-5 content-center">
+                {anime.anime.info.charactersVoiceActors.map(
+                  (character, idx) => {
+                    return (
+                      <CharacterCard
+                        key={idx}
+                        character={character}
+                        className="self-center justify-self-center"
+                      />
+                    );
+                  },
+                )}
+              </div>
+            </TabsContent>
+          )}
         </Tabs>
 
         {!!anime.recommendedAnimes.length && (
@@ -159,27 +188,6 @@ const Page = async ({ params }: { params: { slug: string } }) => {
             className="pt-20"
           />
         )}
-
-        {/* <TabsContent
-            value="characters"
-            className="w-full flex flex-col gap-5 "
-          >
-            <h3 className="text-xl font-semibold">Anime Characters</h3>
-            <div className="grid lg:grid-cols-5 grid-cols-2 sm:grid-cols-3 md:grid-cols-4 xl:grid-cols-6 2xl:grid-cols-7 w-full gap-5 content-center">
-              {anime.characters.map((character, idx) => {
-                return (
-                  <CharacterCard
-                    key={idx}
-                    character={character}
-                    className="self-center justify-self-center"
-                  />
-                );
-              })}
-            </div>
-          </TabsContent>
-          
-        </Tabs>
-         */}
       </Container>
     </div>
   );
@@ -187,4 +195,3 @@ const Page = async ({ params }: { params: { slug: string } }) => {
 };
 
 export default Page;
-

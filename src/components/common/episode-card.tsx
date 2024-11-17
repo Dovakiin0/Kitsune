@@ -7,7 +7,7 @@ import { cn } from "@/lib/utils";
 
 import Link from "next/link";
 import { ROUTES } from "@/constants/routes";
-import { Episode } from "@/types/anime-details";
+import { Episode } from "@/types/episodes";
 import { useAnimeStore } from "@/store/anime-store";
 import { useHasAnimeWatched } from "@/hooks/use-is-anime-watched";
 
@@ -27,7 +27,7 @@ const EpisodeCard = ({
   const { selectedEpisode } = useAnimeStore();
   const { hasWatchedEpisode } = useHasAnimeWatched(
     props.animeId,
-    props.episode.id
+    props.episode.episodeId,
   );
 
   if (showCard && variant === "card") {
@@ -40,26 +40,26 @@ const EpisodeCard = ({
           props.className,
         ])}
       >
-        <Image
-          src={props.episode.image}
-          alt="image"
-          height={100}
-          width={100}
-          className="w-full h-full object-cover"
-          unoptimized
-        />
+        {/* <Image */}
+        {/*   src={props.episode.} */}
+        {/*   alt="image" */}
+        {/*   height={100} */}
+        {/*   width={100} */}
+        {/*   className="w-full h-full object-cover" */}
+        {/*   unoptimized */}
+        {/* /> */}
 
         <div className="absolute inset-0 m-auto h-full w-full bg-gradient-to-t from-[#000000a9] to-transparent"></div>
         <div className="absolute bottom-0 flex flex-col gap-1 px-4 pb-3">
-          <h5 className="line-clamp-2">{`Episode ${props.episode.number}`}</h5>
-          <p className="line-clamp-2">{props.episode.airDate}</p>
+          <h5 className="line-clamp-2">{`${props.episode.number}. ${props.episode.title}`}</h5>
+          {/* <p className="line-clamp-2">{props.episode.airDate}</p> */}
         </div>
       </div>
     );
   } else if (!showCard && variant === "card") {
     return (
       <Link
-        href={`${ROUTES.WATCH}?anime=${props.animeId}&episode=${props.episode.id}`}
+        href={`${ROUTES.WATCH}?anime=${props.animeId}&episode=${props.episode.episodeId}`}
       >
         <div
           className={cn([
@@ -75,32 +75,32 @@ const EpisodeCard = ({
   } else {
     return (
       <Link
-        href={`${ROUTES.WATCH}?anime=${props.animeId}&episode=${props.episode.id}`}
+        href={`${ROUTES.WATCH}?anime=${props.animeId}&episode=${props.episode.episodeId}`}
       >
         <div
           className="flex gap-5 items-center w-full relative h-fit rounded-md p-2 hover:!bg-slate-600"
           style={
-            selectedEpisode === props.episode.id
+            selectedEpisode === props.episode.episodeId
               ? { backgroundColor: "#18181a" }
               : hasWatchedEpisode
-              ? {
-                  backgroundColor: "#0f172a",
-                }
-              : {}
+                ? {
+                    backgroundColor: "#0f172a",
+                  }
+                : {}
           }
         >
-          <figure className="h-[3.125rem] w-[4.375rem] rounded-md overflow-hidden">
-            <Image
-              src={props.episode.image}
-              alt={`Episode ${props.episode.number}`}
-              height={100}
-              width={150}
-              unoptimized
-              className="h-full w-full object-cover"
-            />
-          </figure>
-          <h3>{`Episode ${props.episode.number}`}</h3>
-          {selectedEpisode === props.episode.id && (
+          {/* <figure className="h-[3.125rem] w-[4.375rem] rounded-md overflow-hidden"> */}
+          {/*   <Image */}
+          {/*     src={props.episode.image} */}
+          {/*     alt={`Episode ${props.episode.number}`} */}
+          {/*     height={100} */}
+          {/*     width={150} */}
+          {/*     unoptimized */}
+          {/*     className="h-full w-full object-cover" */}
+          {/*   /> */}
+          {/* </figure> */}
+          <h3>{`${props.episode.number}. ${props.episode.title}`}</h3>
+          {selectedEpisode === props.episode.episodeId && (
             <span className="absolute bottom-2 right-3 text-xs font-thin">
               Now Playing
             </span>
@@ -112,4 +112,3 @@ const EpisodeCard = ({
 };
 
 export default EpisodeCard;
-

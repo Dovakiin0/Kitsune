@@ -8,14 +8,13 @@ import dynamic from "next/dynamic";
 // Dynamically import components
 const HeroSection = dynamic(() => import("@/components/hero-section"));
 const LatestEpisodesAnime = dynamic(
-  () => import("@/components/latest-episodes-section")
+  () => import("@/components/latest-episodes-section"),
 );
 const AnimeSections = dynamic(() => import("@/components/anime-sections"));
 
 export default function Home() {
   const { data, isLoading } = useGetHomePageData();
 
-  console.log(data);
   return (
     <div className="flex flex-col bg-[#121212]">
       <HeroSection
@@ -56,4 +55,3 @@ export default function Home() {
     </div>
   );
 }
-

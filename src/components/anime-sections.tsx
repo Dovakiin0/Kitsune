@@ -6,6 +6,7 @@ import AnimeCard from "./anime-card";
 
 import BlurFade from "./ui/blur-fade";
 import { IAnime } from "@/types/anime";
+import { ROUTES } from "@/constants/routes";
 
 type Props = {
   trendingAnime: IAnime[];
@@ -22,9 +23,11 @@ const AnimeSections = (props: Props) => {
         {props.trendingAnime.map((anime, idx) => (
           <BlurFade key={idx} delay={idx * 0.05} inView>
             <AnimeCard
-              anime={anime}
+              title={anime.name}
+              subTitle={anime.type ? anime.type : `Rank: ${anime.rank}`}
+              poster={anime.poster}
               className="self-center justify-self-center"
-              showGenre={false}
+              href={`${ROUTES.ANIME_DETAILS}/${anime.id}`}
             />
           </BlurFade>
         ))}
@@ -52,4 +55,3 @@ const LoadingSkeleton = () => {
 };
 
 export default AnimeSections;
-

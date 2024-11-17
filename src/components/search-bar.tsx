@@ -47,7 +47,7 @@ const SearchBar = ({
     if (e.key === "Enter" && searchValue.trim()) {
       // Redirect to the search results page
       router.push(
-        `${ROUTES.SEARCH}?search-key=${encodeURIComponent(searchValue)}`
+        `${ROUTES.SEARCH}?search-key=${encodeURIComponent(searchValue)}`,
       );
       setIsFocused(false); // Hide the dropdown results
       if (onAnimeClick) {
@@ -74,7 +74,7 @@ const SearchBar = ({
           ref={resultsRef}
           className="absolute w-full max-h-[40vh] hidden lg:flex overflow-y-auto flex-col gap-5 px-5 py-5 bg-secondary top-[110%] rounded-md"
         >
-          <div className="grid grid-cols-2 gap-2">
+          <div className="grid grid-cols-1 gap-2">
             {(isLoading || (!searchResults && !!searchValue)) &&
               [1, 2, 3, 4].map((_, idx) => {
                 return (
@@ -87,30 +87,28 @@ const SearchBar = ({
                 );
               })}
 
-            {searchResults?.results.map((anime) => (
+            {searchResults?.map((anime) => (
               <Link key={anime.id} href={ROUTES.ANIME_DETAILS + "/" + anime.id}>
                 <div
-                  className="flex items-center gap-2 hover:bg-[#121212] rounded-md p-2 cursor-pointer"
+                  className="flex items-start gap-4 hover:bg-[#121212] rounded-md p-2 cursor-pointer"
                   onClick={handleAnimeClick} // Clear search value on click
                 >
                   <div className="h-[6.25rem] w-[5rem] overflow-hidden rounded-md">
                     <Image
-                      src={anime.image}
-                      alt={anime.title.english}
+                      src={anime.poster}
+                      alt={anime.name}
                       height={100}
                       width={100}
                       className="h-full w-full object-cover"
                     />
                   </div>
                   <div className="flex flex-col gap-2">
-                    <h3>
-                      {!!anime.title.english
-                        ? anime.title.english
-                        : anime.title.userPreferred}
+                    <h3 className="line-clamp-2">
+                      {!!anime.name ? anime.name : anime.jname}
                     </h3>
                     <div>
-                      <div className="text-sm">{anime.releaseDate}</div>
-                      <p className="text-xs">{anime.genres.join(", ")}</p>
+                      <div className="text-sm">{anime.type}</div>
+                      <p className="text-xs">{anime.moreInfo.join(", ")}</p>
                     </div>
                   </div>
                 </div>
@@ -138,7 +136,7 @@ const SearchBar = ({
                 );
               })}
 
-            {searchResults?.results.slice(0, 5).map((anime) => (
+            {searchResults?.slice(0, 5).map((anime) => (
               <Link key={anime.id} href={ROUTES.ANIME_DETAILS + "/" + anime.id}>
                 <div
                   className="flex items-center gap-2 hover:bg-[#121212] rounded-md p-1 cursor-pointer"
@@ -146,21 +144,17 @@ const SearchBar = ({
                 >
                   <div className="h-[2.5rem] w-[1.875rem] overflow-hidden rounded-md">
                     <Image
-                      src={anime.image}
-                      alt={anime.title.english}
+                      src={anime.poster}
+                      alt={anime.name}
                       height={100}
                       width={100}
                       className="h-full w-full object-cover"
                     />
                   </div>
                   <div className="flex flex-col gap-2 text-sm">
-                    <h3>
-                      {!!anime.title.english
-                        ? anime.title.english
-                        : anime.title.userPreferred}
-                    </h3>
+                    <h3>{!!anime.name ? anime.name : anime.jname}</h3>
                     <div>
-                      <div className="text-xs">{anime.releaseDate}</div>
+                      <div className="text-xs">{anime.rank}</div>
                     </div>
                   </div>
                 </div>
@@ -174,4 +168,3 @@ const SearchBar = ({
 };
 
 export default SearchBar;
-

@@ -32,10 +32,13 @@ const SearchResults = () => {
         </div>
       )}
       <div className="grid lg:grid-cols-5 grid-cols-2 sm:grid-cols-3 md:grid-cols-4 xl:grid-cols-6 2xl:grid-cols-7 w-full gap-5 content-center">
-        {searchResults?.results.map((anime, idx) => (
+        {searchResults?.map((anime, idx) => (
           <BlurFade key={idx} delay={idx * 0.05} inView>
             <AnimeCard
-              anime={anime}
+              title={anime.name}
+              subTitle={anime.rank?.toString()}
+              poster={anime.poster}
+              href={`${ROUTES.ANIME_DETAILS}/${anime.id}`}
               className="self-center justify-self-center"
               showGenre={false}
             />
@@ -47,4 +50,3 @@ const SearchResults = () => {
 };
 
 export default SearchResults;
-

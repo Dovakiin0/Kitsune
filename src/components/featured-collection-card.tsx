@@ -1,6 +1,7 @@
 import React from "react";
 import AnimeCard from "./anime-card";
 import { IAnime } from "@/types/anime";
+import { ROUTES } from "@/constants/routes";
 
 type Props = {
   title: string;
@@ -13,16 +14,25 @@ const FeaturedCollectionCard = (props: Props) => {
       <h5 className="text-lg font-semibold pt-5 text-center">{props.title}</h5>
       <div className="w-full relative grow flex">
         <AnimeCard
+          title={props.anime[0].name}
           className="absolute bottom-[-5.25rem] left-[15%] rotate-[-10deg] h-[12.5rem] w-[9.375rem] border-[.50rem] border-[#212121]"
-          anime={props.anime[0] as IAnime}
+          subTitle={props.anime[0].episodes.sub?.toString()}
+          poster={props.anime[0].poster}
+          href={`${ROUTES.ANIME_DETAILS}/${props.anime[0].id}`}
         />
         <AnimeCard
+          title={props.anime[1].name}
           className="absolute bottom-[-6.25rem] left-[35%] h-[12.5rem] w-[9.375rem] border-[.50rem] border-[#212121]"
-          anime={props.anime[1]}
-        />
+          subTitle={props.anime[1].episodes.sub?.toString()}
+          poster={props.anime[1].poster}
+          href={`${ROUTES.ANIME_DETAILS}/${props.anime[1].id}`}
+        />{" "}
         <AnimeCard
+          title={props.anime[2].name}
           className="absolute bottom-[-7.25rem] left-[50%] rotate-[10deg] h-[12.5rem] w-[9.375rem] border-[.50rem] border-[#212121]"
-          anime={props.anime[2]}
+          subTitle={props.anime[2].episodes.sub?.toString()}
+          poster={props.anime[2].poster}
+          href={`${ROUTES.ANIME_DETAILS}/${props.anime[2].id}`}
         />
       </div>
     </div>
@@ -30,4 +40,3 @@ const FeaturedCollectionCard = (props: Props) => {
 };
 
 export default FeaturedCollectionCard;
-

@@ -1,17 +1,16 @@
 import { GET_ANIME_DETAILS } from "@/constants/query-keys";
-import { api } from "@/lib/api"
+import { api } from "@/lib/api";
 import { IAnimeDetails } from "@/types/anime-details";
 import { useQuery } from "react-query";
 
 const getAnimeDetails = async (animeId: string) => {
-    const res = await api.get('/anime/' + animeId);
-    return res.data as IAnimeDetails;
-}
+  const res = await api.get("/anime/" + animeId);
+  return res.data.data as IAnimeDetails;
+};
 
 export const useGetAnimeDetails = (animeId: string) => {
-    return useQuery({
-        queryFn: () => getAnimeDetails(animeId),
-        queryKey: [GET_ANIME_DETAILS]
-
-    })
-}
+  return useQuery({
+    queryFn: () => getAnimeDetails(animeId),
+    queryKey: [GET_ANIME_DETAILS],
+  });
+};

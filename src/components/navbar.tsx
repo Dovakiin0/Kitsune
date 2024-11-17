@@ -70,7 +70,7 @@ const NavBar = () => {
             </Link>
           ))}
         </div>
-        <SearchBar className="hidden lg:flex" />
+        <SearchBar className="hidden w-1/3 lg:flex" />
 
         <div className="lg:hidden">
           <MobileMenuSheet trigger={<MenuIcon />} />
@@ -115,4 +115,3 @@ const MobileMenuSheet = ({ trigger }: { trigger: ReactNode }) => {
 };
 
 export default NavBar;
-

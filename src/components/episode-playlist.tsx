@@ -25,15 +25,16 @@ const EpisodePlaylist = ({ animeId, title }: Props) => {
   const episodeRefs = useRef<(HTMLDivElement | null)[]>([]);
 
   useEffect(() => {
-    if (!episodeId && episodes && !!episodes.length) {
-      setSelectedEpisode(episodes[0].id as string);
+    if (!episodeId && episodes && !!episodes.episodes.length) {
+      console.log(episodes);
+      setSelectedEpisode(episodes.episodes[0].episodeId as string);
     }
     //eslint-disable-next-line
   }, [episodes]);
 
   useEffect(() => {
-    const episodeIndex = episodes?.findIndex(
-      (episode) => episode.id === episodeId
+    const episodeIndex = episodes?.episodes.findIndex(
+      (episode) => episode.episodeId === episodeId,
     );
 
     if (
@@ -60,7 +61,7 @@ const EpisodePlaylist = ({ animeId, title }: Props) => {
   }, [animeId, episodes]);
 
   return (
-    <div className="col-span-1 flex flex-col w-full gap-5 border-[.0313rem] border-secondary rounded-md overflow-hidden lg:max-h-[80vh] max-h-[40vh] min-h-[40vh]">
+    <div className="col-span-1 flex flex-col w-full gap-5 border-[.0313rem] border-secondary rounded-md overflow-hidden lg:max-h-[60vh] max-h-[40vh] min-h-[40vh]">
       <div className="h-fit bg-[#18181a] px-5 py-3">
         <h3 className="text-lg font-semibold"> Episode Playlist</h3>
         <span className="text-sm font-thin">{title}</span>
@@ -69,13 +70,13 @@ const EpisodePlaylist = ({ animeId, title }: Props) => {
         ref={scrollContainerRef}
         className="flex flex-col gap-1 px-2 pb-3 flex-grow overflow-y-auto"
       >
-        {episodes?.map((episode, idx) => (
+        {episodes?.episodes.map((episode, idx) => (
           //@ts-expect-error type mismatch
           <div key={idx} ref={(el) => (episodeRefs.current[idx] = el)}>
             <EpisodeCard variant="list" episode={episode} animeId={animeId} />
           </div>
         ))}
-        {!episodes?.length && !isLoading && "No Episodes"}
+        {!episodes?.episodes.length && !isLoading && "No Episodes"}
         {isLoading && <PlaylistSkeleton />}
       </div>
     </div>
@@ -98,4 +99,3 @@ const PlaylistSkeleton = () => {
 };
 
 export default EpisodePlaylist;
-

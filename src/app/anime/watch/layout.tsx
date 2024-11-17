@@ -8,13 +8,13 @@ import Container from "@/components/container";
 import AnimeCard from "@/components/anime-card";
 import { useAnimeStore } from "@/store/anime-store";
 
-import AnimeCarousel from "@/components/anime-carousel";
 import EpisodePlaylist from "@/components/episode-playlist";
-import { Ation, IAnimeDetails } from "@/types/anime-details";
 
 import { useRouter, useSearchParams } from "next/navigation";
 import { useGetAnimeDetails } from "@/query/get-anime-details";
 import React, { ReactNode, useEffect, useMemo, useState } from "react";
+import AnimeCarousel from "@/components/anime-carousel";
+import { IAnime } from "@/types/anime";
 
 type Props = {
   children: ReactNode;
@@ -27,7 +27,7 @@ const Layout = (props: Props) => {
 
   const currentAnimeId = useMemo(
     () => searchParams.get("anime"),
-    [searchParams]
+    [searchParams],
   );
   const episodeId = searchParams.get("episode");
 
@@ -68,37 +68,42 @@ const Layout = (props: Props) => {
         <EpisodePlaylist
           animeId={animeId as string}
           title={
-            !!anime?.title.english
-              ? anime.title.english
-              : (anime?.title.userPreferred as string)
+            !!anime?.anime.info.name
+              ? anime.anime.info.name
+              : (anime?.anime.moreInfo.japanese as string)
           }
         />
       </div>
       <div className="flex md:flex-row flex-col gap-5 -mt-5">
         <AnimeCard
-          anime={anime as IAnimeDetails}
+          title={anime?.anime.info.name!}
+          poster={anime?.anime.info.poster!}
+          subTitle={anime?.anime.moreInfo.aired!}
           displayDetails={false}
           className="!h-full !rounded-sm"
+          href={ROUTES.ANIME_DETAILS + "/" + anime?.anime.info.id}
         />
         <div className="flex flex-col gap-2">
           <h1
             className="text-2xl md:font-black font-extrabold z-[100] cursor-pointer"
             onClick={() => {
-              router.push(ROUTES.ANIME_DETAILS + "/" + anime?.id);
+              router.push(ROUTES.ANIME_DETAILS + "/" + anime?.anime.info.id);
             }}
           >
-            {!!anime?.title.english ? anime.title.english : anime?.title.romaji}
+            {anime?.anime.info.name}
           </h1>
-          <p>{parse(anime?.description as string)}</p>
+          <p>{parse(anime?.anime.info.description as string)}</p>
         </div>
       </div>
-      <AnimeCarousel title={"Also Watch"} anime={anime?.relations as Ation[]} />
+      <AnimeCarousel
+        title={"Also Watch"}
+        anime={anime?.relatedAnimes as IAnime[]}
+      />
       <AnimeCarousel
         title={"Recommended"}
-        anime={anime?.recommendations as Ation[]}
+        anime={anime?.recommendedAnimes as IAnime[]}
       />
     </Container>
   );
 };
 export default Layout;
-

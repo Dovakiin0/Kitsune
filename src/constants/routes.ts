@@ -1,1 +1,6 @@
-export const ROUTES = { HOME: '/', ANIME_DETAILS: '/anime', WATCH: '/anime/watch', SEARCH: '/anime/search' }
+export const ROUTES = {
+  HOME: "/",
+  ANIME_DETAILS: "/anime",
+  WATCH: "/anime/watch",
+  SEARCH: "/search",
+};

@@ -21,7 +21,9 @@ const LatestEpisodesAnime = (props: Props) => {
         {props.latestEpisodes?.map((anime, idx) => (
           <BlurFade key={idx} delay={idx * 0.05} inView>
             <AnimeCard
-              anime={anime}
+              title={anime.name}
+              subTitle={`Episode ${anime.episodes.sub?.toString()}`}
+              poster={anime.poster}
               className="self-center justify-self-center"
               href={`${ROUTES.WATCH}?anime=${anime.id}&episode=${anime.id}`}
             />
@@ -51,4 +53,3 @@ const LoadingSkeleton = () => {
 };
 
 export default LatestEpisodesAnime;
-

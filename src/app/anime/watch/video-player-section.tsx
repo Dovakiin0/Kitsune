@@ -1,32 +1,38 @@
 "use client";
 
-import { IEpisodes } from "@/types/episodes";
 import React, { useEffect, useState } from "react";
 import { useAnimeStore } from "@/store/anime-store";
 
 import { IWatchedAnime } from "@/types/watched-anime";
 import KitsunePlayer from "@/components/kitsune-player";
 import { useGetEpisodeData } from "@/query/get-episode-data";
+import { useGetEpisodeServers } from "@/query/get-episode-servers";
+import { IEpisodeSource } from "@/types/episodes";
 
 const VideoPlayerSection = () => {
   const { selectedEpisode, anime } = useAnimeStore();
-  const { data: episodeData, isLoading } = useGetEpisodeData(selectedEpisode);
+  const { data: serversData } = useGetEpisodeServers(selectedEpisode);
+
+  const { data: episodeData, isLoading } = useGetEpisodeData(
+    selectedEpisode,
+    serversData?.sub[0].serverName!,
+  );
 
   const [watchedDetails, setWatchedDetails] = useState<Array<IWatchedAnime>>(
-    JSON.parse(localStorage.getItem("watched") as string) || []
+    JSON.parse(localStorage.getItem("watched") as string) || [],
   );
 
   useEffect(() => {
     if (episodeData) {
       const existingAnime = watchedDetails.find(
-        (watchedAnime) => watchedAnime.anime === anime.id
+        (watchedAnime) => watchedAnime.anime === anime.anime.info.id,
       );
 
       if (!existingAnime) {
         // Add new anime entry if it doesn't exist
         const updatedWatchedDetails = [
           ...watchedDetails,
-          { anime: anime.id, episodes: [selectedEpisode] },
+          { anime: anime.anime.info.id, episodes: [selectedEpisode] },
         ];
         localStorage.setItem("watched", JSON.stringify(updatedWatchedDetails));
         setWatchedDetails(updatedWatchedDetails);
@@ -38,17 +44,17 @@ const VideoPlayerSection = () => {
         if (!episodeAlreadyWatched) {
           // Add the new episode to the list
           const updatedWatchedDetails = watchedDetails.map((watchedAnime) =>
-            watchedAnime.anime === anime.id
+            watchedAnime.anime === anime.anime.info.id
               ? {
                   ...watchedAnime,
                   episodes: [...watchedAnime.episodes, selectedEpisode],
                 }
-              : watchedAnime
+              : watchedAnime,
           );
 
           localStorage.setItem(
             "watched",
-            JSON.stringify(updatedWatchedDetails)
+            JSON.stringify(updatedWatchedDetails),
           );
           setWatchedDetails(updatedWatchedDetails);
         }
@@ -57,7 +63,7 @@ const VideoPlayerSection = () => {
     //eslint-disable-next-line
   }, [episodeData, selectedEpisode]);
 
-  if (isLoading)
+  if (isLoading || !episodeData)
     return (
       <div className="h-[28vh] md:h-[80vh] w-full animate-pulse bg-slate-700 rounded-md"></div>
     );
@@ -66,12 +72,14 @@ const VideoPlayerSection = () => {
     <>
       <KitsunePlayer
         key={episodeData?.sources[0].url}
-        episodeInfo={episodeData as IEpisodes}
-        animeInfo={{ title: anime.title.english, image: anime.image }}
+        episodeInfo={episodeData!}
+        animeInfo={{
+          title: anime.anime.info.name,
+          image: anime.anime.info.poster,
+        }}
       />
     </>
   );
 };
 
 export default VideoPlayerSection;
-

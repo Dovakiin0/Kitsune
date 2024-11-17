@@ -19,9 +19,9 @@ function ArtPlayer({ option, getInstance, ...rest }: any) {
       });
     });
 
-    // art.on("subtitleUpdate", (text) => {
-    //   art.template.$subtitle.innerHTML = text;
-    // });
+    art.on("subtitleUpdate", (text) => {
+      art.template.$subtitle.innerHTML = text;
+    });
 
     if (getInstance && typeof getInstance === "function") {
       getInstance(art);
@@ -39,4 +39,3 @@ function ArtPlayer({ option, getInstance, ...rest }: any) {
 }
 
 export default ArtPlayer;
-

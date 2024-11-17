@@ -13,6 +13,7 @@ import Button from "./common/custom-button";
 import { ArrowLeft, ArrowRight } from "lucide-react";
 import { cn } from "@/lib/utils";
 import BlurFade from "./ui/blur-fade";
+import { ROUTES } from "@/constants/routes";
 
 type Props = {
   anime: IAnime[];
@@ -54,7 +55,10 @@ const AnimeCarousel = (props: Props) => {
               >
                 <AnimeCard
                   key={idx}
-                  anime={ani as unknown as IAnime}
+                  title={ani.name}
+                  subTitle={ani.rank?.toString()}
+                  href={`${ROUTES.ANIME_DETAILS}/${ani.id}`}
+                  poster={ani.poster}
                   className="self-center justify-self-center"
                 />
               </CarouselItem>
@@ -67,4 +71,3 @@ const AnimeCarousel = (props: Props) => {
 };
 
 export default AnimeCarousel;
-

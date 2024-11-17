@@ -19,8 +19,6 @@ const AnimeEpisodes = (props: Props) => {
 
   const { data, isLoading } = useGetAllEpisodes(props.animeId);
 
-  console.log(data);
-
   useEffect(() => {
     if (data) {
       setEpisodes(data.episodes);
@@ -91,4 +89,3 @@ const AnimeEpisodes = (props: Props) => {
 };
 
 export default AnimeEpisodes;
-
