@@ -28,7 +28,7 @@ const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
       className,
       ...props
     },
-    ref
+    ref,
   ) => {
     return (
       <ShadButton
@@ -45,7 +45,11 @@ const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
         {loading && <SpinnerIcon className="mr-2 h-5 w-5" />}
 
         {LeftIcon && (
-          <LeftIcon className={cn("mr-1", iconClass)} color={iconColor} />
+          <LeftIcon
+            className={cn("mr-1", iconClass)}
+            color={iconColor}
+            strokeWidth={1}
+          />
         )}
 
         {children}
@@ -55,11 +59,10 @@ const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
         )}
       </ShadButton>
     );
-  }
+  },
 );
 
 Button.displayName = "CustomButton";
 
 export type { ButtonProps };
 export default Button;
-

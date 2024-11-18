@@ -39,7 +39,7 @@ const HeroSection = (props: IHeroSectionProps) => {
           ))}
         </CarouselContent>
       </Carousel>
-      <div className="absolute hidden md:flex items-center gap-5 right-10 bottom-10 z-50 isolate">
+      <div className="absolute hidden md:flex items-center gap-5 right-10 3xl:bottom-10 bottom-24 z-50 isolate">
         <Button
           onClick={() => {
             api?.scrollPrev();
@@ -98,6 +98,7 @@ const HeroCarouselItem = ({ anime }: { anime: SpotlightAnime }) => {
 
       {/* Gradient Overlay */}
       <div className="absolute h-full w-full inset-0 m-auto bg-gradient-to-r from-slate-900 to-transparent z-10"></div>
+      <div className="absolute h-full w-full inset-0 m-auto bg-gradient-to-t from-slate-900 to-transparent z-10"></div>
 
       {/* Content Section (remains outside the hover area) */}
       <div className="w-full h-[calc(100%-5.25rem)]  relative z-20">
@@ -108,10 +109,10 @@ const HeroCarouselItem = ({ anime }: { anime: SpotlightAnime }) => {
             <p className="text-lg line-clamp-4">
               {parse(anime?.description as string)}
             </p>
-            <div className="flex items-center gap-5">
+            <div className="flex items-center gap-5 !mt-5">
               <ButtonLink
                 href={`${ROUTES.ANIME_DETAILS}/${anime.id}`}
-                className="h-10 text-md"
+                className="h-10 text-md bg-[#e9376b] text-white hover:bg-[#e9376b]"
               >
                 Learn More
               </ButtonLink>
@@ -149,4 +150,3 @@ const LoadingSkeleton = () => {
   );
 };
 export default HeroSection;
-

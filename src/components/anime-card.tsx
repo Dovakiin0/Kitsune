@@ -22,12 +22,12 @@ const AnimeCard = ({
   ...props
 }: Props) => {
   return (
-    <Link href={props.href || ""}>
+    <Link href={props.href as string}>
       <div
         className={cn([
           "rounded-xl overflow-hidden relative cursor-pointer hover:scale-105 duration-300",
           variant === "sm" &&
-            "h-[15.625rem] min-w-[12.625rem] max-w-[12.625rem] md:h-[18.75rem] md:max-w-[12.5rem]",
+            "h-[15.625rem] min-w-[10.625rem] max-w-[12.625rem] md:h-[18.75rem] md:max-w-[12.5rem]",
           ,
           variant === "lg" &&
             "max-w-[12.625rem] md:max-w-[18.75rem] h-auto md:h-[25rem] shrink-0 lg:w-[18.75rem]",

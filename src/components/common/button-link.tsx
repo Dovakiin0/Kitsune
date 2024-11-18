@@ -32,7 +32,7 @@ const ButtonLink = React.forwardRef<HTMLAnchorElement, ButtonLinkProps>(
       className,
       ...props
     },
-    ref
+    ref,
   ) => {
     return (
       <Link
@@ -40,7 +40,12 @@ const ButtonLink = React.forwardRef<HTMLAnchorElement, ButtonLinkProps>(
         className={cn(buttonVariants({ variant, size, className }))}
         {...props}
       >
-        {LeftIcon && <LeftIcon className={cn("mr-1", classNames?.leftIcon)} />}
+        {LeftIcon && (
+          <LeftIcon
+            className={cn("mr-1", classNames?.leftIcon)}
+            strokeWidth={1}
+          />
+        )}
 
         {children}
 
@@ -49,11 +54,10 @@ const ButtonLink = React.forwardRef<HTMLAnchorElement, ButtonLinkProps>(
         )}
       </Link>
     );
-  }
+  },
 );
 
 ButtonLink.displayName = "ButtonLink";
 
 export type { ButtonLinkProps };
 export { ButtonLink };
-

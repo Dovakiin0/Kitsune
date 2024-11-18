@@ -36,7 +36,7 @@ const EpisodeCard = ({
         className={cn([
           "rounded-xl overflow-hidden relative cursor-pointer ",
 
-          "h-[15.625rem] min-w-[10.625rem] max-w-[12.625rem] md:h-[18.75rem] md:max-w-[12.5rem]",
+          "h-[8.625rem] min-w-[8.625rem] max-w-[10.625rem] md:h-[10.75rem] md:max-w-[12.5rem]",
           props.className,
         ])}
       >
@@ -63,7 +63,7 @@ const EpisodeCard = ({
       >
         <div
           className={cn([
-            "h-[6.25rem] rounded-lg cursor-pointer w-full flex items-center justify-center bg-secondary",
+            "h-[5.25rem] rounded-lg cursor-pointer w-full flex items-center justify-center bg-secondary md:text-base text-xs",
 
             hasWatchedEpisode && "bg-slate-900",
           ])}

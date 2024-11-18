@@ -59,7 +59,7 @@ const AnimeCarousel = (props: Props) => {
                   subTitle={ani.rank?.toString()}
                   href={`${ROUTES.ANIME_DETAILS}/${ani.id}`}
                   poster={ani.poster}
-                  className="self-center justify-self-center"
+                  className="self-center justify-self-center min-w-[12rem]"
                 />
               </CarouselItem>
             </BlurFade>

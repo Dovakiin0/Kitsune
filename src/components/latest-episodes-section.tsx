@@ -14,6 +14,7 @@ type Props = {
 
 const LatestEpisodesAnime = (props: Props) => {
   if (props.loading) return <LoadingSkeleton />;
+  console.log(props.latestEpisodes);
   return (
     <Container className="flex flex-col gap-5 py-10 items-center lg:items-start lg:mt-[-10.125rem] z-20 ">
       <h5 className="text-2xl font-bold">Recent Releases</h5>
@@ -25,7 +26,7 @@ const LatestEpisodesAnime = (props: Props) => {
               subTitle={`Episode ${anime.episodes.sub?.toString()}`}
               poster={anime.poster}
               className="self-center justify-self-center"
-              href={`${ROUTES.WATCH}?anime=${anime.id}&episode=${anime.id}`}
+              href={`${ROUTES.WATCH}?anime=${anime.id}&episode=${anime.id}&type=latest`}
             />
           </BlurFade>
         ))}

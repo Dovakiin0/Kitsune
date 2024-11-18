@@ -7,15 +7,16 @@ import { IWatchedAnime } from "@/types/watched-anime";
 import KitsunePlayer from "@/components/kitsune-player";
 import { useGetEpisodeData } from "@/query/get-episode-data";
 import { useGetEpisodeServers } from "@/query/get-episode-servers";
-import { IEpisodeSource } from "@/types/episodes";
 
 const VideoPlayerSection = () => {
   const { selectedEpisode, anime } = useAnimeStore();
+
+  console.log("selected", selectedEpisode);
   const { data: serversData } = useGetEpisodeServers(selectedEpisode);
 
   const { data: episodeData, isLoading } = useGetEpisodeData(
     selectedEpisode,
-    serversData?.sub[0].serverName!,
+    serversData?.sub[0]?.serverName as string,
   );
 
   const [watchedDetails, setWatchedDetails] = useState<Array<IWatchedAnime>>(

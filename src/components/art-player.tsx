@@ -35,7 +35,7 @@ function ArtPlayer({ option, getInstance, ...rest }: any) {
     //eslint-disable-next-line
   }, []);
 
-  return <div ref={artRef} {...rest}></div>;
+  return <div ref={artRef} {...rest} style={{ background: "none" }}></div>;
 }
 
 export default ArtPlayer;

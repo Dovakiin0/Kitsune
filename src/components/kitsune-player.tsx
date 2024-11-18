@@ -173,10 +173,10 @@ const KitsunePlayer = ({ episodeInfo, animeInfo }: KitsunePlayerProps) => {
   return (
     <div
       ref={playerRef}
-      className="w-full h-full lg:max-h-[60vh] max-h-[40vh] min-h-[40vh]"
+      className="w-full h-full lg:max-h-[60vh] max-h-[40vh] min-h-[60vh]"
     >
       {uri ? (
-        <ArtPlayer option={options} className="w-full h-full" />
+        <ArtPlayer option={options} className="w-full h-full border-none" />
       ) : (
         <div
           className="rounded-lg p-5 w-full h-full"

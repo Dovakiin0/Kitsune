@@ -61,7 +61,7 @@ const Layout = (props: Props) => {
   if (isLoading) return <Loading />;
 
   return (
-    <Container className="mt-[6.5rem] space-y-10 pb-20">
+    <Container className="mt-[8.5rem] space-y-10 pb-20">
       <div className="grid lg:grid-cols-4 grid-cols-1 gap-y-5 gap-x-10 w-full">
         <div className="lg:col-span-3 col-span-1">{props.children}</div>
 
@@ -76,9 +76,9 @@ const Layout = (props: Props) => {
       </div>
       <div className="flex md:flex-row flex-col gap-5 -mt-5">
         <AnimeCard
-          title={anime?.anime.info.name!}
-          poster={anime?.anime.info.poster!}
-          subTitle={anime?.anime.moreInfo.aired!}
+          title={anime?.anime.info.name as string}
+          poster={anime?.anime.info.poster as string}
+          subTitle={anime?.anime.moreInfo.aired as string}
           displayDetails={false}
           className="!h-full !rounded-sm"
           href={ROUTES.ANIME_DETAILS + "/" + anime?.anime.info.id}

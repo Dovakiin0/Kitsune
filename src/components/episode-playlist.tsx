@@ -15,7 +15,8 @@ type Props = {
 const EpisodePlaylist = ({ animeId, title }: Props) => {
   const searchParams = useSearchParams();
 
-  const episodeId = searchParams.get("episode");
+  const episodeId = searchParams.get("epi");
+  const isLatestEpisode = searchParams.get("type");
 
   const { setSelectedEpisode } = useAnimeStore();
 
@@ -25,9 +26,14 @@ const EpisodePlaylist = ({ animeId, title }: Props) => {
   const episodeRefs = useRef<(HTMLDivElement | null)[]>([]);
 
   useEffect(() => {
-    if (!episodeId && episodes && !!episodes.episodes.length) {
-      console.log(episodes);
-      setSelectedEpisode(episodes.episodes[0].episodeId as string);
+    if (!episodeId && !!episodes && !!episodes.episodes.length) {
+      if (!!isLatestEpisode) {
+        setSelectedEpisode(
+          episodes.episodes[episodes.episodes.length - 1].episodeId as string,
+        );
+      } else {
+        setSelectedEpisode(episodes.episodes[0].episodeId as string);
+      }
     }
     //eslint-disable-next-line
   }, [episodes]);

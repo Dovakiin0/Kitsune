@@ -101,7 +101,7 @@ const Page = async ({ params }: { params: { slug: string } }) => {
           >
             <div className="col-span-1 flex flex-col gap-5 w-full">
               <h3 className="text-xl font-semibold">Details</h3>
-              <div className="grid grid-cols-2 w-full md:text-lg text-base gap-y-2 gap-x-20 md:gap-x-0">
+              <div className="grid grid-cols-2 w-full md:text-base text-xs gap-y-2 gap-x-20 md:gap-x-0">
                 <h3>Aired</h3>
                 <span>{anime.anime.moreInfo.aired}</span>
 
@@ -126,7 +126,7 @@ const Page = async ({ params }: { params: { slug: string } }) => {
             </div>
             <div className="col-span-4 flex flex-col gap-5">
               <h3 className="text-xl font-semibold">Description</h3>
-              <p className="md:text-lg text-base">
+              <p className="md:text-base text-xs leading-6">
                 {anime.anime.info.description}
               </p>
             </div>
