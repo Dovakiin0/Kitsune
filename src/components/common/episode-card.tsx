@@ -99,7 +99,7 @@ const EpisodeCard = ({
           {/*     className="h-full w-full object-cover" */}
           {/*   /> */}
           {/* </figure> */}
-          <h3>{`${props.episode.number}. ${props.episode.title}`}</h3>
+          <h3>{`${props.episode.number}. Episode ${props.episode.number}`}</h3>
           {selectedEpisode === props.episode.episodeId && (
             <span className="absolute bottom-2 right-3 text-xs font-thin">
               Now Playing

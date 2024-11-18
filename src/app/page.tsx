@@ -1,5 +1,6 @@
 "use client";
 
+import ContinueWatching from "@/components/continue-watching";
 import FeaturedCollection from "@/components/featured-collection";
 import { useGetHomePageData } from "@/query/get-home-page-data";
 import { IAnime, LatestCompletedAnime, SpotlightAnime } from "@/types/anime";
@@ -25,6 +26,9 @@ export default function Home() {
         loading={isLoading}
         latestEpisodes={data?.latestEpisodeAnimes as LatestCompletedAnime[]}
       />
+
+      <ContinueWatching loading={isLoading} />
+
       <FeaturedCollection
         loading={isLoading}
         featuredAnime={[
@@ -48,8 +52,8 @@ export default function Home() {
         loading={isLoading}
       />
       <AnimeSections
-        title={"Top Upcoming Anime"}
-        trendingAnime={data?.topUpcomingAnimes as IAnime[]}
+        title={"Top Airing Anime"}
+        trendingAnime={data?.topAiringAnimes as IAnime[]}
         loading={isLoading}
       />
     </div>

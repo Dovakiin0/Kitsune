@@ -5,17 +5,18 @@ import { ROUTES } from "@/constants/routes";
 import AnimeCard from "@/components/anime-card";
 
 import BlurFade from "@/components/ui/blur-fade";
-import { useSearchAnime } from "@/query/search-anime";
 import { redirect, useSearchParams } from "next/navigation";
+import { useGetSearchAnimeResults } from "@/query/get-search-results";
 
 const SearchResults = () => {
   const searchParams = useSearchParams();
   const searchPhrase = searchParams.get("search-key") as string;
-  const { data: searchResults, isLoading } = useSearchAnime(searchPhrase);
+  const { data: searchResults, isLoading } =
+    useGetSearchAnimeResults(searchPhrase);
 
   if (!searchPhrase) redirect(ROUTES.HOME);
   return (
-    <div className="flex flex-col gap-10 mt-28 lg:mt-36 pb-20">
+    <div className="flex flex-col gap-10 mt-28 lg:mt-36 pb-20 min-h-[75vh]">
       <div className="text-2xl font-semibold">
         Search Results for <span className="font-[800]">{searchPhrase}</span>
       </div>

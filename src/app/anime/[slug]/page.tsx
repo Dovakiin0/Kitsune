@@ -17,6 +17,7 @@ import AnimeCarousel from "@/components/anime-carousel";
 import AnimeEpisodes from "@/components/anime-episodes";
 import CharacterCard from "@/components/common/character-card";
 import { ROUTES } from "@/constants/routes";
+import WatchTrailer from "@/components/watch-trailer";
 
 const Page = async ({ params }: { params: { slug: string } }) => {
   const anime: IAnimeDetails = await api
@@ -36,12 +37,9 @@ const Page = async ({ params }: { params: { slug: string } }) => {
           className="h-full w-full object-cover"
           unoptimized
         />
-        <Button
-          className="absolute md:flex hidden md:bottom-10 md:right-10 bottom-4 right-4 m-auto z-10"
-          LeftIcon={CirclePlay}
-        >
-          Watch Trailer
-        </Button>
+        <WatchTrailer
+          videoHref={anime.anime.info.promotionalVideos[0]?.source}
+        />
         <div className="absolute h-full w-full inset-0 m-auto bg-gradient-to-r from-slate-900 to-transparent"></div>
       </div>
       <Container className="z-50 md:space-y-10 pb-20">

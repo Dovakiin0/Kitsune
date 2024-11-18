@@ -11,7 +11,6 @@ import { useGetEpisodeServers } from "@/query/get-episode-servers";
 const VideoPlayerSection = () => {
   const { selectedEpisode, anime } = useAnimeStore();
 
-  console.log("selected", selectedEpisode);
   const { data: serversData } = useGetEpisodeServers(selectedEpisode);
 
   const { data: episodeData, isLoading } = useGetEpisodeData(
@@ -26,14 +25,21 @@ const VideoPlayerSection = () => {
   useEffect(() => {
     if (episodeData) {
       const existingAnime = watchedDetails.find(
-        (watchedAnime) => watchedAnime.anime === anime.anime.info.id,
+        (watchedAnime) => watchedAnime.anime.id === anime.anime.info.id,
       );
 
       if (!existingAnime) {
         // Add new anime entry if it doesn't exist
         const updatedWatchedDetails = [
           ...watchedDetails,
-          { anime: anime.anime.info.id, episodes: [selectedEpisode] },
+          {
+            anime: {
+              id: anime.anime.info.id,
+              title: anime.anime.info.name,
+              poster: anime.anime.info.poster,
+            },
+            episodes: [selectedEpisode],
+          },
         ];
         localStorage.setItem("watched", JSON.stringify(updatedWatchedDetails));
         setWatchedDetails(updatedWatchedDetails);
@@ -45,7 +51,7 @@ const VideoPlayerSection = () => {
         if (!episodeAlreadyWatched) {
           // Add the new episode to the list
           const updatedWatchedDetails = watchedDetails.map((watchedAnime) =>
-            watchedAnime.anime === anime.anime.info.id
+            watchedAnime.anime.id === anime.anime.info.id
               ? {
                   ...watchedAnime,
                   episodes: [...watchedAnime.episodes, selectedEpisode],

@@ -24,7 +24,7 @@ const WatchButton = () => {
           ? `${ROUTES.WATCH}?anime=${animeId}`
           : `${ROUTES.WATCH}?anime=${animeId}&episode=${latestEpisodeWatched}`
       }
-      className="max-w-fit"
+      className="max-w-fit text-base"
       LeftIcon={CirclePlay}
     >
       {hasWatchedAnime ? "Continue Watching" : "Start Watching"}
@@ -33,4 +33,3 @@ const WatchButton = () => {
 };
 
 export default WatchButton;
-

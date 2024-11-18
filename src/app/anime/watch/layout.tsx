@@ -80,7 +80,7 @@ const Layout = (props: Props) => {
           poster={anime?.anime.info.poster as string}
           subTitle={anime?.anime.moreInfo.aired as string}
           displayDetails={false}
-          className="!h-full !rounded-sm"
+          className="!h-full !rounded-sm !shrink-0"
           href={ROUTES.ANIME_DETAILS + "/" + anime?.anime.info.id}
         />
         <div className="flex flex-col gap-2">
