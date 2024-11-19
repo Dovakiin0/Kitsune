@@ -37,7 +37,9 @@ const ContinueWatching = (props: Props) => {
   }, []);
 
   if (props.loading) return <LoadingSkeleton />;
-  if (!anime && !props.loading) return <></>;
+
+  console.log(anime)
+  if ((!anime || !anime.length) && !props.loading) return <></>;
 
   return (
     <Container className="flex flex-col gap-5 py-10 items-center lg:items-start  ">

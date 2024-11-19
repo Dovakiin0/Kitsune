@@ -1,0 +1,53 @@
+name: Build and Deploy Kitsune
+
+on:
+  push:
+    branches:
+      - kitsune-dev # Trigger on push to main branch
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      # Checkout the repository
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      # Set up Docker Buildx
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v2
+
+      # Log in to Docker Hub
+      - name: Log in to Docker Hub
+        uses: docker/login-action@v2
+        with:
+          username: ${{ secrets.DOCKER_USERNAME }}
+          password: ${{ secrets.DOCKER_TOKEN }}
+
+      # Build and push Docker image
+      - name: Build and push Docker image
+        uses: docker/build-push-action@v4
+        with:
+          context: .
+          push: true
+          tags: dovakiin0/kitsune-v2:latest, dovakiin0/kitsune-v2:${{ github.sha }}
+
+      # Deploy to VPS via SSH
+      - name: Deploy to VPS
+        uses: appleboy/ssh-action@v0.1.7
+        with:
+          host: ${{ secrets.HOST }}
+          username: ${{ secrets.USERNAME }}
+          key: ${{ secrets.SSH_PRIVATE_KEY }}
+          port: 22
+          script: |
+            # Pull the latest Docker image
+            docker pull dovakiin0/kitsune-v2:latest
+
+            # Stop and remove the existing container
+            docker stop kitsune-v2 || true
+            docker rm kitsune-v2 || true
+
+            # Run the new container
+            docker run -d --name kitsune-v2 -e PORT=3000 -p 3000:3000 dovakiin0/kitsune-v2

@@ -42,7 +42,7 @@ const KitsunePlayer = ({ episodeInfo, animeInfo }: KitsunePlayerProps) => {
       url: uri,
       customType: {
         //eslint-disable-next-line
-        m3u8: function (video: HTMLMediaElement, url: string, art: any) {
+        m3u8: function(video: HTMLMediaElement, url: string, art: any) {
           if (Hls.isSupported()) {
             if (art.hls) art.hls.destroy();
             const hls = new Hls();
@@ -72,6 +72,7 @@ const KitsunePlayer = ({ episodeInfo, animeInfo }: KitsunePlayerProps) => {
             // Show qualitys in setting
             setting: true,
             // Get the quality name from level
+            //eslint-disable-next-line
             getName: (level: any) => level.height + "P",
             // I18n
             title: "Quality",
@@ -83,6 +84,7 @@ const KitsunePlayer = ({ episodeInfo, animeInfo }: KitsunePlayerProps) => {
             // Show audios in setting
             setting: true,
             // Get the audio name from track
+            //eslint-disable-next-line
             getName: (track: any) => track.name,
             // I18n
             title: "Audio",
@@ -162,18 +164,19 @@ const KitsunePlayer = ({ episodeInfo, animeInfo }: KitsunePlayerProps) => {
           color: "#fff",
         },
         encoding: "utf-8",
+        escape: false,
       },
       icons: {
         loading: `<img width="50" height="50" src="${loadingImage.src}">`,
       },
     }),
-    [uri, animeInfo],
+    [uri, animeInfo, episodeInfo?.tracks],
   );
 
   return (
     <div
       ref={playerRef}
-      className="w-full h-full lg:max-h-[60vh] max-h-[40vh] min-h-[60vh]"
+      className="w-full h-full lg:max-h-[80vh] max-h-[40vh] min-h-[80vh]"
     >
       {uri ? (
         <ArtPlayer option={options} className="w-full h-full border-none" />

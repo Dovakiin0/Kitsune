@@ -61,49 +61,51 @@ const Layout = (props: Props) => {
   if (isLoading) return <Loading />;
 
   return (
-    <Container className="mt-[8.5rem] space-y-10 pb-20">
-      <div className="grid lg:grid-cols-4 grid-cols-1 gap-y-5 gap-x-10 w-full">
-        <div className="lg:col-span-3 col-span-1">{props.children}</div>
+    anime?.anime.info && (
+      <Container className="mt-[6.5rem] space-y-10 pb-20">
+        <div className="grid lg:grid-cols-4 grid-cols-1 gap-y-5 gap-x-10 w-full">
+          <div className="lg:col-span-3 col-span-1">{props.children}</div>
 
-        <EpisodePlaylist
-          animeId={animeId as string}
-          title={
-            !!anime?.anime.info.name
-              ? anime.anime.info.name
-              : (anime?.anime.moreInfo.japanese as string)
-          }
-        />
-      </div>
-      <div className="flex md:flex-row flex-col gap-5 -mt-5">
-        <AnimeCard
-          title={anime?.anime.info.name as string}
-          poster={anime?.anime.info.poster as string}
-          subTitle={anime?.anime.moreInfo.aired as string}
-          displayDetails={false}
-          className="!h-full !rounded-sm !shrink-0"
-          href={ROUTES.ANIME_DETAILS + "/" + anime?.anime.info.id}
-        />
-        <div className="flex flex-col gap-2">
-          <h1
-            className="text-2xl md:font-black font-extrabold z-[100] cursor-pointer"
-            onClick={() => {
-              router.push(ROUTES.ANIME_DETAILS + "/" + anime?.anime.info.id);
-            }}
-          >
-            {anime?.anime.info.name}
-          </h1>
-          <p>{parse(anime?.anime.info.description as string)}</p>
+          <EpisodePlaylist
+            animeId={animeId as string}
+            title={
+              !!anime?.anime.info.name
+                ? anime.anime.info.name
+                : (anime?.anime.moreInfo.japanese as string)
+            }
+          />
         </div>
-      </div>
-      <AnimeCarousel
-        title={"Also Watch"}
-        anime={anime?.relatedAnimes as IAnime[]}
-      />
-      <AnimeCarousel
-        title={"Recommended"}
-        anime={anime?.recommendedAnimes as IAnime[]}
-      />
-    </Container>
+        <div className="flex md:flex-row flex-col gap-5 -mt-5">
+          <AnimeCard
+            title={anime?.anime.info.name}
+            poster={anime?.anime.info.poster}
+            subTitle={anime?.anime.moreInfo.aired}
+            displayDetails={false}
+            className="!h-full !rounded-sm"
+            href={ROUTES.ANIME_DETAILS + "/" + anime?.anime.info.id}
+          />
+          <div className="flex flex-col gap-2">
+            <h1
+              className="text-2xl md:font-black font-extrabold z-[100] cursor-pointer"
+              onClick={() => {
+                router.push(ROUTES.ANIME_DETAILS + "/" + anime?.anime.info.id);
+              }}
+            >
+              {anime?.anime.info.name}
+            </h1>
+            <p>{parse(anime?.anime.info.description as string)}</p>
+          </div>
+        </div>
+        <AnimeCarousel
+          title={"Also Watch"}
+          anime={anime?.relatedAnimes as IAnime[]}
+        />
+        <AnimeCarousel
+          title={"Recommended"}
+          anime={anime?.recommendedAnimes as IAnime[]}
+        />
+      </Container>
+    )
   );
 };
 export default Layout;

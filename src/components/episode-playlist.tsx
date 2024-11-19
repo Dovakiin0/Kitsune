@@ -72,7 +72,7 @@ const EpisodePlaylist = ({ animeId, title }: Props) => {
   }, [animeId, episodes]);
 
   return (
-    <div className="col-span-1 flex flex-col w-full gap-5 border-[.0313rem] border-secondary rounded-md overflow-hidden lg:max-h-[60vh] max-h-[40vh] min-h-[40vh]">
+    <div className="col-span-1 flex flex-col w-full gap-5 border-[.0313rem] border-secondary rounded-md overflow-hidden lg:max-h-[80vh] max-h-[80vh] min-h-[40vh]">
       <div className="h-fit bg-[#18181a] px-5 py-3">
         <h3 className="text-lg font-semibold"> Episode Playlist</h3>
         <span className="text-sm font-thin">{title}</span>

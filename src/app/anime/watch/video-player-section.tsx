@@ -11,8 +11,6 @@ import { useGetEpisodeServers } from "@/query/get-episode-servers";
 const VideoPlayerSection = () => {
   const { selectedEpisode, anime } = useAnimeStore();
 
-  console.log("selected", selectedEpisode);
-
   const { data: serversData } = useGetEpisodeServers(selectedEpisode);
 
   const { data: episodeData, isLoading } = useGetEpisodeData(
@@ -55,9 +53,9 @@ const VideoPlayerSection = () => {
           const updatedWatchedDetails = watchedDetails.map((watchedAnime) =>
             watchedAnime.anime.id === anime.anime.info.id
               ? {
-                  ...watchedAnime,
-                  episodes: [...watchedAnime.episodes, selectedEpisode],
-                }
+                ...watchedAnime,
+                episodes: [...watchedAnime.episodes, selectedEpisode],
+              }
               : watchedAnime,
           );
 

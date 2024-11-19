@@ -1,7 +1,6 @@
 "use client";
 
 import React from "react";
-import Image from "next/image";
 
 import { cn } from "@/lib/utils";
 
@@ -84,8 +83,8 @@ const EpisodeCard = ({
               ? { backgroundColor: "#18181a" }
               : hasWatchedEpisode
                 ? {
-                    backgroundColor: "#0f172a",
-                  }
+                  backgroundColor: "#0f172a",
+                }
                 : {}
           }
         >

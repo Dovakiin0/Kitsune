@@ -19,10 +19,6 @@ function ArtPlayer({ option, getInstance, ...rest }: any) {
       });
     });
 
-    art.on("subtitleUpdate", (text) => {
-      art.template.$subtitle.innerHTML = text;
-    });
-
     if (getInstance && typeof getInstance === "function") {
       getInstance(art);
     }
