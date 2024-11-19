@@ -5,9 +5,6 @@ import Container from "@/components/container";
 import AnimeCard from "@/components/anime-card";
 import { IAnimeDetails } from "@/types/anime-details";
 
-import Button from "@/components/common/custom-button";
-import { CirclePlay } from "lucide-react";
-
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { api } from "@/lib/api";
 
@@ -53,7 +50,7 @@ const Page = async ({ params }: { params: { slug: string } }) => {
             className="shrink-0"
           />
           <div className="flex flex-col md:gap-5 gap-2 pb-16">
-            <h1 className="md:text-5xl text-2xl md:font-black font-extrabold z-[100]">
+            <h1 className="md:text-5xl text-2xl md:font-black font-extrabold z-[9]">
               {anime.anime.info.name}
             </h1>
 

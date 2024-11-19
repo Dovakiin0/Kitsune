@@ -11,6 +11,8 @@ import { useGetEpisodeServers } from "@/query/get-episode-servers";
 const VideoPlayerSection = () => {
   const { selectedEpisode, anime } = useAnimeStore();
 
+  console.log("selected", selectedEpisode);
+
   const { data: serversData } = useGetEpisodeServers(selectedEpisode);
 
   const { data: episodeData, isLoading } = useGetEpisodeData(
