@@ -26,6 +26,14 @@ export interface IEpisodeServers {
     serverId: number;
     serverName: string;
   }[];
+  dub: {
+    serverId: number;
+    serverName: string;
+  }[];
+  raw: {
+    serverId: number;
+    serverName: string;
+  }[];
 }
 
 export interface Track {

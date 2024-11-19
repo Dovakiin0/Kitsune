@@ -7,15 +7,19 @@ import { IWatchedAnime } from "@/types/watched-anime";
 import KitsunePlayer from "@/components/kitsune-player";
 import { useGetEpisodeData } from "@/query/get-episode-data";
 import { useGetEpisodeServers } from "@/query/get-episode-servers";
+import { getFallbackServer } from "@/utils/fallback-server";
 
 const VideoPlayerSection = () => {
   const { selectedEpisode, anime } = useAnimeStore();
 
   const { data: serversData } = useGetEpisodeServers(selectedEpisode);
 
+  const { serverName, key } = getFallbackServer(serversData);
+
   const { data: episodeData, isLoading } = useGetEpisodeData(
     selectedEpisode,
-    serversData?.sub[0]?.serverName as string,
+    serverName,
+    key,
   );
 
   const [watchedDetails, setWatchedDetails] = useState<Array<IWatchedAnime>>(
