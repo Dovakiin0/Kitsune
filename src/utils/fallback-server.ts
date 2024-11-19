@@ -1,18 +1,23 @@
-export function getFallbackServer(serversData: any): {
+import { IEpisodeServers } from "@/types/episodes";
+
+export function getFallbackServer(serversData: IEpisodeServers | undefined): {
   serverName: string;
   key: string;
 } {
-  const keys = ["sub", "dub", "raw"];
-  for (const key of keys) {
-    if (serversData?.[key]?.[0]?.serverName) {
-      return {
-        serverName: serversData[key][0].serverName,
-        key,
-      };
+  if (serversData) {
+    const keys: Array<"sub" | "dub" | "raw"> = ["sub", "dub", "raw"]; // Only valid keys
+    for (const key of keys) {
+      const serverList = serversData[key]; // Safely index the object
+      if (serverList && serverList[0]?.serverName) {
+        return {
+          serverName: serverList[0].serverName,
+          key,
+        };
+      }
     }
   }
   return {
     serverName: "",
     key: "",
-  }; // No valid server found
+  }; // Fallback if no valid server is found
 }
