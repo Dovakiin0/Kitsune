@@ -50,4 +50,4 @@ jobs:
             docker rm kitsune-v2 || true
 
             # Run the new container
-            docker run -d --name kitsune-v2 -e PORT=3000 -p 3000:3000 dovakiin0/kitsune-v2
+            docker run -d --name kitsune-v2 -p 4000:4000 dovakiin0/kitsune-v2
