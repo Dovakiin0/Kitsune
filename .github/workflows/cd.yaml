@@ -3,7 +3,7 @@ name: Build and Deploy Kitsune
 on:
   push:
     branches:
-      - kitsune-dev # Trigger on push to main branch
+      - master # Trigger on push to main branch
 
 jobs:
   build:
