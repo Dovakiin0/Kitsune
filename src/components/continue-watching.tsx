@@ -38,7 +38,6 @@ const ContinueWatching = (props: Props) => {
 
   if (props.loading) return <LoadingSkeleton />;
 
-  console.log(anime)
   if ((!anime || !anime.length) && !props.loading) return <></>;
 
   return (
