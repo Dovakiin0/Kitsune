@@ -9,6 +9,11 @@ export const useHasAnimeWatched = (animeId: string, episodeId?: string) => {
     const watchedDetails: Array<IWatchedAnime> =
       JSON.parse(localStorage.getItem("watched") as string) || [];
 
+    if (!Array.isArray(watchedDetails)) {
+      localStorage.removeItem("watched");
+      return;
+    }
+
     const anime = watchedDetails.find(
       (watchedAnime) => watchedAnime.anime.id === animeId,
     );

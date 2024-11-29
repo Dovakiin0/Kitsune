@@ -26,6 +26,11 @@ const ContinueWatching = (props: Props) => {
         episodes: string[];
       }[] = storedData ? JSON.parse(storedData) : [];
 
+      if (!Array.isArray(watchedAnimes)) {
+        localStorage.removeItem("watched");
+        return;
+      }
+
       const animes = watchedAnimes.reverse().map((anime) => ({
         id: anime.anime.id,
         name: anime.anime.title,

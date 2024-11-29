@@ -27,6 +27,11 @@ const VideoPlayerSection = () => {
   );
 
   useEffect(() => {
+    if (!Array.isArray(watchedDetails)) {
+      localStorage.removeItem("watched");
+      return;
+    }
+
     if (episodeData) {
       const existingAnime = watchedDetails.find(
         (watchedAnime) => watchedAnime.anime.id === anime.anime.info.id,

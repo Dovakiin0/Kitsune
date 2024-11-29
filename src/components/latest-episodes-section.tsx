@@ -14,7 +14,6 @@ type Props = {
 
 const LatestEpisodesAnime = (props: Props) => {
   if (props.loading) return <LoadingSkeleton />;
-  console.log(props.latestEpisodes);
   return (
     <Container className="flex flex-col gap-5 py-10 items-center lg:items-start lg:mt-[-10.125rem] z-20 ">
       <h5 className="text-2xl font-bold">Recent Releases</h5>
