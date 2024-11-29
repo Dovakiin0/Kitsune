@@ -24,9 +24,9 @@ const menuItems: Array<{ title: string; href?: string }> = [
   {
     title: "Catalog",
   },
-  {
-    title: "News",
-  },
+  // {
+  //   title: "News",
+  // },
   {
     title: "Collection",
   },

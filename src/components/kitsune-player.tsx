@@ -42,7 +42,7 @@ const KitsunePlayer = ({ episodeInfo, animeInfo }: KitsunePlayerProps) => {
       url: uri,
       customType: {
         //eslint-disable-next-line
-        m3u8: function(video: HTMLMediaElement, url: string, art: any) {
+        m3u8: function (video: HTMLMediaElement, url: string, art: any) {
           if (Hls.isSupported()) {
             if (art.hls) art.hls.destroy();
             const hls = new Hls();

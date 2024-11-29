@@ -4,6 +4,7 @@ import localFont from "next/font/local";
 
 import NavBar from "@/components/navbar";
 import Footer from "@/components/footer";
+import Script from "next/script";
 import QueryProvider from "@/providers/query-provider";
 
 import { ThemeProvider } from "@/components/theme-provider";
@@ -56,6 +57,18 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
+      <Script
+        src="https://www.googletagmanager.com/gtag/js?id=G-X9RZ58XPH1"
+        strategy="afterInteractive"
+      />
+      <Script id="google-analytics" strategy="afterInteractive">
+        {`
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'G-X9RZ58XPH1');`}
+      </Script>
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased max-w-[100vw] overflow-x-hidden`}
       >
@@ -76,4 +89,3 @@ export default function RootLayout({
     </html>
   );
 }
-
