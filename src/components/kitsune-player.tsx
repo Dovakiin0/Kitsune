@@ -20,7 +20,7 @@ const KitsunePlayer = ({
   subOrDub,
 }: KitsunePlayerProps) => {
   const playerRef = useRef<HTMLDivElement | null>(null); // Ref to hold the player container
-  const uri = episodeInfo?.sources[0].url;
+  const uri = `https://api.kitsunee.me/proxy?url=${episodeInfo?.sources[0].url}`;
 
   useEffect(() => {
     const videoElement = playerRef.current?.querySelector("video");

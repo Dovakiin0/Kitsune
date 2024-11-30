@@ -90,7 +90,7 @@ function ArtPlayer({
 
     return () => {
       if (art && art.destroy) {
-        art.destroy(false);
+        art.destroy(true);
       }
     };
     //eslint-disable-next-line
