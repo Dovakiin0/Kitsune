@@ -28,6 +28,9 @@ const AnimeSections = (props: Props) => {
               poster={anime.poster}
               className="self-center justify-self-center"
               href={`${ROUTES.ANIME_DETAILS}/${anime.id}`}
+              episodeCard
+              sub={anime?.episodes?.sub}
+              dub={anime?.episodes?.dub}
             />
           </BlurFade>
         ))}

@@ -22,10 +22,13 @@ const LatestEpisodesAnime = (props: Props) => {
           <BlurFade key={idx} delay={idx * 0.05} inView>
             <AnimeCard
               title={anime.name}
-              subTitle={`Episode ${anime.episodes.sub?.toString()}`}
+              subTitle={anime.type}
               poster={anime.poster}
               className="self-center justify-self-center"
               href={`${ROUTES.WATCH}?anime=${anime.id}&episode=${anime.id}&type=latest`}
+              episodeCard
+              sub={anime.episodes.sub}
+              dub={anime.episodes.dub}
             />
           </BlurFade>
         ))}

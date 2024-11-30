@@ -11,9 +11,14 @@ import artplayerPluginAmbilight from "artplayer-plugin-ambilight";
 type KitsunePlayerProps = {
   episodeInfo: IEpisodeSource;
   animeInfo: { title: string; image: string };
+  subOrDub: string;
 };
 
-const KitsunePlayer = ({ episodeInfo, animeInfo }: KitsunePlayerProps) => {
+const KitsunePlayer = ({
+  episodeInfo,
+  animeInfo,
+  subOrDub,
+}: KitsunePlayerProps) => {
   const playerRef = useRef<HTMLDivElement | null>(null); // Ref to hold the player container
   const uri = episodeInfo?.sources[0].url;
 
@@ -122,64 +127,41 @@ const KitsunePlayer = ({ episodeInfo, animeInfo }: KitsunePlayerProps) => {
       moreVideoAttr: {
         crossOrigin: "anonymous",
       },
-      // settings: [
-      //   {
-      //     width: 200,
-      //     html: "Subtitle",
-      //     selector: [
-      //       {
-      //         html: "Display",
-      //         tooltip: "Show",
-      //         switch: true,
-      //         onSwitch: function (item: any) {
-      //           // item.tooltip = item.switch ? 'Hide' : 'Show';
-      //           // playerRef?.current.subtitle.show = !item.switch;
-      //           // return !item.switch;
-      //         },
-      //       },
-      //       episodeInfo?.tracks.map((track) => ({
-      //         default: track.label === "English",
-      //         html: track.label,
-      //         url: track.file,
-      //       })),
-      //     ],
-      //     onSelect: function (item: any) {
-      //       playerRef.current?.subtitle.switch(item.url, {
-      //         name: item.html,
-      //       });
-      //       return item.html;
-      //     },
-      //   },
-      // ],
-      // thumbnails: {
-      //   url: animeInfo.image,
-      //   number: 60,
-      //   column: 10,
-      // },
-      subtitle: {
-        url: episodeInfo?.tracks.find((track) => track.label === "English")
-          ?.file,
-        type: "vtt",
-        style: {
-          color: "#fff",
-        },
-        encoding: "utf-8",
-        escape: false,
-      },
+
+      subtitle:
+        subOrDub === "sub"
+          ? {
+              url: episodeInfo?.tracks.find(
+                (track) => track.label === "English",
+              )?.file,
+              type: "vtt",
+              style: {
+                color: "#fff",
+              },
+              encoding: "utf-8",
+              escape: false,
+            }
+          : {},
       icons: {
         loading: `<img width="50" height="50" src="${loadingImage.src}">`,
       },
     }),
-    [uri, animeInfo, episodeInfo?.tracks],
+    [uri, animeInfo, episodeInfo?.tracks, subOrDub],
   );
 
   return (
     <div
       ref={playerRef}
-      className="w-full h-full lg:max-h-[80vh] max-h-[40vh] min-h-[80vh]"
+      className="w-full h-full min-h-[20vh] sm:min-h-[30vh] max-h-[60vh] md:min-h-[40vh] lg:min-h-[60vh]"
     >
       {uri ? (
-        <ArtPlayer option={options} className="w-full h-full border-none" />
+        <ArtPlayer
+          intro={episodeInfo?.intro}
+          outro={episodeInfo?.outro}
+          tracks={episodeInfo?.tracks}
+          option={options}
+          className="w-full h-full border-none"
+        />
       ) : (
         <div
           className="rounded-lg p-5 w-full h-full"

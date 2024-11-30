@@ -9,6 +9,7 @@ import { ROUTES } from "@/constants/routes";
 import { Episode } from "@/types/episodes";
 import { useAnimeStore } from "@/store/anime-store";
 import { useHasAnimeWatched } from "@/hooks/use-is-anime-watched";
+import { Captions, Mic } from "lucide-react";
 
 type Props = {
   className?: string;
@@ -16,6 +17,7 @@ type Props = {
   showCard?: boolean;
   animeId: string;
   variant?: "card" | "list";
+  subOrDub?: { sub: number; dub: number };
 };
 
 const EpisodeCard = ({
@@ -50,7 +52,7 @@ const EpisodeCard = ({
 
         <div className="absolute inset-0 m-auto h-full w-full bg-gradient-to-t from-[#000000a9] to-transparent"></div>
         <div className="absolute bottom-0 flex flex-col gap-1 px-4 pb-3">
-          <h5 className="line-clamp-2">{`${props.episode.number}. ${props.episode.title}`}</h5>
+          <h5 className="line-clamp-1">{`${props.episode.number}. ${props.episode.title}`}</h5>
           {/* <p className="line-clamp-2">{props.episode.airDate}</p> */}
         </div>
       </div>
@@ -98,7 +100,14 @@ const EpisodeCard = ({
           {/*     className="h-full w-full object-cover" */}
           {/*   /> */}
           {/* </figure> */}
-          <h3>{`${props.episode.number}. Episode ${props.episode.number}`}</h3>
+          <h3>{`Episode ${props.episode.number}`}</h3>
+          {props.subOrDub && props.episode.number <= props.subOrDub.sub && (
+            <Captions className="text-gray-400" />
+          )}
+          {props.subOrDub && props.episode.number <= props.subOrDub.dub && (
+            <Mic className="text-gray-400" />
+          )}
+
           {selectedEpisode === props.episode.episodeId && (
             <span className="absolute bottom-2 right-3 text-xs font-thin">
               Now Playing

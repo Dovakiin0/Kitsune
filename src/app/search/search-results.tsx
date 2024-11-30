@@ -18,7 +18,8 @@ const SearchResults = () => {
   return (
     <div className="flex flex-col gap-10 mt-28 lg:mt-36 pb-20 min-h-[75vh]">
       <div className="text-2xl font-semibold">
-        Search Results for <span className="font-[800]">{searchPhrase}</span>
+        Search Results for{" "}
+        <span className="font-[800]">&quot;{searchPhrase}&quot;</span>
       </div>
       {isLoading && (
         <div className="grid lg:grid-cols-5 grid-cols-2 sm:grid-cols-3 md:grid-cols-4 xl:grid-cols-6 2xl:grid-cols-7 w-full gap-5 content-center">
@@ -37,11 +38,14 @@ const SearchResults = () => {
           <BlurFade key={idx} delay={idx * 0.05} inView>
             <AnimeCard
               title={anime.name}
-              subTitle={anime.rank?.toString()}
+              subTitle={anime.type}
               poster={anime.poster}
               href={`${ROUTES.ANIME_DETAILS}/${anime.id}`}
               className="self-center justify-self-center"
               showGenre={false}
+              episodeCard
+              sub={anime?.episodes?.sub}
+              dub={anime?.episodes?.dub}
             />
           </BlurFade>
         ))}
