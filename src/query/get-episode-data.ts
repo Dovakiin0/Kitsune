@@ -25,7 +25,7 @@ export const useGetEpisodeData = (
 ) => {
   return useQuery({
     queryFn: () => getEpisodeData(episodeId, server, subOrDub),
-    queryKey: [GET_EPISODE_DATA, episodeId],
+    queryKey: [GET_EPISODE_DATA, episodeId, subOrDub],
     refetchOnWindowFocus: false,
     enabled: server !== "",
   });

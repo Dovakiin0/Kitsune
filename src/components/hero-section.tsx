@@ -12,11 +12,12 @@ import { Button } from "./ui/button";
 import parse from "html-react-parser";
 
 import React from "react";
-import { ArrowLeft, ArrowRight } from "lucide-react";
+import { ArrowLeft, ArrowRight, Captions, Mic } from "lucide-react";
 
 import { ROUTES } from "@/constants/routes";
 import { ButtonLink } from "./common/button-link";
 import { SpotlightAnime } from "@/types/anime";
+import { Badge } from "./ui/badge";
 
 type IHeroSectionProps = {
   spotlightAnime: SpotlightAnime[];
@@ -81,8 +82,8 @@ const HeroCarouselItem = ({ anime }: { anime: SpotlightAnime }) => {
     <div
       className={`w-full bg-cover bg-no-repeat bg-center h-[80vh] relative`}
       style={{ backgroundImage: `url(${anime?.poster})` }}
-      // onMouseEnter={handleMouseEnter}
-      // onMouseLeave={handleMouseLeave}
+    // onMouseEnter={handleMouseEnter}
+    // onMouseLeave={handleMouseLeave}
     >
       {/* {isHovered && (
         <div className="absolute inset-0 z-0">
@@ -106,6 +107,22 @@ const HeroCarouselItem = ({ anime }: { anime: SpotlightAnime }) => {
           <div className="space-y-2 lg:w-[40vw]">
             {/* Title and description moved inside the hover area */}
             <h1 className="text-4xl font-black">{anime?.name}</h1>
+
+            <div className="flex flex-row items-center space-x-2 ">
+              {anime.episodes.sub && (
+                <Badge className="bg-red-200 flex flex-row items-center space-x-0.5">
+                  <Captions size={"16"} />
+                  <span>{anime.episodes.sub}</span>
+                </Badge>
+              )}
+              {anime.episodes.dub && (
+                <Badge className="bg-green-200 flex flex-row items-center space-x-0.5">
+                  <Mic size={"16"} />
+                  <span>{anime.episodes.dub}</span>
+                </Badge>
+              )}
+            </div>
+
             <p className="text-lg line-clamp-4">
               {parse(anime?.description as string)}
             </p>

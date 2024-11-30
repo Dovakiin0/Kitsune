@@ -8,6 +8,7 @@ import Link from "next/link";
 import { ROUTES } from "@/constants/routes";
 import { cn } from "@/lib/utils";
 import { useRouter } from "next/navigation";
+import { Button } from "./ui/button";
 
 const SearchBar = ({
   className,
@@ -93,7 +94,7 @@ const SearchBar = ({
                   className="flex items-start gap-4 hover:bg-[#121212] rounded-md p-2 cursor-pointer"
                   onClick={handleAnimeClick} // Clear search value on click
                 >
-                  <div className="h-[6.25rem] w-[5rem] overflow-hidden rounded-md">
+                  <div className="h-[6.25rem] w-[5rem] overflow-hidden rounded-md flex-shrink-0">
                     <Image
                       src={anime.poster}
                       alt={anime.name}
@@ -103,17 +104,27 @@ const SearchBar = ({
                     />
                   </div>
                   <div className="flex flex-col gap-2">
-                    <h3 className="line-clamp-2">
+                    <h3 className="line-clamp-2 text-sm">
                       {!!anime.name ? anime.name : anime.jname}
                     </h3>
                     <div>
                       <div className="text-sm">{anime.type}</div>
-                      <p className="text-xs">{anime.moreInfo.join(", ")}</p>
+                      <p className="text-xs text-gray-300">
+                        {anime.moreInfo?.join(", ")}
+                      </p>
                     </div>
                   </div>
                 </div>
               </Link>
             ))}
+            <Link
+              className="w-full"
+              href={`${ROUTES.SEARCH}?search-key=${encodeURIComponent(searchValue)}`}
+            >
+              <Button className="w-full bg-[#e9376b] text-white">
+                Show More
+              </Button>
+            </Link>
           </div>
         </div>
       )}

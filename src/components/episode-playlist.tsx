@@ -10,9 +10,10 @@ import { useGetAllEpisodes } from "@/query/get-all-episodes";
 type Props = {
   animeId: string;
   title: string;
+  subOrDub?: { sub: number; dub: number };
 };
 
-const EpisodePlaylist = ({ animeId, title }: Props) => {
+const EpisodePlaylist = ({ animeId, title, subOrDub }: Props) => {
   const searchParams = useSearchParams();
 
   const episodeId = searchParams.get("episode");
@@ -72,7 +73,7 @@ const EpisodePlaylist = ({ animeId, title }: Props) => {
   }, [animeId, episodes]);
 
   return (
-    <div className="col-span-1 flex flex-col w-full gap-5 border-[.0313rem] border-secondary rounded-md overflow-hidden lg:max-h-[80vh] max-h-[80vh] min-h-[40vh]">
+    <div className="col-span-1 flex flex-col w-full gap-5 border-[.0313rem] border-secondary rounded-md overflow-hidden min-h-[20vh] sm:min-h-[30vh] max-h-[60vh] md:min-h-[40vh] lg:min-h-[60vh]">
       <div className="h-fit bg-[#18181a] px-5 py-3">
         <h3 className="text-lg font-semibold"> Episode Playlist</h3>
         <span className="text-sm font-thin">{title}</span>
@@ -84,7 +85,12 @@ const EpisodePlaylist = ({ animeId, title }: Props) => {
         {episodes?.episodes.map((episode, idx) => (
           //@ts-expect-error type mismatch
           <div key={idx} ref={(el) => (episodeRefs.current[idx] = el)}>
-            <EpisodeCard variant="list" episode={episode} animeId={animeId} />
+            <EpisodeCard
+              subOrDub={subOrDub}
+              variant="list"
+              episode={episode}
+              animeId={animeId}
+            />
           </div>
         ))}
         {!episodes?.episodes.length && !isLoading && "No Episodes"}

@@ -17,19 +17,19 @@ import useScrollPosition from "@/hooks/use-scroll-position";
 import { Sheet, SheetClose, SheetContent, SheetTrigger } from "./ui/sheet";
 
 const menuItems: Array<{ title: string; href?: string }> = [
-  {
-    title: "Home",
-    href: ROUTES.HOME,
-  },
-  {
-    title: "Catalog",
-  },
+  // {
+  //   title: "Home",
+  //   href: ROUTES.HOME,
+  // },
+  // {
+  //   title: "Catalog",
+  // },
   // {
   //   title: "News",
   // },
-  {
-    title: "Collection",
-  },
+  // {
+  //   title: "Collection",
+  // },
 ];
 
 const NavBar = () => {

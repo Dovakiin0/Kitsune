@@ -8,13 +8,22 @@ import KitsunePlayer from "@/components/kitsune-player";
 import { useGetEpisodeData } from "@/query/get-episode-data";
 import { useGetEpisodeServers } from "@/query/get-episode-servers";
 import { getFallbackServer } from "@/utils/fallback-server";
+import { Captions, Mic } from "lucide-react";
+import { Button } from "@/components/ui/button";
 
 const VideoPlayerSection = () => {
   const { selectedEpisode, anime } = useAnimeStore();
 
   const { data: serversData } = useGetEpisodeServers(selectedEpisode);
 
-  const { serverName, key } = getFallbackServer(serversData);
+  const [serverName, setServerName] = useState<string>("");
+  const [key, setKey] = useState<string>("");
+
+  useEffect(() => {
+    const { serverName, key } = getFallbackServer(serversData);
+    setServerName(serverName);
+    setKey(key);
+  }, [serversData]);
 
   const { data: episodeData, isLoading } = useGetEpisodeData(
     selectedEpisode,
@@ -25,6 +34,13 @@ const VideoPlayerSection = () => {
   const [watchedDetails, setWatchedDetails] = useState<Array<IWatchedAnime>>(
     JSON.parse(localStorage.getItem("watched") as string) || [],
   );
+
+  function changeServer(serverName: string, key: string) {
+    setServerName(serverName);
+    setKey(key);
+    const preference = { serverName, key };
+    localStorage.setItem("serverPreference", JSON.stringify(preference));
+  }
 
   useEffect(() => {
     if (!Array.isArray(watchedDetails)) {
@@ -62,9 +78,9 @@ const VideoPlayerSection = () => {
           const updatedWatchedDetails = watchedDetails.map((watchedAnime) =>
             watchedAnime.anime.id === anime.anime.info.id
               ? {
-                ...watchedAnime,
-                episodes: [...watchedAnime.episodes, selectedEpisode],
-              }
+                  ...watchedAnime,
+                  episodes: [...watchedAnime.episodes, selectedEpisode],
+                }
               : watchedAnime,
           );
 
@@ -81,7 +97,7 @@ const VideoPlayerSection = () => {
 
   if (isLoading || !episodeData)
     return (
-      <div className="h-[28vh] md:h-[80vh] w-full animate-pulse bg-slate-700 rounded-md"></div>
+      <div className="min-h-[20vh] sm:min-h-[30vh] max-h-[60vh] md:min-h-[40vh] lg:min-h-[60vh] w-full animate-pulse bg-slate-700 rounded-md"></div>
     );
 
   return (
@@ -93,7 +109,40 @@ const VideoPlayerSection = () => {
           title: anime.anime.info.name,
           image: anime.anime.info.poster,
         }}
+        subOrDub={key}
       />
+      <div className="bg-[#0f172a] p-5">
+        <div className="flex flex-row items-center space-x-5">
+          <Captions className="text-red-300" />
+          <p className="font-bold text-sm">SUB</p>
+          {serversData?.sub.map((s, i) => (
+            <Button
+              size="sm"
+              key={i}
+              className={`uppercase font-bold ${serverName === s.serverName && key === "sub" && "bg-red-300"}`}
+              onClick={() => changeServer(s.serverName, "sub")}
+            >
+              {s.serverName}
+            </Button>
+          ))}
+        </div>
+        {!!serversData?.dub.length && (
+          <div className="flex flex-row items-center space-x-5 mt-2">
+            <Mic className="text-green-300" />
+            <p className="font-bold text-sm">DUB</p>
+            {serversData?.dub.map((s, i) => (
+              <Button
+                size="sm"
+                key={i}
+                className={`uppercase font-bold ${serverName === s.serverName && key === "dub" && "bg-green-300"}`}
+                onClick={() => changeServer(s.serverName, "dub")}
+              >
+                {s.serverName}
+              </Button>
+            ))}
+          </div>
+        )}
+      </div>
     </>
   );
 };
