@@ -20,7 +20,7 @@ const KitsunePlayer = ({
   subOrDub,
 }: KitsunePlayerProps) => {
   const playerRef = useRef<HTMLDivElement | null>(null); // Ref to hold the player container
-  const uri = `https://api.kitsunee.me/proxy?url=${episodeInfo?.sources[0].url}`;
+  const uri = episodeInfo?.sources[0].url;
 
   useEffect(() => {
     const videoElement = playerRef.current?.querySelector("video");
@@ -47,7 +47,7 @@ const KitsunePlayer = ({
       url: uri,
       customType: {
         //eslint-disable-next-line
-        m3u8: function (video: HTMLMediaElement, url: string, art: any) {
+        m3u8: function(video: HTMLMediaElement, url: string, art: any) {
           if (Hls.isSupported()) {
             if (art.hls) art.hls.destroy();
             const hls = new Hls();
@@ -131,16 +131,16 @@ const KitsunePlayer = ({
       subtitle:
         subOrDub === "sub"
           ? {
-              url: episodeInfo?.tracks.find(
-                (track) => track.label === "English",
-              )?.file,
-              type: "vtt",
-              style: {
-                color: "#fff",
-              },
-              encoding: "utf-8",
-              escape: false,
-            }
+            url: episodeInfo?.tracks.find(
+              (track) => track.label === "English",
+            )?.file,
+            type: "vtt",
+            style: {
+              color: "#fff",
+            },
+            encoding: "utf-8",
+            escape: false,
+          }
           : {},
       icons: {
         loading: `<img width="50" height="50" src="${loadingImage.src}">`,
