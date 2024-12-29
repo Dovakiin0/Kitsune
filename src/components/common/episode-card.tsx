@@ -4,7 +4,6 @@ import React from "react";
 
 import { cn } from "@/lib/utils";
 
-import Link from "next/link";
 import { ROUTES } from "@/constants/routes";
 import { Episode } from "@/types/episodes";
 import { useAnimeStore } from "@/store/anime-store";
