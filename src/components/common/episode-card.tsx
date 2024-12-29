@@ -59,7 +59,7 @@ const EpisodeCard = ({
     );
   } else if (!showCard && variant === "card") {
     return (
-      <Link
+      <a
         href={`${ROUTES.WATCH}?anime=${props.animeId}&episode=${props.episode.episodeId}`}
       >
         <div
@@ -71,11 +71,11 @@ const EpisodeCard = ({
         >
           {`Episode ${props.episode.number}`}
         </div>
-      </Link>
+      </a>
     );
   } else {
     return (
-      <Link
+      <a
         href={`${ROUTES.WATCH}?anime=${props.animeId}&episode=${props.episode.episodeId}`}
       >
         <div
@@ -85,8 +85,8 @@ const EpisodeCard = ({
               ? { backgroundColor: "#18181a" }
               : hasWatchedEpisode
                 ? {
-                  backgroundColor: "#0f172a",
-                }
+                    backgroundColor: "#0f172a",
+                  }
                 : {}
           }
         >
@@ -114,7 +114,7 @@ const EpisodeCard = ({
             </span>
           )}
         </div>
-      </Link>
+      </a>
     );
   }
 };
