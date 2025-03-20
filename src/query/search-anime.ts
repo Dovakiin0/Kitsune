@@ -7,7 +7,7 @@ const searchAnime = async (q: string) => {
   if (q === "") {
     return;
   }
-  const res = await api.get("/search/suggestion", {
+  const res = await api.get("/api/search/suggestion", {
     params: {
       q: q,
     },

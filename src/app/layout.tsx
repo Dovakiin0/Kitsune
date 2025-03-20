@@ -6,6 +6,7 @@ import NavBar from "@/components/navbar";
 import Footer from "@/components/footer";
 import Script from "next/script";
 import QueryProvider from "@/providers/query-provider";
+import { PublicEnvScript } from "next-runtime-env";
 
 import { ThemeProvider } from "@/components/theme-provider";
 
@@ -69,6 +70,7 @@ export default function RootLayout({
 
   gtag('config', 'G-X9RZ58XPH1');`}
       </Script>
+      <PublicEnvScript />
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased max-w-[100vw] overflow-x-hidden`}
       >

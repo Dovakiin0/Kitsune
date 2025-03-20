@@ -4,7 +4,7 @@ import { IEpisodeServers } from "@/types/episodes";
 import { useQuery } from "react-query";
 
 const getEpisodeServers = async (episodeId: string) => {
-  const res = await api.get("/episode/servers", {
+  const res = await api.get("/api/episode/servers", {
     params: {
       animeEpisodeId: decodeURIComponent(episodeId),
     },

@@ -4,50 +4,53 @@ import Artplayer from "artplayer";
 import React, { useRef, useEffect } from "react";
 
 /* eslint-disable @typescript-eslint/no-explicit-any */
+const generateHighlights = (start: any, end: any, label: any) => {
+  if (start == null || end == null || start > end) return [];
+  const highlights = [];
+  for (let time = start; time <= end; time++) {
+    highlights.push({ time, text: `${label}` });
+  }
+  return highlights;
+};
+
+/* eslint-disable @typescript-eslint/no-explicit-any */
 function ArtPlayer({
   intro,
   outro,
   tracks,
   option,
   getInstance,
+  artRef,
   ...rest
 }: any) {
-  const artRef = useRef();
-
-  const trackOptions: Array<{ default: boolean; html: string; url: string }> =
-    [];
-
-  tracks.map((track: { label: string; file: string; kind: string }) => {
-    if (track.kind === "captions") {
-      trackOptions.push({
-        default: track.label === "English",
-        html: track.label,
-        url: track.file,
-      });
-    }
-  });
+  const artInstanceRef = useRef<Artplayer | null>(null);
 
   useEffect(() => {
+    if (!artRef.current) return;
+
+    if (artInstanceRef.current) {
+      artInstanceRef.current.destroy(true);
+    }
+
+    const trackOptions: Array<{ default: boolean; html: string; url: string }> =
+      [];
+
+    tracks.map((track: { label: string; file: string; kind: string }) => {
+      if (track.kind === "captions") {
+        trackOptions.push({
+          default: track.label === "English",
+          html: track.label,
+          url: track.file,
+        });
+      }
+    });
+
     const art = new Artplayer({
       ...option,
       container: artRef.current,
       highlight: [
-        {
-          time: intro?.start,
-          text: "Intro Start",
-        },
-        {
-          time: intro?.end,
-          text: "Intro End",
-        },
-        {
-          time: outro?.start,
-          text: "Outro Start",
-        },
-        {
-          time: outro?.end,
-          text: "Outro End",
-        },
+        ...generateHighlights(intro?.start, intro?.end, "Intro"),
+        ...generateHighlights(outro?.start, outro?.end, "Outro"),
       ],
       settings: [
         {
@@ -78,9 +81,11 @@ function ArtPlayer({
       ],
     });
 
+    artInstanceRef.current = art;
+
     art.on("resize", () => {
       art.subtitle.style({
-        fontSize: art.height * 0.05 + "px",
+        fontSize: art.height * 0.04 + "px",
       });
     });
 
@@ -89,12 +94,12 @@ function ArtPlayer({
     }
 
     return () => {
-      if (art && art.destroy) {
+      if (artInstanceRef.current) {
         art.destroy(true);
       }
     };
     //eslint-disable-next-line
-  }, [option, trackOptions]);
+  }, [option, intro, outro, tracks, artRef, getInstance]);
 
   return <div ref={artRef} {...rest} style={{ background: "none" }}></div>;
 }

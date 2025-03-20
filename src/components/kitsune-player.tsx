@@ -5,8 +5,9 @@ import ArtPlayer from "./art-player";
 import Hls from "hls.js";
 import { IEpisodeSource } from "@/types/episodes";
 import loadingImage from "@/assets/genkai.gif";
-import artplayerPluginHlsControl from "artplayer-plugin-hls-control";
+// import artplayerPluginHlsControl from "artplayer-plugin-hls-control";
 import artplayerPluginAmbilight from "artplayer-plugin-ambilight";
+import { env } from "next-runtime-env";
 
 type KitsunePlayerProps = {
   episodeInfo: IEpisodeSource;
@@ -20,7 +21,12 @@ const KitsunePlayer = ({
   subOrDub,
 }: KitsunePlayerProps) => {
   const playerRef = useRef<HTMLDivElement | null>(null); // Ref to hold the player container
-  const uri = episodeInfo?.sources[0].url;
+  const baseURI = `${env("NEXT_PUBLIC_PROXY_URL")}/m3u8-proxy`;
+  const url = encodeURIComponent(episodeInfo?.sources[0].url);
+  const header = encodeURIComponent(
+    JSON.stringify({ Referer: episodeInfo?.headers.Referer }),
+  );
+  const uri = `${baseURI}?url=${url}&headers=${header}`;
 
   useEffect(() => {
     const videoElement = playerRef.current?.querySelector("video");
@@ -43,11 +49,10 @@ const KitsunePlayer = ({
 
   const options = useMemo(
     () => ({
-      container: playerRef.current,
       url: uri,
       customType: {
         //eslint-disable-next-line
-        m3u8: function(video: HTMLMediaElement, url: string, art: any) {
+        m3u8: function (video: HTMLMediaElement, url: string, art: any) {
           if (Hls.isSupported()) {
             if (art.hls) art.hls.destroy();
             const hls = new Hls();
@@ -63,6 +68,32 @@ const KitsunePlayer = ({
         },
       },
       plugins: [
+        // artplayerPluginHlsControl({
+        //   quality: {
+        //     // Show qualitys in control
+        //     control: true,
+        //     // Show qualitys in setting
+        //     setting: true,
+        //     // Get the quality name from level
+        //     //eslint-disable-next-line
+        //     getName: (level: any) => level.height + "P",
+        //     // I18n
+        //     title: "Quality",
+        //     auto: "Auto",
+        //   },
+        //   audio: {
+        //     // Show audios in control
+        //     control: true,
+        //     // Show audios in setting
+        //     setting: true,
+        //     // Get the audio name from track
+        //     //eslint-disable-next-line
+        //     getName: (track: any) => track.name,
+        //     // I18n
+        //     title: "Audio",
+        //     auto: "Auto",
+        //   },
+        // }),
         artplayerPluginAmbilight({
           blur: "30px",
           opacity: 1,
@@ -70,34 +101,7 @@ const KitsunePlayer = ({
           duration: 0.3,
           zIndex: -1,
         }),
-        artplayerPluginHlsControl({
-          quality: {
-            // Show qualitys in control
-            control: true,
-            // Show qualitys in setting
-            setting: true,
-            // Get the quality name from level
-            //eslint-disable-next-line
-            getName: (level: any) => level.height + "P",
-            // I18n
-            title: "Quality",
-            auto: "Auto",
-          },
-          audio: {
-            // Show audios in control
-            control: true,
-            // Show audios in setting
-            setting: true,
-            // Get the audio name from track
-            //eslint-disable-next-line
-            getName: (track: any) => track.name,
-            // I18n
-            title: "Audio",
-            auto: "Auto",
-          },
-        }),
       ],
-      title: animeInfo.title,
       poster: animeInfo.image,
       volume: 1,
       isLive: false,
@@ -123,39 +127,36 @@ const KitsunePlayer = ({
       autoPlayback: true,
       airplay: true,
       theme: "#F5316F",
-      whitelist: ["*"],
       moreVideoAttr: {
         crossOrigin: "anonymous",
       },
-
       subtitle:
         subOrDub === "sub"
           ? {
-            url: episodeInfo?.tracks.find(
-              (track) => track.label === "English",
-            )?.file,
-            type: "vtt",
-            style: {
-              color: "#fff",
-            },
-            encoding: "utf-8",
-            escape: false,
-          }
+              url: episodeInfo?.tracks.find(
+                (track) => track.label === "English",
+              )?.file,
+              type: "vtt",
+              style: {
+                color: "#fff",
+              },
+              encoding: "utf-8",
+              escape: false,
+            }
           : {},
       icons: {
         loading: `<img width="50" height="50" src="${loadingImage.src}">`,
       },
     }),
-    [uri, animeInfo, episodeInfo?.tracks, subOrDub],
+    [uri, animeInfo.image, subOrDub, episodeInfo?.tracks],
   );
 
   return (
-    <div
-      ref={playerRef}
-      className="w-full h-full min-h-[20vh] sm:min-h-[30vh] max-h-[60vh] md:min-h-[40vh] lg:min-h-[60vh]"
-    >
+    <div className="w-full h-full min-h-[20vh] sm:min-h-[30vh] max-h-[60vh] md:min-h-[40vh] lg:min-h-[60vh]">
       {uri ? (
         <ArtPlayer
+          key={uri}
+          artRef={playerRef}
           intro={episodeInfo?.intro}
           outro={episodeInfo?.outro}
           tracks={episodeInfo?.tracks}

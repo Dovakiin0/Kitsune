@@ -9,6 +9,7 @@ import { Episode } from "@/types/episodes";
 import { useAnimeStore } from "@/store/anime-store";
 import { useHasAnimeWatched } from "@/hooks/use-is-anime-watched";
 import { Captions, Mic } from "lucide-react";
+import Link from "next/link";
 
 type Props = {
   className?: string;
@@ -58,7 +59,7 @@ const EpisodeCard = ({
     );
   } else if (!showCard && variant === "card") {
     return (
-      <a
+      <Link
         href={`${ROUTES.WATCH}?anime=${props.animeId}&episode=${props.episode.episodeId}`}
       >
         <div
@@ -70,11 +71,11 @@ const EpisodeCard = ({
         >
           {`Episode ${props.episode.number}`}
         </div>
-      </a>
+      </Link>
     );
   } else {
     return (
-      <a
+      <Link
         href={`${ROUTES.WATCH}?anime=${props.animeId}&episode=${props.episode.episodeId}`}
       >
         <div
@@ -113,7 +114,7 @@ const EpisodeCard = ({
             </span>
           )}
         </div>
-      </a>
+      </Link>
     );
   }
 };

@@ -8,7 +8,7 @@ const getEpisodeData = async (
   server: string | undefined,
   subOrDub: string,
 ) => {
-  const res = await api.get("/episode/sources", {
+  const res = await api.get("/api/episode/sources", {
     params: {
       animeEpisodeId: decodeURIComponent(episodeId),
       server: server,

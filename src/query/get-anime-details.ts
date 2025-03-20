@@ -4,7 +4,7 @@ import { IAnimeDetails } from "@/types/anime-details";
 import { useQuery } from "react-query";
 
 const getAnimeDetails = async (animeId: string) => {
-  const res = await api.get("/anime/" + animeId);
+  const res = await api.get("/api/anime/" + animeId);
   return res.data.data as IAnimeDetails;
 };
 

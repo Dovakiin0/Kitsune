@@ -15,10 +15,11 @@ import AnimeEpisodes from "@/components/anime-episodes";
 import CharacterCard from "@/components/common/character-card";
 import { ROUTES } from "@/constants/routes";
 import WatchTrailer from "@/components/watch-trailer";
+import { env } from "next-runtime-env";
 
 const Page = async ({ params }: { params: { slug: string } }) => {
   const anime: IAnimeDetails = await api
-    .get(`/anime/${params.slug}`)
+    .get(`${env("BASE_URL")}/api/anime/${params.slug}`)
     .then((res) => {
       return res.data.data;
     });
