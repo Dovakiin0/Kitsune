@@ -1,6 +1,6 @@
 import React, { useState, useRef } from "react";
 import { Input } from "./ui/input";
-import { SearchIcon } from "lucide-react";
+import { SearchIcon, SlidersHorizontal } from "lucide-react";
 import useDebounce from "@/hooks/use-debounce";
 import { useSearchAnime } from "@/query/search-anime";
 import Image from "next/image";
@@ -9,6 +9,7 @@ import { ROUTES } from "@/constants/routes";
 import { cn } from "@/lib/utils";
 import { useRouter } from "next/navigation";
 import { Button } from "./ui/button";
+import Tooltip from "./common/tooltip";
 
 const SearchBar = ({
   className,
@@ -70,6 +71,14 @@ const SearchBar = ({
         value={searchValue}
         onKeyDown={handleKeyDown}
       />
+      <Button
+        variant="secondary"
+        className="absolute  text-white right-2 top-1/2 -translate-y-1/2 h-2/3"
+      >
+        <Tooltip side="bottom" content="Filter">
+          <SlidersHorizontal className="h-4 w-4" />
+        </Tooltip>
+      </Button>
       {isFocused && searchValue && (
         <div
           ref={resultsRef}
