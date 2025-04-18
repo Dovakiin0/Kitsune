@@ -58,6 +58,7 @@ const NavBar = () => {
             avatar: user.record.avatar,
             collectionId: user.record.collectionId,
             collectionName: user.record.collectionName,
+            autoSkip: user.record.autoSkip,
           });
         }
       }

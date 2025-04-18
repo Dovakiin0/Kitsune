@@ -6,48 +6,56 @@ import AnimeCard from "./anime-card";
 import { ROUTES } from "@/constants/routes";
 import BlurFade from "./ui/blur-fade";
 import { IAnime } from "@/types/anime";
+import { History } from "lucide-react";
+import useBookMarks, { WatchHistory } from "@/hooks/use-get-bookmark";
+import { useAuthStore } from "@/store/auth-store";
 
 type Props = {
   loading: boolean;
 };
 
 interface WatchedAnime extends IAnime {
-  episode: string;
+  episode: WatchHistory;
 }
 
 const ContinueWatching = (props: Props) => {
   const [anime, setAnime] = useState<WatchedAnime[] | null>(null);
 
+  const { auth } = useAuthStore();
+  const { bookmarks } = useBookMarks({
+    page: 1,
+    per_page: 8,
+    status: "watching",
+  });
+
   useEffect(() => {
-    if (typeof window !== "undefined") {
-      const storedData = localStorage.getItem("watched");
-      const watchedAnimes: {
-        anime: { id: string; title: string; poster: string };
-        episodes: string[];
-      }[] = storedData ? JSON.parse(storedData) : [];
-
-      if (!Array.isArray(watchedAnimes)) {
-        localStorage.removeItem("watched");
-        return;
+    if (!auth) {
+      return;
+    } else {
+      if (bookmarks && bookmarks.length > 0) {
+        const animes = bookmarks.map((anime) => ({
+          id: anime.animeId,
+          name: anime.animeTitle,
+          poster: anime.thumbnail,
+          episode: anime.expand.watchHistory.sort(
+            (a, b) => b.episodeNumber - a.episodeNumber,
+          )[0],
+        }));
+        setAnime(animes as WatchedAnime[]);
       }
-
-      const animes = watchedAnimes.reverse().map((anime) => ({
-        id: anime.anime.id,
-        name: anime.anime.title,
-        poster: anime.anime.poster,
-        episode: anime.episodes[anime.episodes.length - 1],
-      }));
-      setAnime(animes as WatchedAnime[]);
     }
-  }, []);
+  }, [auth, bookmarks]);
 
   if (props.loading) return <LoadingSkeleton />;
 
   if ((!anime || !anime.length) && !props.loading) return <></>;
 
   return (
-    <Container className="flex flex-col gap-5 py-10 items-center lg:items-start  ">
-      <h5 className="text-2xl font-bold">Continue Watching</h5>
+    <Container className="flex flex-col gap-5 py-10 items-center lg:items-start">
+      <div className="flex items-center gap-2">
+        <History />
+        <h5 className="text-2xl font-bold">Continue Watching</h5>
+      </div>
       <div className="grid lg:grid-cols-5 grid-cols-2 sm:grid-cols-3 md:grid-cols-4 xl:grid-cols-6 2xl:grid-cols-7 w-full gap-5 content-center">
         {anime?.map((ani, idx) => (
           <BlurFade key={idx} delay={idx * 0.05} inView>
@@ -55,7 +63,8 @@ const ContinueWatching = (props: Props) => {
               title={ani.name}
               poster={ani.poster}
               className="self-center justify-self-center"
-              href={`${ROUTES.WATCH}?anime=${ani.id}&episode=${ani.episode}`}
+              href={`${ROUTES.WATCH}?anime=${ani.id}&episode=${ani.episode.episodeId}`}
+              watchDetail={ani.episode}
             />
           </BlurFade>
         ))}

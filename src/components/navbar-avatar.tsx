@@ -37,15 +37,6 @@ function NavbarAvatar({ auth }: Props) {
               <p>Profile</p>
             </Link>
           </div>
-          <div className="border-b border-gray-600 pb-2">
-            <Link
-              href="/profile"
-              className="flex flex-row space-x-2 items-center"
-            >
-              <ListVideo size="20" />
-              <p>My List</p>
-            </Link>
-          </div>
 
           <div
             className="flex flex-row space-x-2 items-center cursor-pointer "

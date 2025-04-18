@@ -5,15 +5,23 @@ import React, { useEffect, useRef } from "react";
 import { useSearchParams } from "next/navigation";
 
 import { useAnimeStore } from "@/store/anime-store";
-import { useGetAllEpisodes } from "@/query/get-all-episodes";
+import { IEpisodes } from "@/types/episodes";
 
 type Props = {
   animeId: string;
   title: string;
   subOrDub?: { sub: number; dub: number };
+  episodes: IEpisodes | null;
+  isLoading: boolean;
 };
 
-const EpisodePlaylist = ({ animeId, title, subOrDub }: Props) => {
+const EpisodePlaylist = ({
+  animeId,
+  title,
+  subOrDub,
+  episodes,
+  isLoading,
+}: Props) => {
   const searchParams = useSearchParams();
 
   const episodeId = searchParams.get("episode");
@@ -21,8 +29,6 @@ const EpisodePlaylist = ({ animeId, title, subOrDub }: Props) => {
   const isLatestEpisode = searchParams.get("type");
 
   const { setSelectedEpisode } = useAnimeStore();
-
-  const { data: episodes, isLoading } = useGetAllEpisodes(animeId);
 
   const scrollContainerRef = useRef<HTMLDivElement | null>(null);
   const episodeRefs = useRef<(HTMLDivElement | null)[]>([]);

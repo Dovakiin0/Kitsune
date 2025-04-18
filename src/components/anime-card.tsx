@@ -2,9 +2,11 @@ import React from "react";
 import Link from "next/link";
 import Image from "next/image";
 
-import { cn } from "@/lib/utils";
+import { cn, formatSecondsToMMSS } from "@/lib/utils";
 import { Badge } from "./ui/badge";
 import { Captions, Mic } from "lucide-react";
+import { WatchHistory } from "@/hooks/use-get-bookmark";
+import { Progress } from "./ui/progress";
 
 type Props = {
   className?: string;
@@ -18,6 +20,7 @@ type Props = {
   variant?: "sm" | "lg";
   href?: string;
   showGenre?: boolean;
+  watchDetail?: WatchHistory;
 };
 
 const AnimeCard = ({
@@ -26,16 +29,30 @@ const AnimeCard = ({
   variant = "sm",
   ...props
 }: Props) => {
+  const safeCurrent =
+    typeof props.watchDetail?.current === "number"
+      ? props.watchDetail.current
+      : 0;
+  const safeTotal =
+    typeof props.watchDetail?.timestamp === "number" &&
+    props.watchDetail.timestamp > 0
+      ? props.watchDetail.timestamp
+      : 0;
+
+  const clampedCurrent = Math.min(safeCurrent, safeTotal);
+
+  const percentage = safeTotal > 0 ? (clampedCurrent / safeTotal) * 100 : 0;
+
   return (
     <Link href={props.href as string}>
       <div
         className={cn([
           "rounded-xl overflow-hidden relative cursor-pointer hover:scale-105 duration-300",
           variant === "sm" &&
-          "h-[12rem] min-[320px]:h-[16.625rem] sm:h-[18rem] max-w-[12.625rem] md:min-w-[12rem]",
+            "h-[12rem] min-[320px]:h-[16.625rem] sm:h-[18rem] max-w-[12.625rem] md:min-w-[12rem]",
           ,
           variant === "lg" &&
-          "max-w-[12.625rem] md:max-w-[18.75rem] h-auto md:h-[25rem] shrink-0 lg:w-[18.75rem]",
+            "max-w-[12.625rem] md:max-w-[18.75rem] h-auto md:h-[25rem] shrink-0 lg:w-[18.75rem]",
           props.className,
         ])}
       >
@@ -52,6 +69,16 @@ const AnimeCard = ({
             <div className="absolute inset-0 m-auto h-full w-full bg-gradient-to-t from-accent to-transparent"></div>
             <div className="absolute bottom-0 flex flex-col gap-1 px-4 pb-3">
               <h5 className="line-clamp-1">{props.title}</h5>
+              {props.watchDetail && (
+                <>
+                  <p className="text-xs text-gray-400">
+                    {formatSecondsToMMSS(props.watchDetail.current)} /
+                    {formatSecondsToMMSS(props.watchDetail.timestamp)} - Episode{" "}
+                    {props.watchDetail.episodeNumber}
+                  </p>
+                  <Progress value={percentage} />
+                </>
+              )}
               {props.episodeCard ? (
                 <div className="flex flex-row items-center space-x-2 ">
                   {props.sub && (

@@ -49,6 +49,7 @@ function LoginPopoverButton({}: Props) {
           avatar: pb.authStore.record.avatar,
           collectionId: pb.authStore.record.collectionId,
           collectionName: pb.authStore.record.collectionName,
+          autoSkip: pb.authStore.record.autoSkip,
         });
       }
     } catch (e: any) {
@@ -93,6 +94,7 @@ function LoginPopoverButton({}: Props) {
           avatar: pb.authStore.record.avatar,
           collectionId: pb.authStore.record.collectionId,
           collectionName: pb.authStore.record.collectionName,
+          autoSkip: pb.authStore.record.autoSkip,
         });
       }
     } catch (e) {
@@ -127,6 +129,7 @@ function LoginPopoverButton({}: Props) {
         avatar: pb.authStore.record.avatar,
         collectionId: pb.authStore.record.collectionId,
         collectionName: pb.authStore.record.collectionName,
+        autoSkip: pb.authStore.record.autoSkip,
       });
     }
   };
