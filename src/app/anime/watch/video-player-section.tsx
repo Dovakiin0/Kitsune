@@ -78,9 +78,9 @@ const VideoPlayerSection = () => {
           const updatedWatchedDetails = watchedDetails.map((watchedAnime) =>
             watchedAnime.anime.id === anime.anime.info.id
               ? {
-                  ...watchedAnime,
-                  episodes: [...watchedAnime.episodes, selectedEpisode],
-                }
+                ...watchedAnime,
+                episodes: [...watchedAnime.episodes, selectedEpisode],
+              }
               : watchedAnime,
           );
 

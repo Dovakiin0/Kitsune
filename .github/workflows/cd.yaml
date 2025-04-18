@@ -42,12 +42,5 @@ jobs:
           key: ${{ secrets.SSH_PRIVATE_KEY }}
           port: 22
           script: |
-            # Pull the latest Docker image
-            docker pull dovakiin0/kitsune-v2:latest
-
-            # Stop and remove the existing container
-            docker stop kitsune-v2 || true
-            docker rm kitsune-v2 || true
-
-            # Run the new container
-            docker run -d --name kitsune-v2 -p 3000:3000 dovakiin0/kitsune-v2
+            cd ~/kitsune
+            docker compose up --detach --pull always

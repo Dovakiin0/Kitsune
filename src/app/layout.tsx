@@ -10,6 +10,8 @@ import { PublicEnvScript } from "next-runtime-env";
 
 import { ThemeProvider } from "@/components/theme-provider";
 
+import { Toaster } from "@/components/ui/sonner";
+
 const geistSans = localFont({
   src: "./fonts/GeistVF.woff",
   variable: "--font-geist-sans",
@@ -58,21 +60,23 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <Script
-        src="https://www.googletagmanager.com/gtag/js?id=G-X9RZ58XPH1"
-        strategy="afterInteractive"
-      />
-      <Script id="google-analytics" strategy="afterInteractive">
-        {`
-  window.dataLayer = window.dataLayer || [];
-  function gtag(){dataLayer.push(arguments);}
-  gtag('js', new Date());
+      <head>
+        <Script
+          src="https://www.googletagmanager.com/gtag/js?id=G-X9RZ58XPH1"
+          strategy="afterInteractive"
+        />
+        <Script id="google-analytics" strategy="afterInteractive">
+          {`
+          window.dataLayer = window.dataLayer || [];
+          function gtag(){dataLayer.push(arguments);}
+          gtag('js', new Date());
 
-  gtag('config', 'G-X9RZ58XPH1');`}
-      </Script>
-      <PublicEnvScript />
+          gtag('config', 'G-X9RZ58XPH1');`}
+        </Script>
+        <PublicEnvScript />
+      </head>
       <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased max-w-[100vw] overflow-x-hidden`}
+        className={`${geistSans.className} antialiased max-w-[100vw] overflow-x-hidden`}
       >
         <link rel="icon" href="/icon.png" type="image/png" sizes="192x192" />
         <ThemeProvider
@@ -87,6 +91,7 @@ export default function RootLayout({
             <Footer />
           </QueryProvider>
         </ThemeProvider>
+        <Toaster />
       </body>
     </html>
   );

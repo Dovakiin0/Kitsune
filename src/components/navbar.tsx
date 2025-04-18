@@ -9,12 +9,17 @@ import { Separator } from "./ui/separator";
 
 import { nightTokyo } from "@/utils/fonts";
 import { ROUTES } from "@/constants/routes";
-import React, { ReactNode, useState } from "react";
+import React, { ReactNode, useEffect, useState } from "react";
 
 import SearchBar from "./search-bar";
 import { MenuIcon, X } from "lucide-react";
 import useScrollPosition from "@/hooks/use-scroll-position";
 import { Sheet, SheetClose, SheetContent, SheetTrigger } from "./ui/sheet";
+import LoginPopoverButton from "./login-popover-button";
+import { useAuthStore } from "@/store/auth-store";
+import Avatar from "./common/avatar";
+import { pb } from "@/lib/pocketbase";
+import NavbarAvatar from "./navbar-avatar";
 
 const menuItems: Array<{ title: string; href?: string }> = [
   // {
@@ -33,9 +38,32 @@ const menuItems: Array<{ title: string; href?: string }> = [
 ];
 
 const NavBar = () => {
+  const auth = useAuthStore();
   const { y } = useScrollPosition();
   const isHeaderFixed = true;
   const isHeaderSticky = y > 0;
+
+  useEffect(() => {
+    const refreshAuth = async () => {
+      const auth_token = JSON.parse(
+        localStorage.getItem("pocketbase_auth") as string,
+      );
+      if (auth_token) {
+        const user = await pb.collection("users").authRefresh();
+        if (user) {
+          auth.setAuth({
+            id: user.record.id,
+            email: user.record.email,
+            username: user.record.username,
+            avatar: user.record.avatar,
+            collectionId: user.record.collectionId,
+            collectionName: user.record.collectionName,
+          });
+        }
+      }
+    };
+    refreshAuth();
+  }, []);
 
   return (
     <div
@@ -70,8 +98,10 @@ const NavBar = () => {
             </Link>
           ))}
         </div>
-        <SearchBar className="hidden w-1/3 lg:flex" />
-
+        <div className="flex w-1/3 items-center gap-5">
+          <SearchBar className="hidden lg:flex" />
+          {auth.auth ? <NavbarAvatar auth={auth} /> : <LoginPopoverButton />}
+        </div>
         <div className="lg:hidden">
           <MobileMenuSheet trigger={<MenuIcon />} />
         </div>
