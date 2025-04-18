@@ -207,8 +207,8 @@ function LoginPopoverButton({}: Props) {
                 onChange={(e) =>
                   setFormData({ ...formData, username: e.target.value })
                 }
-                type="email"
-                placeholder="Enter your email"
+                type="text"
+                placeholder="Enter your username"
               />
             </div>
             <div>
