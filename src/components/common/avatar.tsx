@@ -9,15 +9,24 @@ import { env } from "next-runtime-env";
 type Props = {
   url?: string;
   username?: string;
-  collectionID: string;
+  collectionID?: string;
   id?: string;
+  className?: string;
+  onClick?: () => void;
 };
 
-function Avatar({ url, username, id, collectionID }: Props) {
+function Avatar({
+  url,
+  username,
+  id,
+  className,
+  collectionID,
+  onClick,
+}: Props) {
   const src = `${env("NEXT_PUBLIC_POCKETBASE_URL")}/api/files/${collectionID}/${id}/${url}`;
 
   return (
-    <AvatarCN>
+    <AvatarCN className={className} onClick={onClick}>
       <AvatarImage src={src} alt={username} />
       <AvatarFallback>
         {username?.charAt(0).toUpperCase()}

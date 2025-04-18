@@ -7,6 +7,7 @@ export type IAuth = {
   username: string;
   collectionId: string;
   collectionName: string;
+  autoSkip: boolean;
 };
 
 export interface IAuthStore {
