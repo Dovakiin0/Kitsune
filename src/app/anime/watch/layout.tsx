@@ -130,21 +130,23 @@ const Layout = (props: Props) => {
     anime?.anime.info && (
       <Container className="mt-[6.5rem] space-y-10 pb-20">
         <div className="grid lg:grid-cols-4 grid-cols-1 gap-y-5 gap-x-10 w-full">
-          <div className="lg:col-span-3 col-span-1 mb-32 lg:mb-0">
+          <div className="lg:col-span-3 col-span-1 lg:mb-0">
             {props.children}
           </div>
-
-          <EpisodePlaylist
-            animeId={animeId as string}
-            title={
-              !!anime?.anime.info.name
-                ? anime.anime.info.name
-                : (anime?.anime.moreInfo.japanese as string)
-            }
-            subOrDub={anime?.anime.info.stats.episodes}
-            episodes={episodes!}
-            isLoading={episodeLoading}
-          />
+          {episodes && (
+            <EpisodePlaylist
+              animeId={animeId as string}
+              title={
+                !!anime?.anime.info.name
+                  ? anime.anime.info.name
+                  : (anime?.anime.moreInfo.japanese as string)
+              }
+              subOrDub={anime?.anime.info.stats.episodes}
+              episodes={episodes}
+              isLoading={episodeLoading}
+              bookmarks={bookmarks}
+            />
+          )}
         </div>
         <div className="flex md:flex-row flex-col gap-5 -mt-5">
           <AnimeCard

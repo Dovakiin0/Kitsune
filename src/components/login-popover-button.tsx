@@ -17,7 +17,7 @@ type FormData = {
   confirm_password: string;
 };
 
-function LoginPopoverButton({}: Props) {
+function LoginPopoverButton({ }: Props) {
   const auth = useAuthStore();
   const [formData, setFormData] = useState<FormData>({
     username: "",
@@ -146,7 +146,7 @@ function LoginPopoverButton({}: Props) {
       </PopoverTrigger>
       <PopoverContent
         side="bottom"
-        className="bg-black bg-opacity-50 backdrop-blur-sm w-[300px] p-4"
+        className="bg-black bg-opacity-50 backdrop-blur-sm w-[300px] mt-4 mr-4 p-4"
       >
         <Tabs defaultValue="login">
           <TabsList>

@@ -99,12 +99,13 @@ const NavBar = () => {
             </Link>
           ))}
         </div>
-        <div className="flex w-1/3 items-center gap-5">
-          <SearchBar className="hidden lg:flex" />
+        <div className="w-1/3 hidden lg:flex items-center gap-5">
+          <SearchBar />
           {auth.auth ? <NavbarAvatar auth={auth} /> : <LoginPopoverButton />}
         </div>
-        <div className="lg:hidden">
+        <div className="lg:hidden flex items-center gap-5">
           <MobileMenuSheet trigger={<MenuIcon />} />
+          {auth.auth ? <NavbarAvatar auth={auth} /> : <LoginPopoverButton />}
         </div>
       </Container>
     </div>

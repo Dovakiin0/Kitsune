@@ -20,7 +20,7 @@ type Props = {
   variant?: "sm" | "lg";
   href?: string;
   showGenre?: boolean;
-  watchDetail?: WatchHistory;
+  watchDetail?: WatchHistory | null;
 };
 
 const AnimeCard = ({
@@ -72,9 +72,9 @@ const AnimeCard = ({
               {props.watchDetail && (
                 <>
                   <p className="text-xs text-gray-400">
+                    Episode {props.watchDetail.episodeNumber} -
                     {formatSecondsToMMSS(props.watchDetail.current)} /
-                    {formatSecondsToMMSS(props.watchDetail.timestamp)} - Episode{" "}
-                    {props.watchDetail.episodeNumber}
+                    {formatSecondsToMMSS(props.watchDetail.timestamp)}
                   </p>
                   <Progress value={percentage} />
                 </>

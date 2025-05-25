@@ -93,13 +93,13 @@ function KitsunePlayer({
   const uri = useMemo(() => {
     const firstSourceUrl = episodeInfo?.sources?.[0]?.url;
     const referer = episodeInfo?.headers?.Referer;
-    if (!firstSourceUrl || !referer) return null; // Cannot construct URI
+    if (!firstSourceUrl || !referer) return null;
 
     try {
-      const baseURI = `${env("NEXT_PUBLIC_PROXY_URL")}/m3u8-proxy`; // Add fallback for env
+      const baseURI = `${env("NEXT_PUBLIC_PROXY_URL")}/m3u8-proxy`;
       const url = encodeURIComponent(firstSourceUrl);
-      const header = encodeURIComponent(JSON.stringify({ Referer: referer }));
-      return `${baseURI}?url=${url}&headers=${header}`;
+      // const header = encodeURIComponent(JSON.stringify({ Referer: referer }));
+      return `${baseURI}?url=${url}`;
     } catch (error) {
       console.error("Error constructing proxy URI:", error);
       return null;
@@ -447,35 +447,35 @@ function KitsunePlayer({
         ),
       ],
       poster: animeInfo.image,
-      volume: 0.8, // Start slightly lower
+      volume: 0.8,
       isLive: false,
       muted: false,
-      autoplay: true, // Be cautious with autoplay policy
+      autoplay: true,
       autoOrientation: true,
       pip: true,
-      autoSize: false, // Usually false for fixed containers
+      autoSize: false,
       autoMini: false,
       screenshot: true,
-      setting: true, // Enable settings panel
+      setting: true,
       loop: false,
       flip: true,
-      playbackRate: true, // Enable controls
-      aspectRatio: true, // Enable controls
+      playbackRate: true,
+      aspectRatio: true,
       fullscreen: true,
       fullscreenWeb: true,
-      subtitleOffset: true, // Allow user adjustment
+      subtitleOffset: true,
       miniProgressBar: false,
-      mutex: true, // Pause other players
-      backdrop: true, // Click backdrop to pause
+      mutex: true,
+      backdrop: true,
       playsInline: true,
       autoPlayback: true,
       airplay: true,
-      theme: "#F5316F", // Your theme color
+      theme: "#F5316F",
       moreVideoAttr: { crossOrigin: "anonymous" },
-      subtitle: subtitleConfig, // Assign the calculated subtitle config
+      subtitle: subtitleConfig,
       icons: {
         loading: `<img width="60" height="60" src="${loadingImage.src}">`,
-      }, // Custom loading icon
+      },
     };
 
     // --- Initialize ArtPlayer ---
@@ -536,9 +536,9 @@ function KitsunePlayer({
         if (inIntro || inOutro) {
           // Show the button
           if (manualSkip.style?.display === "none") {
-            if (manualSkip.style) manualSkip.style.display = "inline-flex"; // Or 'flex' depending on styling
+            if (manualSkip.style) manualSkip.style.display = "inline-flex";
           }
-          // Update text/tooltip (optional but good)
+          // Update text/tooltip
           const skipText = inIntro ? "Intro" : "Outro";
           // Update HTML text if needed (more complex, might need querySelector)
           const textElement = manualSkip.querySelector(".art-skip-text");
@@ -621,13 +621,13 @@ function KitsunePlayer({
       ) {
         console.log(`Player ready, seeking to initial timestamp: ${seekTime}`);
         // Optional: Add a very small delay for HLS stability if needed
-        // setTimeout(() => {
-        if (artInstanceRef.current) {
-          // Check if instance still exists
-          artInstanceRef.current.seek = seekTime;
-        }
-        // }, 100); // 100ms delay example
-        initialSeekTimeRef.current = null; // --- Important: Seek only once ---
+        setTimeout(() => {
+          if (artInstanceRef.current) {
+            // Check if instance still exists
+            artInstanceRef.current.seek = seekTime;
+          }
+        }, 100);
+        initialSeekTimeRef.current = null;
       } else {
         console.log(
           "Player ready, not seeking (no valid initial time found or near end).",
@@ -762,7 +762,7 @@ function KitsunePlayer({
   return (
     <div
       className={cn(
-        "relative w-full h-auto aspect-video max-h-[calc(100vh-150px)] bg-black overflow-hidden", // Added relative and overflow-hidden
+        "relative w-full h-auto aspect-video lg:max-h-[calc(100vh-150px)] bg-black overflow-hidden", // Added relative and overflow-hidden
         rest.className ?? "",
       )}
     >

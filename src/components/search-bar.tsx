@@ -98,7 +98,7 @@ const SearchBar = ({
               })}
 
             {searchResults?.map((anime) => (
-              <Link key={anime.id} href={ROUTES.ANIME_DETAILS + "/" + anime.id}>
+              <a key={anime.id} href={ROUTES.ANIME_DETAILS + "/" + anime.id}>
                 <div
                   className="flex items-start gap-4 hover:bg-[#121212] rounded-md p-2 cursor-pointer"
                   onClick={handleAnimeClick} // Clear search value on click
@@ -124,7 +124,7 @@ const SearchBar = ({
                     </div>
                   </div>
                 </div>
-              </Link>
+              </a>
             ))}
             <Link
               className="w-full"

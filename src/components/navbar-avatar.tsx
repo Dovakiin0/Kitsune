@@ -3,7 +3,7 @@ import Avatar from "./common/avatar";
 import { IAuthStore } from "@/store/auth-store";
 import { Popover, PopoverContent, PopoverTrigger } from "./ui/popover";
 import Link from "next/link";
-import { User, LogOut, ListVideo } from "lucide-react";
+import { User, LogOut } from "lucide-react";
 import { pb } from "@/lib/pocketbase";
 
 type Props = {
@@ -22,7 +22,7 @@ function NavbarAvatar({ auth }: Props) {
             collectionID={auth.auth.collectionId}
           />
         </PopoverTrigger>
-        <PopoverContent className="bg-black bg-opacity-50 backdrop-blur-sm w-[200px] text-sm flex flex-col space-y-2">
+        <PopoverContent className="bg-black bg-opacity-50 backdrop-blur-sm w-[200px] mt-4 mr-4 text-sm flex flex-col space-y-2">
           <div className="mb-2">
             <p>
               Hello, <span className="text-red-500">@{auth.auth.username}</span>

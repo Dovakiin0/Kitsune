@@ -25,10 +25,12 @@ export type Bookmark = {
 };
 
 export type WatchHistory = {
+  id: string;
   current: number;
   timestamp: number;
   episodeId: string;
   episodeNumber: number;
+  created: string;
 };
 
 function useBookMarks({
@@ -51,29 +53,32 @@ function useBookMarks({
     filterParts.push(`status='${status}'`);
   }
 
-  // Join the parts with ' && '
   const filters = filterParts.join(" && ");
 
   useEffect(() => {
     if (!populate) return;
     const getBookmarks = async () => {
-      const res = await pb
-        .collection<Bookmark>("bookmarks")
-        .getList(page, per_page, {
-          filter: filters,
-          expand: "watchHistory",
-        });
+      try {
+        const res = await pb
+          .collection<Bookmark>("bookmarks")
+          .getList(page, per_page, {
+            filter: filters,
+            expand: "watchHistory",
+          });
 
-      if (res.totalItems > 0) {
-        const bookmark = res.items;
-        setBookmarks(bookmark);
-      } else {
-        setBookmarks(null);
+        if (res.totalItems > 0) {
+          const bookmark = res.items;
+          setBookmarks(bookmark);
+        } else {
+          setBookmarks(null);
+        }
+      } catch (error) {
+        console.log(error);
       }
     };
 
     getBookmarks();
-  }, [animeID, status, page, per_page, filters]);
+  }, [animeID, status, page, per_page, filters, auth]);
 
   const createOrUpdateBookMark = async (
     animeID: string,
@@ -85,47 +90,52 @@ function useBookMarks({
     if (!auth) {
       return null;
     }
-    const res = await pb.collection<Bookmark>("bookmarks").getList(1, 1, {
-      filter: `animeId='${animeID}'`,
-    });
+    try {
+      const res = await pb.collection<Bookmark>("bookmarks").getList(1, 1, {
+        filter: `animeId='${animeID}'`,
+      });
 
-    if (res.totalItems > 0) {
-      if (res.items[0].status === status) {
+      if (res.totalItems > 0) {
+        if (res.items[0].status === status) {
+          if (showToast) {
+            toast.error("Already in this status", {
+              style: { background: "red" },
+            });
+          }
+          return res.items[0].id;
+        }
+
+        let updated = await pb.collection("bookmarks").update(res.items[0].id, {
+          status: status,
+        });
+
         if (showToast) {
-          toast.error("Already in this status", {
-            style: { background: "red" },
+          toast.success("Successfully updated status", {
+            style: { background: "green" },
           });
         }
-        return res.items[0].id;
-      }
 
-      let updated = await pb.collection("bookmarks").update(res.items[0].id, {
-        status: status,
-      });
-
-      if (showToast) {
-        toast.success("Successfully updated status", {
-          style: { background: "green" },
+        return updated.id;
+      } else {
+        let created = await pb.collection<Bookmark>("bookmarks").create({
+          user: auth.id,
+          animeId: animeID,
+          animeTitle: animeTitle,
+          thumbnail: animeThumbnail,
+          status: status,
         });
+
+        if (showToast) {
+          toast.success("Successfully added to list", {
+            style: { background: "green" },
+          });
+        }
+
+        return created.id;
       }
-
-      return updated.id;
-    } else {
-      let created = await pb.collection<Bookmark>("bookmarks").create({
-        user: auth.id,
-        animeId: animeID,
-        animeTitle: animeTitle,
-        thumbnail: animeThumbnail,
-        status: status,
-      });
-
-      if (showToast) {
-        toast.success("Successfully added to list", {
-          style: { background: "green" },
-        });
-      }
-
-      return created.id;
+    } catch (error) {
+      console.log(error);
+      return null;
     }
   };
 

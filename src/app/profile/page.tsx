@@ -3,7 +3,7 @@ import React, { useEffect } from "react";
 import Container from "@/components/container";
 import Avatar from "@/components/common/avatar";
 import { useAuthStore } from "@/store/auth-store";
-import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs"; // Import TabsContent if you use it
+import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
 import { useRouter } from "next/navigation";
 import { pb } from "@/lib/pocketbase";
 import { toast } from "sonner";
@@ -12,10 +12,11 @@ import MALIcon from "@/icons/mal";
 import Image from "next/image";
 import CoverImage from "@/assets/cover.png";
 import AnimeLists from "./components/anime-lists";
+import AnimeHeatmap from "./components/anime-heatmap";
 
 type Props = {};
 
-function ProfilePage({}: Props) {
+function ProfilePage({ }: Props) {
   const { auth, setAuth } = useAuthStore();
   const router = useRouter();
   const fileInputRef = React.useRef<HTMLInputElement>(null);
@@ -111,6 +112,9 @@ function ProfilePage({}: Props) {
                 <AnimeLists status="completed" />
               </TabsContent>
             </Tabs>
+          </div>
+          <div className="my-20">
+            <AnimeHeatmap />
           </div>
         </div>
       </Container>

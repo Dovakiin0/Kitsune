@@ -15,7 +15,7 @@ type Props = {
 };
 
 interface WatchedAnime extends IAnime {
-  episode: WatchHistory;
+  episode: WatchHistory | string;
 }
 
 const ContinueWatching = (props: Props) => {
@@ -30,16 +30,37 @@ const ContinueWatching = (props: Props) => {
 
   useEffect(() => {
     if (!auth) {
-      return;
+      if (typeof window !== "undefined") {
+        const storedData = localStorage.getItem("watched");
+        const watchedAnimes: {
+          anime: { id: string; title: string; poster: string };
+          episodes: string[];
+        }[] = storedData ? JSON.parse(storedData) : [];
+
+        if (!Array.isArray(watchedAnimes)) {
+          localStorage.removeItem("watched");
+          return;
+        }
+
+        const animes = watchedAnimes.reverse().map((anime) => ({
+          id: anime.anime.id,
+          name: anime.anime.title,
+          poster: anime.anime.poster,
+          episode: anime.episodes[anime.episodes.length - 1],
+        }));
+        setAnime(animes as WatchedAnime[]);
+      }
     } else {
       if (bookmarks && bookmarks.length > 0) {
         const animes = bookmarks.map((anime) => ({
           id: anime.animeId,
           name: anime.animeTitle,
           poster: anime.thumbnail,
-          episode: anime.expand.watchHistory.sort(
-            (a, b) => b.episodeNumber - a.episodeNumber,
-          )[0],
+          episode: anime.expand.watchHistory
+            ? anime.expand.watchHistory.sort(
+                (a, b) => b.episodeNumber - a.episodeNumber,
+              )[0]
+            : null,
         }));
         setAnime(animes as WatchedAnime[]);
       }
@@ -57,17 +78,22 @@ const ContinueWatching = (props: Props) => {
         <h5 className="text-2xl font-bold">Continue Watching</h5>
       </div>
       <div className="grid lg:grid-cols-5 grid-cols-2 sm:grid-cols-3 md:grid-cols-4 xl:grid-cols-6 2xl:grid-cols-7 w-full gap-5 content-center">
-        {anime?.map((ani, idx) => (
-          <BlurFade key={idx} delay={idx * 0.05} inView>
-            <AnimeCard
-              title={ani.name}
-              poster={ani.poster}
-              className="self-center justify-self-center"
-              href={`${ROUTES.WATCH}?anime=${ani.id}&episode=${ani.episode.episodeId}`}
-              watchDetail={ani.episode}
-            />
-          </BlurFade>
-        ))}
+        {anime?.map(
+          (ani, idx) =>
+            ani.episode && (
+              <BlurFade key={idx} delay={idx * 0.05} inView>
+                <AnimeCard
+                  title={ani.name}
+                  poster={ani.poster}
+                  className="self-center justify-self-center"
+                  href={`${ROUTES.WATCH}?anime=${ani.id}&episode=${typeof ani.episode !== "string" ? ani.episode.episodeId : ani.episode}`}
+                  watchDetail={
+                    typeof ani.episode !== "string" ? ani.episode : null
+                  }
+                />
+              </BlurFade>
+            ),
+        )}
       </div>
     </Container>
   );
@@ -75,7 +101,7 @@ const ContinueWatching = (props: Props) => {
 
 const LoadingSkeleton = () => {
   return (
-    <Container className="flex flex-col gap-5 py-10 items-center lg:items-start lg:mt-[-10.125rem] z-20 ">
+    <Container className="flex flex-col gap-5 py-10 items-center lg:items-start lg:mt-[10.125rem] z-20 ">
       <div className="h-10 w-[15.625rem] animate-pulse bg-slate-700"></div>
       <div className="grid lg:grid-cols-5 grid-cols-2 sm:grid-cols-3 md:grid-cols-4 xl:grid-cols-6 2xl:grid-cols-7 w-full gap-5 content-center">
         {[1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1].map((_, idx) => {

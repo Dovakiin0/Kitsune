@@ -11,6 +11,6 @@ const getAnimeDetails = async (animeId: string) => {
 export const useGetAnimeDetails = (animeId: string) => {
   return useQuery({
     queryFn: () => getAnimeDetails(animeId),
-    queryKey: [GET_ANIME_DETAILS],
+    queryKey: [GET_ANIME_DETAILS, animeId],
   });
 };

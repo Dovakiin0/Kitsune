@@ -1,5 +1,5 @@
 "use client";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import Image from "next/image";
 
 import Container from "@/components/container";
@@ -20,6 +20,7 @@ import {
   BookmarkCheck,
   CheckCheck,
   Hand,
+  Heart,
   TvMinimalPlay,
 } from "lucide-react";
 import { useParams } from "next/navigation";
@@ -28,6 +29,9 @@ import Loading from "@/app/loading";
 import { useAuthStore } from "@/store/auth-store";
 import { toast } from "sonner";
 import useBookMarks from "@/hooks/use-get-bookmark";
+import { useGetAnimeBanner } from "@/query/get-banner-anime";
+import { useQueryClient } from "react-query";
+import { GET_ANIME_DETAILS } from "@/constants/query-keys";
 
 const SelectOptions: ISelectOptions[] = [
   {
@@ -68,6 +72,10 @@ const Page = () => {
   });
   const [selected, setSelected] = useState(bookmarks?.[0]?.status || "");
 
+  const { data: banner, isLoading: bannerLoading } = useGetAnimeBanner(
+    anime?.anime.info.anilistId!,
+  );
+
   const handleSelect = async (value: string) => {
     if (!auth) {
       return;
@@ -93,14 +101,21 @@ const Page = () => {
   ) : (
     <div className="w-full z-50">
       <div className="h-[30vh] md:h-[40vh] w-full relative ">
-        <Image
-          src={anime.anime.info.poster}
-          alt={anime.anime.info.name}
-          height={100}
-          width={100}
-          className="h-full w-full object-cover"
-          unoptimized
-        />
+        {bannerLoading ? (
+          <div className="absolute inset-0 m-auto w-full h-full bg-slate-900 animate-pulse"></div>
+        ) : (
+          <Image
+            src={
+              (banner?.Media.bannerImage as string) || anime.anime.info.poster
+            }
+            alt={anime.anime.info.name}
+            height={100}
+            width={100}
+            className="h-full w-full object-cover"
+            unoptimized
+          />
+        )}
+
         <WatchTrailer
           videoHref={anime.anime.info.promotionalVideos[0]?.source}
         />
@@ -122,12 +137,15 @@ const Page = () => {
             </h1>
             <div className="flex items-center gap-5">
               <WatchButton />
-              <Select
-                placeholder="Add to list"
-                value={bookmarks?.[0]?.status || selected}
-                options={SelectOptions}
-                onChange={handleSelect}
-              />
+              {auth && (
+                <Select
+                  placeholder="Add to list"
+                  value={bookmarks?.[0]?.status || selected}
+                  options={SelectOptions}
+                  onChange={handleSelect}
+                  placeholderIcon={Heart}
+                />
+              )}
             </div>
           </div>
         </div>

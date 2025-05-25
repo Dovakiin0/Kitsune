@@ -23,7 +23,9 @@ const VideoPlayerSection = () => {
   const [key, setKey] = useState<string>("");
 
   const { auth, setAuth } = useAuthStore();
-  const [autoSkip, setAutoSkip] = useState<boolean>(auth?.autoSkip || false);
+  const [autoSkip, setAutoSkip] = useState<boolean>(
+    auth?.autoSkip || Boolean(localStorage.getItem("autoSkip")) || false,
+  );
 
   useEffect(() => {
     const { serverName, key } = getFallbackServer(serversData);
@@ -50,7 +52,10 @@ const VideoPlayerSection = () => {
 
   async function onHandleAutoSkipChange(value: boolean) {
     setAutoSkip(value);
-    if (!auth) return;
+    if (!auth) {
+      localStorage.setItem("autoSkip", JSON.stringify(value));
+      return;
+    }
     const res = await pb.collection("users").update(auth.id, {
       autoSkip: value,
     });
@@ -115,11 +120,11 @@ const VideoPlayerSection = () => {
 
   if (isLoading || !episodeData)
     return (
-      <div className="min-h-[20vh] sm:min-h-[30vh] max-h-[60vh] md:min-h-[40vh] lg:min-h-[60vh] w-full animate-pulse bg-slate-700 rounded-md"></div>
+      <div className="h-auto aspect-video lg:max-h-[calc(100vh-150px)] min-h-[20vh] sm:min-h-[30vh] md:min-h-[40vh] lg:min-h-[60vh] w-full animate-pulse bg-slate-700 rounded-md"></div>
     );
 
   return (
-    <>
+    <div>
       <KitsunePlayer
         key={episodeData?.sources[0].url}
         episodeInfo={episodeData!}
@@ -174,7 +179,7 @@ const VideoPlayerSection = () => {
           <p>Auto Skip</p>
         </div>
       </div>
-    </>
+    </div>
   );
 };
 
