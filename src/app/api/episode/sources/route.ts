@@ -1,16 +1,16 @@
 import { hianime } from "@/lib/hianime";
-import { HiAnime } from "aniwatch";
+// import { HiAnime } from "aniwatch";
 
 export async function GET(req: Request) {
   try {
     const { searchParams } = new URL(req.url);
     const episodeId = searchParams.get("animeEpisodeId") as string;
-    const server = searchParams.get("server") as HiAnime.AnimeServers;
+    // const server = searchParams.get("server") as HiAnime.AnimeServers;
     const category = searchParams.get("category") as "sub" | "dub" | "raw";
 
     const data = await hianime.getEpisodeSources(
       decodeURIComponent(episodeId),
-      server,
+      undefined,
       category,
     );
     return Response.json({ data });
