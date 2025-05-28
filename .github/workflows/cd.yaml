@@ -25,6 +25,12 @@ jobs:
           username: ${{ secrets.DOCKER_USERNAME }}
           password: ${{ secrets.DOCKER_TOKEN }}
 
+      - name: Create env file
+        uses: SpicyPizza/create-envfile@v2.0
+        with:
+          envkey_NEXT_PUBLIC_PROXY_URL: ${{secrets.NEXT_PUBLIC_PROXY_URL}}
+          envkey_NEXT_PUBLIC_POCKETBASE_URL: ${{secrets.NEXT_PUBLIC_POCKETBASE_URL}}
+
       # Build and push Docker image
       - name: Build and push Docker image
         uses: docker/build-push-action@v4
