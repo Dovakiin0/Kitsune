@@ -48,9 +48,7 @@ const SearchBar = ({
   const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
     if (e.key === "Enter" && searchValue.trim()) {
       // Redirect to the search results page
-      router.push(
-        `${ROUTES.SEARCH}?search-key=${encodeURIComponent(searchValue)}`,
-      );
+      router.push(`${ROUTES.SEARCH}?q=${encodeURIComponent(searchValue)}`);
       setIsFocused(false); // Hide the dropdown results
       if (onAnimeClick) {
         onAnimeClick();
@@ -74,6 +72,9 @@ const SearchBar = ({
       <Button
         variant="secondary"
         className="absolute  text-white right-2 top-1/2 -translate-y-1/2 h-2/3"
+        onClick={() => {
+          router.push(ROUTES.SEARCH + '?q=""');
+        }}
       >
         <Tooltip side="bottom" content="Filter">
           <SlidersHorizontal className="h-4 w-4" />
@@ -128,7 +129,7 @@ const SearchBar = ({
             ))}
             <Link
               className="w-full"
-              href={`${ROUTES.SEARCH}?search-key=${encodeURIComponent(searchValue)}`}
+              href={`${ROUTES.SEARCH}?q=${encodeURIComponent(searchValue)}`}
             >
               <Button className="w-full bg-[#e9376b] text-white">
                 Show More

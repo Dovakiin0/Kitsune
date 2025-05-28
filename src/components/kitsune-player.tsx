@@ -88,7 +88,7 @@ function KitsunePlayer({
   useEffect(() => {
     setIsAutoSkipEnabled(autoSkip);
   }, [autoSkip]);
-  //
+
   // --- Construct Proxy URI ---
   const uri = useMemo(() => {
     const firstSourceUrl = episodeInfo?.sources?.[0]?.url;
@@ -220,19 +220,6 @@ function KitsunePlayer({
       return;
     }
 
-    // Destroy previous instance if dependencies change (e.g., new URI)
-    if (artInstanceRef.current) {
-      console.log("Destroying previous ArtPlayer instance due to change.");
-      artInstanceRef.current.destroy(true);
-      artInstanceRef.current = null;
-    }
-    // Also destroy HLS instance manually if it exists from previous render cycle
-    if (hlsInstanceRef.current) {
-      console.log("Destroying previous HLS instance due to change.");
-      hlsInstanceRef.current.destroy();
-      hlsInstanceRef.current = null;
-    }
-
     // Make sure start/end are valid numbers before creating range
     const introStart = episodeInfo?.intro?.start;
     const introEnd = episodeInfo?.intro?.end;
@@ -338,13 +325,19 @@ function KitsunePlayer({
       },
     };
 
+    let currentHlsInstanceForCleanup: Hls | null = null;
+
     // Combine All Options
     const finalOptions: Option = {
       container: artContainerRef.current,
       url: uri,
       type: "m3u8", // Explicitly set type for HLS
       customType: {
-        m3u8: (videoElement: HTMLMediaElement, url: string, art: Artplayer) => {
+        m3u8: (
+          videoElement: HTMLMediaElement,
+          url: string,
+          artPlayerInstance: Artplayer,
+        ) => {
           if (Hls.isSupported()) {
             // Destroy previous HLS instance if attached to this player
             if (hlsInstanceRef.current) {
@@ -354,12 +347,14 @@ function KitsunePlayer({
             hls.loadSource(url);
             hls.attachMedia(videoElement);
             hlsInstanceRef.current = hls; // Store ref
+            currentHlsInstanceForCleanup = hls; // Store for cleanup
             // Make sure HLS instance is destroyed when ArtPlayer instance is destroyed
-            art.on("destroy", () => {
+            artPlayerInstance.on("destroy", () => {
               if (hlsInstanceRef.current === hls) {
                 // Check if it's the same instance
                 hls.destroy();
                 hlsInstanceRef.current = null;
+                currentHlsInstanceForCleanup = null;
                 console.log(
                   "HLS instance destroyed via ArtPlayer destroy event.",
                 );
@@ -370,7 +365,8 @@ function KitsunePlayer({
           ) {
             videoElement.src = url; // Fallback for Safari native HLS
           } else {
-            art.notice.show = "HLS playback is not supported on your browser.";
+            artPlayerInstance.notice.show =
+              "HLS playback is not supported on your browser.";
           }
         },
       },
@@ -698,17 +694,6 @@ function KitsunePlayer({
       const art = artInstanceRef.current; // Get instance ref
       const hls = hlsInstanceRef.current; // Get HLS ref
 
-      // --- Explicitly stop playback and detach ---
-      if (art) {
-        console.log("Cleanup: Pausing player");
-        art.pause(); // Explicitly pause
-
-        if (art.video) {
-          console.log("Cleanup: Removing video src and loading");
-          art.video.removeAttribute("src"); // Remove source
-          art.video.load(); // Force reload/reset state
-        }
-      }
       if (hls) {
         console.log("Cleanup: Detaching HLS media");
         // Although hls.destroy() calls detachMedia, being explicit can sometimes help timing
@@ -738,21 +723,51 @@ function KitsunePlayer({
       // Clear throttle timer
       if (updateTimerRef.current) {
         clearTimeout(updateTimerRef.current);
-      }
-
-      if (
-        artInstanceRef.current &&
-        typeof artInstanceRef.current?.off === "function"
-      ) {
-        artInstanceRef.current?.off("video:timeupdate", handleTimeUpdate);
+        updateTimerRef.current = null;
       }
 
       if (art) {
         console.log("Cleanup: Destroying ArtPlayer instance.");
-        art.destroy(true); // Keep container div
         art.off("video:pause", handleInteractionUpdate);
         art.off("video:seeked", handleInteractionUpdate);
-        artInstanceRef.current = null;
+        art.off("video:timeupdate", handleTimeUpdate);
+
+        console.log("Cleanup: Pausing player");
+        art.pause(); // Explicitly pause
+
+        if (art.video) {
+          console.log("Cleanup: Removing video src and loading");
+          art.video.removeAttribute("src"); // Remove source
+          art.video.load(); // Force reload/reset state
+        }
+
+        if (currentHlsInstanceForCleanup) {
+          console.log(
+            "Cleanup: Destroying HLS instance specifically for ArtPlayer:",
+            art.id,
+          );
+          currentHlsInstanceForCleanup.destroy();
+          // If the global hlsInstanceRef still points to this one, nullify it.
+          if (hlsInstanceRef.current === currentHlsInstanceForCleanup) {
+            hlsInstanceRef.current = null;
+          }
+          currentHlsInstanceForCleanup = null; // Clear the closure variable
+        } else if (hlsInstanceRef.current) {
+          // Fallback: if currentHlsInstanceForCleanup wasn't set but global one exists,
+          // it *might* be the one. This is less ideal but a safeguard.
+          // The art.on('destroy') for HLS should have ideally handled this.
+          console.warn(
+            "Cleanup: currentHlsInstanceForCleanup was null, attempting to destroy hlsInstanceRef.current for ArtPlayer:",
+            art.id,
+          );
+          hlsInstanceRef.current.destroy();
+          hlsInstanceRef.current = null;
+        }
+
+        art.destroy(true);
+        if (artInstanceRef.current === art) {
+          artInstanceRef.current = null;
+        }
       }
     };
     // eslint-disable-next-line react-hooks/exhaustive-deps
