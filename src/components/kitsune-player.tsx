@@ -98,8 +98,7 @@ function KitsunePlayer({
     try {
       const baseURI = `${env("NEXT_PUBLIC_PROXY_URL")}/m3u8-proxy`;
       const url = encodeURIComponent(firstSourceUrl);
-      // const header = encodeURIComponent(JSON.stringify({ Referer: referer }));
-      return `${baseURI}?url=${url}`;
+      return `${baseURI}?url=${url}&referer=${referer}`;
     } catch (error) {
       console.error("Error constructing proxy URI:", error);
       return null;

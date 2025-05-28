@@ -5,9 +5,12 @@ services:
       - "3000:3000"
     environment:
       - NEXT_PUBLIC_POCKETBASE_URL=http://localhost:8090
-      - NEXT_PUBLIC_PROXY_URL=http://localhost:8080
+      - NEXT_PUBLIC_PROXY_URL=http://localhost:4040
 
   proxy:
-    image: dovakiin0/proxy:latest
+    image: dovakiin0/proxy-m3u8:latest
     ports:
       - "4040:4040"
+    environment:
+      - PORT=4040
+      - CORS_DOMAIN=localhost:3000
