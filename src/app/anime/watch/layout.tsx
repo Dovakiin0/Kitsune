@@ -104,7 +104,7 @@ const Layout = (props: Props) => {
   const [selected, setSelected] = useState("");
 
   const handleSelect = async (value: string) => {
-    let previousSelected = selected;
+    const previousSelected = selected;
     setSelected(value);
 
     try {
@@ -115,6 +115,7 @@ const Layout = (props: Props) => {
         value,
       );
     } catch (error) {
+      console.log(error);
       setSelected(previousSelected);
       toast.error("Error adding to list", { style: { background: "red" } });
     }

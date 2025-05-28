@@ -78,7 +78,7 @@ const Page = () => {
     if (!auth) {
       return;
     }
-    let previousSelected = selected;
+    const previousSelected = selected;
     setSelected(value);
 
     try {
@@ -89,6 +89,7 @@ const Page = () => {
         value,
       );
     } catch (error) {
+      console.log(error);
       setSelected(previousSelected);
       toast.error("Error adding to list", { style: { background: "red" } });
     }

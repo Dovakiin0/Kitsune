@@ -135,9 +135,9 @@ const EpisodePlaylist = ({
     }
   };
 
-  let groupOptions = (): ISelectOptions[] => {
+  const groupOptions = (): ISelectOptions[] => {
     let start = 1;
-    let end = episodes?.totalEpisodes;
+    const end = episodes?.totalEpisodes;
     const options: ISelectOptions[] = [];
     // group episodes in range of 50
     while (start <= end!) {

@@ -6,9 +6,7 @@ import Button from "./common/custom-button";
 import Link from "next/link";
 import { ROUTES } from "@/constants/routes";
 
-type Props = {};
-
-function AnimeSchedule({ }: Props) {
+function AnimeSchedule() {
   const currentDate = new Date();
   const currentDay = currentDate
     .toLocaleString("en-US", { weekday: "long" })
@@ -32,7 +30,7 @@ function AnimeSchedule({ }: Props) {
     const date = getDateForWeekday(currentSelectedTab);
     date.setDate(date.getDate() + 1); // idk why i had to add 1 day, but the schedule API returns the next day
     return date.toLocaleDateString("en-US");
-  }, [currentSelectedTab, currentDate]);
+  }, [currentSelectedTab, getDateForWeekday]);
 
   const { isLoading, data } = useGetAnimeSchedule(selectedDate);
 

@@ -28,7 +28,7 @@ const getAnilistAnimes = async (username: string) => {
       username,
     },
   });
-  let data = res.data as AnilistAnimes;
+  const data = res.data as AnilistAnimes;
   return data.data;
 };
 

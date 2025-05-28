@@ -1,8 +1,6 @@
 import React from "react";
 
-type Props = {};
-
-function MALIcon({}: Props) {
+function MALIcon() {
   return (
     <svg
       width="32"

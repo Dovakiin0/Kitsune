@@ -21,6 +21,7 @@ import { cn } from "@/lib/utils";
 import { useAuthStore } from "@/store/auth-store";
 import useBookMarks from "@/hooks/use-get-bookmark";
 import { pb } from "@/lib/pocketbase";
+import Image from "next/image";
 
 const WATCH_PROGRESS_UPDATE_INTERVAL = 10000; // Update every 10 seconds
 const WATCH_PROGRESS_MIN_WATCH_TIME = 10; // Min seconds watched to create record
@@ -59,7 +60,6 @@ function KitsunePlayer({
   episodeInfo,
   animeInfo,
   subOrDub,
-  episodes, // Not actively used in options below, but available
   getInstance,
   autoSkip = true,
   serversData,
@@ -129,7 +129,7 @@ function KitsunePlayer({
     let isMounted = true; // Track mount status for async operations
 
     const fetchBookmarkAndWatchedId = async () => {
-      let id = await createOrUpdateBookMark(
+      const id = await createOrUpdateBookMark(
         animeInfo.id,
         animeInfo.title,
         animeInfo.image,
@@ -179,7 +179,8 @@ function KitsunePlayer({
           initialSeekTimeRef.current = null; // Ensure it's null if no record
           hasMetMinWatchTimeRef.current = false;
         }
-      } catch (expandError) {
+      } catch (e) {
+        console.error("Error fetching bookmark watch history:", e);
         if (!isMounted) return;
         // Keep bookmarkId, but assume no watched record found
         watchedRecordIdRef.current = null;
@@ -202,6 +203,7 @@ function KitsunePlayer({
     animeInfo.title,
     animeInfo.image,
     serversData.episodeId,
+    createOrUpdateBookMark,
   ]);
 
   // --- Effect for Player Initialization and Cleanup ---
@@ -231,7 +233,7 @@ function KitsunePlayer({
     skipTimesRef.current.introEnd = introEnd;
 
     const outroStart = episodeInfo?.outro?.start;
-    let outroEnd = episodeInfo?.outro?.end; // Use let for potential modification
+    const outroEnd = episodeInfo?.outro?.end; // Use let for potential modification
     skipTimesRef.current.validOutro =
       typeof outroStart === "number" &&
       typeof outroEnd === "number" &&
@@ -252,19 +254,19 @@ function KitsunePlayer({
     const subtitleConfig: Option["subtitle"] =
       subOrDub === "sub"
         ? {
-            url: episodeInfo?.tracks?.find(
-              (track) => track.label === "English" && track.kind === "captions", // Be specific
-            )?.file,
-            type: "vtt",
-            style: {
-              // Example styles
-              color: "#FFFFFF",
-              fontSize: "22px", // Base size, will be adjusted
-              textShadow: "1px 1px 3px rgba(0,0,0,0.8)",
-            },
-            encoding: "utf-8",
-            escape: false, // Allow potential styling tags in VTT
-          }
+          url: episodeInfo?.tracks?.find(
+            (track) => track.label === "English" && track.kind === "captions", // Be specific
+          )?.file,
+          type: "vtt",
+          style: {
+            // Example styles
+            color: "#FFFFFF",
+            fontSize: "22px", // Base size, will be adjusted
+            textShadow: "1px 1px 3px rgba(0,0,0,0.8)",
+          },
+          encoding: "utf-8",
+          escape: false, // Allow potential styling tags in VTT
+        }
         : {}; // Explicitly hide if 'dub'
 
     const manualSkipControl = {
@@ -285,7 +287,7 @@ function KitsunePlayer({
         marginRight: "10px", // Space from toggle
         padding: "3px 0", // Adjust padding for vertical centering
       },
-      click: function (controlItem: any) {
+      click: function(controlItem: any) {
         const art = artInstanceRef.current;
         if (!art) return;
         const { introEnd, outroStart, outroEnd, validIntro, validOutro } =
@@ -409,7 +411,7 @@ function KitsunePlayer({
               html: "Display",
               tooltip: subOrDub === "sub" ? "Hide" : "Show", // Initial state based on prop
               switch: subOrDub === "sub", // Switch is ON if sub
-              onSwitch: function (item) {
+              onSwitch: function(item) {
                 const showSubtitle = !item.switch; // The new state
                 art.subtitle.show = showSubtitle;
                 item.tooltip = showSubtitle ? "Hide" : "Show";
@@ -419,7 +421,7 @@ function KitsunePlayer({
             },
             ...trackOptions, // Add subtitle track choices
           ],
-          onSelect: function (item: any) {
+          onSelect: function(item: any) {
             // Type the item
             if (item.url && typeof item.url === "string") {
               art.subtitle.switch(item.url, { name: item.html });
@@ -496,13 +498,13 @@ function KitsunePlayer({
 
       const resolvedOutroEnd =
         validOutro && outroEnd === 0 && duration > 0 ? duration : outroEnd;
-      let inIntro =
+      const inIntro =
         validIntro &&
         typeof introStart === "number" &&
         typeof introEnd === "number" &&
         currentTime >= introStart &&
         currentTime < introEnd;
-      let inOutro =
+      const inOutro =
         validOutro &&
         typeof outroStart === "number" &&
         typeof resolvedOutroEnd === "number" &&
@@ -787,7 +789,7 @@ function KitsunePlayer({
             className="w-full h-full flex items-center justify-center bg-cover bg-center"
             style={{ backgroundImage: `url(${animeInfo.image})` }}
           >
-            <img
+            <Image
               width="60"
               height="60"
               src={loadingImage.src}

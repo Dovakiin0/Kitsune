@@ -7,15 +7,6 @@ export const useHasAnimeWatched = (
   episodeId?: string,
   watchedEpisodes?: WatchHistory[],
 ) => {
-  if (watchedEpisodes && watchedEpisodes.length > 0) {
-    if (episodeId) {
-      const episodeWatched = watchedEpisodes.some(
-        (episode) => episode.episodeId === episodeId,
-      );
-      return { hasWatchedAnime: true, hasWatchedEpisode: episodeWatched };
-    }
-  }
-
   const [hasWatchedAnime, setHasWatchedAnime] = useState(false);
   const [hasWatchedEpisode, setHasWatchedEpisode] = useState(false);
 
@@ -43,6 +34,15 @@ export const useHasAnimeWatched = (
       setHasWatchedEpisode(false); // Episode has not been watched
     }
   }, [animeId, episodeId]);
+
+  if (watchedEpisodes && watchedEpisodes.length > 0) {
+    if (episodeId) {
+      const episodeWatched = watchedEpisodes.some(
+        (episode) => episode.episodeId === episodeId,
+      );
+      return { hasWatchedAnime: true, hasWatchedEpisode: episodeWatched };
+    }
+  }
 
   return { hasWatchedAnime, hasWatchedEpisode };
 };

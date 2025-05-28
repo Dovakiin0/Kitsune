@@ -18,9 +18,7 @@ import { api } from "@/lib/api";
 import useBookMarks from "@/hooks/use-get-bookmark";
 import { Badge } from "@/components/ui/badge";
 
-type Props = {};
-
-function AnilistImport({}: Props) {
+function AnilistImport() {
   const getAnilistAnime = useGetAnilistAnimes();
   const [username, setUsername] = React.useState("");
   const [isLoading, setIsLoading] = React.useState(false);

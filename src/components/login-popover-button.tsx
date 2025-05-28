@@ -8,8 +8,6 @@ import { pb } from "@/lib/pocketbase";
 import { toast } from "sonner";
 import { useAuthStore } from "@/store/auth-store";
 
-type Props = {};
-
 type FormData = {
   username: string;
   email: string;
@@ -17,7 +15,7 @@ type FormData = {
   confirm_password: string;
 };
 
-function LoginPopoverButton({ }: Props) {
+function LoginPopoverButton() {
   const auth = useAuthStore();
   const [formData, setFormData] = useState<FormData>({
     username: "",
@@ -52,7 +50,8 @@ function LoginPopoverButton({ }: Props) {
           autoSkip: pb.authStore.record.autoSkip,
         });
       }
-    } catch (e: any) {
+    } catch (e) {
+      console.error("Login error:", e);
       toast.error("Invalid username or password", {
         style: { background: "red" },
       });
@@ -98,6 +97,7 @@ function LoginPopoverButton({ }: Props) {
         });
       }
     } catch (e) {
+      console.error("Signup error:", e);
       toast.error("Error creating account", { style: { background: "red" } });
     }
   };

@@ -40,11 +40,11 @@ function AnimeLists(props: Props) {
         {bookmarks.map((bookmark) => {
           const latestEpisode = bookmark.expand.watchHistory
             ? bookmark.expand.watchHistory.sort(
-                (a, b) => b.episodeNumber - a.episodeNumber,
-              )[0]
+              (a, b) => b.episodeNumber - a.episodeNumber,
+            )[0]
             : null;
 
-          let url = latestEpisode
+          const url = latestEpisode
             ? `${ROUTES.WATCH}?anime=${bookmark.animeId}&episode=${latestEpisode.episodeId}`
             : `${ROUTES.ANIME_DETAILS}/${bookmark.animeId}`;
 

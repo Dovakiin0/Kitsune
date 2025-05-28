@@ -14,9 +14,7 @@ import AnimeHeatmap from "./components/anime-heatmap";
 import Loading from "@/app/loading";
 import AnilistImport from "./components/anilist-import";
 
-type Props = {};
-
-function ProfilePage({}: Props) {
+function ProfilePage() {
   const { auth, setAuth } = useAuthStore();
   const router = useRouter();
   const fileInputRef = React.useRef<HTMLInputElement>(null);
@@ -26,7 +24,7 @@ function ProfilePage({}: Props) {
     if (hasHydrated && !auth) {
       router.replace("/");
     }
-  }, [auth, hasHydrated]);
+  }, [auth, hasHydrated, router]);
 
   if (!hasHydrated) {
     return <Loading />;

@@ -1,8 +1,6 @@
 import React from "react";
 
-type Props = {};
-
-function AnilistIcon({}: Props) {
+function AnilistIcon() {
   return (
     <svg
       xmlns="http://www.w3.org/2000/svg"

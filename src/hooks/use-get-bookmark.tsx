@@ -80,7 +80,7 @@ function useBookMarks({
     };
 
     getBookmarks();
-  }, [animeID, status, page, per_page, filters, auth]);
+  }, [animeID, status, page, per_page, filters, auth, populate]);
 
   const createOrUpdateBookMark = async (
     animeID: string,
@@ -107,9 +107,11 @@ function useBookMarks({
           return res.items[0].id;
         }
 
-        let updated = await pb.collection("bookmarks").update(res.items[0].id, {
-          status: status,
-        });
+        const updated = await pb
+          .collection("bookmarks")
+          .update(res.items[0].id, {
+            status: status,
+          });
 
         if (showToast) {
           toast.success("Successfully updated status", {
@@ -119,7 +121,7 @@ function useBookMarks({
 
         return updated.id;
       } else {
-        let created = await pb.collection<Bookmark>("bookmarks").create({
+        const created = await pb.collection<Bookmark>("bookmarks").create({
           user: auth.id,
           animeId: animeID,
           animeTitle: animeTitle,
@@ -173,7 +175,11 @@ function useBookMarks({
           await pb.collection("bookmarks").update(bookmarkId, {
             "watchHistory+": newWatchedRecord.id,
           });
-        } catch (relationError) {
+        } catch (error) {
+          console.error(
+            "Error updating bookmark with new watch record:",
+            error,
+          );
           return null;
         }
         return newWatchedRecord.id;

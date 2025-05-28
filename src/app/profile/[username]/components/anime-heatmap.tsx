@@ -7,8 +7,6 @@ import { pb } from "@/lib/pocketbase";
 import { toast } from "sonner";
 import { Tooltip } from "react-tooltip";
 
-type Props = {};
-
 type HeatmapValue = {
   date: string;
   count: number;
@@ -18,7 +16,7 @@ export type BookmarkData = {
   watchHistory: string[];
 };
 
-function AnimeHeatmap({}: Props) {
+function AnimeHeatmap() {
   const { auth } = useAuthStore();
   const [heatmapData, setHeatmapData] = useState<HeatmapValue[]>([]);
   const [totalContributionCount, setTotalContributionCount] =
