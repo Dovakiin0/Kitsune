@@ -129,7 +129,7 @@ const Layout = (props: Props) => {
   return (
     anime?.anime.info && (
       <Container className="mt-[6.5rem] space-y-10 pb-20">
-        <div className="grid lg:grid-cols-4 grid-cols-1 gap-y-5 gap-x-10 w-full">
+        <div className="grid lg:grid-cols-4 grid-cols-1 gap-y-5 gap-x-10 h-auto w-full">
           <div className="lg:col-span-3 col-span-1 lg:mb-0">
             {props.children}
           </div>

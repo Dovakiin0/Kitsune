@@ -2,8 +2,9 @@ import { hianime } from "@/lib/hianime";
 
 export async function GET(
   request: Request,
-  { params }: { params: { id: string } },
+  props: { params: Promise<{ id: string }> },
 ) {
+  const params = await props.params;
   try {
     const { id } = params;
     const data = await hianime.getEpisodes(id);

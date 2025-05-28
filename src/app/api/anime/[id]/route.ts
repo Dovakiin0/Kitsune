@@ -2,10 +2,10 @@ import { hianime } from "@/lib/hianime";
 
 export async function GET(
   req: Request,
-  { params }: { params: { id: string } },
+  { params }: { params: Promise<{ id: string }> },
 ) {
   try {
-    const { id } = params;
+    const { id } = await params;
     const data = await hianime.getInfo(id);
     return Response.json({ data });
   } catch (err) {

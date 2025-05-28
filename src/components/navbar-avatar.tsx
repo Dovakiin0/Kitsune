@@ -11,9 +11,11 @@ type Props = {
 };
 
 function NavbarAvatar({ auth }: Props) {
+  const [open, setOpen] = React.useState(false);
+
   return (
     auth.auth && (
-      <Popover>
+      <Popover open={open} onOpenChange={setOpen}>
         <PopoverTrigger>
           <Avatar
             username={auth.auth.username}
@@ -32,6 +34,7 @@ function NavbarAvatar({ auth }: Props) {
             <Link
               href={`/profile/${auth.auth.username}`}
               className="flex flex-row space-x-2 items-center"
+              onClick={() => setOpen(false)}
             >
               <User size="20" />
               <p>Profile</p>
