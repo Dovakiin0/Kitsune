@@ -43,6 +43,7 @@ function useBookMarks({
   const { auth } = useAuthStore();
   const [bookmarks, setBookmarks] = useState<Bookmark[] | null>(null);
   const [totalPages, setTotalPages] = useState<number>(0);
+  const [isLoading, setIsLoading] = useState(true);
 
   const filterParts = [];
 
@@ -60,6 +61,7 @@ function useBookMarks({
     if (!populate) return;
     const getBookmarks = async () => {
       try {
+        setIsLoading(true);
         const res = await pb
           .collection<Bookmark>("bookmarks")
           .getList(page, per_page, {
@@ -74,7 +76,9 @@ function useBookMarks({
         } else {
           setBookmarks(null);
         }
+        setIsLoading(false);
       } catch (error) {
+        setIsLoading(false);
         console.log(error);
       }
     };
@@ -195,6 +199,7 @@ function useBookMarks({
     syncWatchProgress,
     createOrUpdateBookMark,
     totalPages,
+    isLoading,
   };
 }
 

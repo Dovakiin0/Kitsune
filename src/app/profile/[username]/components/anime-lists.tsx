@@ -11,7 +11,7 @@ type Props = {
 function AnimeLists(props: Props) {
   const [currentPage, setPage] = React.useState(1);
 
-  const { bookmarks, totalPages } = useBookMarks({
+  const { bookmarks, totalPages, isLoading } = useBookMarks({
     status: props.status,
     page: currentPage,
     per_page: 8,
@@ -34,14 +34,22 @@ function AnimeLists(props: Props) {
     setPage(pageNumber);
   };
 
+  if (isLoading) {
+    return (
+      <div className="flex justify-center items-center h-64">
+        <p className="text-gray-500">Loading...</p>
+      </div>
+    );
+  }
+
   return bookmarks && bookmarks.length > 0 ? (
     <>
       <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6 mt-10">
         {bookmarks.map((bookmark) => {
           const latestEpisode = bookmark.expand.watchHistory
             ? bookmark.expand.watchHistory.sort(
-              (a, b) => b.episodeNumber - a.episodeNumber,
-            )[0]
+                (a, b) => b.episodeNumber - a.episodeNumber,
+              )[0]
             : null;
 
           const url = latestEpisode
