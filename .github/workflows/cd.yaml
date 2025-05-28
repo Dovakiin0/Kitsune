@@ -37,7 +37,7 @@ jobs:
         with:
           context: .
           push: true
-          tags: dovakiin0/kitsune-v2:latest, dovakiin0/kitsune-v2:${{ github.sha }}
+          tags: dovakiin0/kitsune:latest, dovakiin0/kitsune:${{ github.sha }}
 
       # Deploy to VPS via SSH
       - name: Deploy to VPS
