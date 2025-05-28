@@ -37,6 +37,13 @@ export interface IAnime {
   rank?: number;
 }
 
+export interface IAnimeSearch {
+  animes: IAnime[];
+  totalPages: number;
+  hasNextPage: boolean;
+  currentPage: number;
+}
+
 export interface ISuggestionAnime extends IAnime {
   moreInfo: string[];
 }
@@ -68,4 +75,16 @@ export interface TopUpcomingAnime {
   type: string;
   rating: null | string;
   episodes: Episodes;
+}
+
+export interface SearchAnimeParams {
+  q: string; // Required
+  page: number;
+  type?: string;
+  status?: string;
+  rated?: string;
+  season?: string;
+  language?: string;
+  sort?: string;
+  genres?: string; // Comma-separated: "isekai,shounen"
 }
