@@ -1,5 +1,5 @@
 "use client";
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import Image from "next/image";
 
 import Container from "@/components/container";
@@ -30,8 +30,6 @@ import { useAuthStore } from "@/store/auth-store";
 import { toast } from "sonner";
 import useBookMarks from "@/hooks/use-get-bookmark";
 import { useGetAnimeBanner } from "@/query/get-banner-anime";
-import { useQueryClient } from "react-query";
-import { GET_ANIME_DETAILS } from "@/constants/query-keys";
 
 const SelectOptions: ISelectOptions[] = [
   {

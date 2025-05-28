@@ -2,10 +2,8 @@ import { hianime } from "@/lib/hianime";
 import { AnilistMediaList } from "@/types/anilist-animes";
 import { NextRequest, NextResponse } from "next/server";
 
-export async function POST(
-  request: NextRequest,
-  { params }: { params: { provider: string } },
-) {
+export async function POST(request: NextRequest, props: { params: Promise<{ provider: string }> }) {
+  const params = await props.params;
   const { provider } = params;
   if (provider !== "anilist" && provider !== "mal") {
     return NextResponse.json({ error: "Invalid provider" }, { status: 400 });
