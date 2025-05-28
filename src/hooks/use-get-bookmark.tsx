@@ -42,6 +42,7 @@ function useBookMarks({
 }: Props) {
   const { auth } = useAuthStore();
   const [bookmarks, setBookmarks] = useState<Bookmark[] | null>(null);
+  const [totalPages, setTotalPages] = useState<number>(0);
 
   const filterParts = [];
 
@@ -68,6 +69,7 @@ function useBookMarks({
 
         if (res.totalItems > 0) {
           const bookmark = res.items;
+          setTotalPages(res.totalPages);
           setBookmarks(bookmark);
         } else {
           setBookmarks(null);
@@ -182,7 +184,12 @@ function useBookMarks({
     }
   };
 
-  return { bookmarks, syncWatchProgress, createOrUpdateBookMark };
+  return {
+    bookmarks,
+    syncWatchProgress,
+    createOrUpdateBookMark,
+    totalPages,
+  };
 }
 
 export default useBookMarks;

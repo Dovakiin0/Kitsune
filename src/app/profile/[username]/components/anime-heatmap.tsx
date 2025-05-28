@@ -5,12 +5,12 @@ import styles from "../heatmap.module.css";
 import { useAuthStore } from "@/store/auth-store";
 import { pb } from "@/lib/pocketbase";
 import { toast } from "sonner";
+import { Tooltip } from "react-tooltip";
 
 type Props = {};
 
-// Type for the heatmap data format
 type HeatmapValue = {
-  date: string; // YYYY-MM-DD
+  date: string;
   count: number;
 };
 
@@ -18,11 +18,11 @@ export type BookmarkData = {
   watchHistory: string[];
 };
 
-function AnimeHeatmap({ }: Props) {
+function AnimeHeatmap({}: Props) {
   const { auth } = useAuthStore();
   const [heatmapData, setHeatmapData] = useState<HeatmapValue[]>([]);
   const [totalContributionCount, setTotalContributionCount] =
-    useState<number>(0); //
+    useState<number>(0);
 
   const startDate = new Date(new Date().setMonth(0, 1));
   const endDate = new Date(new Date().setMonth(11, 31));
@@ -32,7 +32,6 @@ function AnimeHeatmap({ }: Props) {
     if (!auth?.id) return; // Need authenticated user ID
 
     try {
-      console.log("Fetching bookmarks for user:", auth.id);
       // 1. Get all bookmark records for the user
       const bookmarkRecords = await pb
         .collection<BookmarkData>("bookmarks")
@@ -141,6 +140,26 @@ function AnimeHeatmap({ }: Props) {
     return styles.colorEmpty;
   };
 
+  const getTooltipContent = (
+    value: HeatmapValue | null,
+  ): Record<string, string> => {
+    const val = value as HeatmapValue;
+    if (!val.date) {
+      return {
+        "data-tooltip-id": "heatmap-tooltip",
+        "data-tooltip-content": "No episodes watched",
+      };
+    }
+    const formatedDate = new Date(val.date).toLocaleDateString("en-US", {
+      month: "short",
+      day: "numeric",
+    });
+    return {
+      "data-tooltip-id": "heatmap-tooltip",
+      "data-tooltip-content": `Watched ${val.count} episodes on ${formatedDate}`,
+    } as Record<string, string>;
+  };
+
   return (
     <>
       <p className="text-lg font-bold mb-4">
@@ -157,7 +176,9 @@ function AnimeHeatmap({ }: Props) {
         }
         values={heatmapData}
         gutterSize={2}
+        tooltipDataAttrs={(value) => getTooltipContent(value as HeatmapValue)}
       />
+      <Tooltip id="heatmap-tooltip" />
     </>
   );
 }

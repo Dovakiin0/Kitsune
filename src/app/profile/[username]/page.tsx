@@ -2,30 +2,35 @@
 import React, { useEffect } from "react";
 import Container from "@/components/container";
 import Avatar from "@/components/common/avatar";
-import { useAuthStore } from "@/store/auth-store";
+import { useAuthHydrated, useAuthStore } from "@/store/auth-store";
 import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
 import { useRouter } from "next/navigation";
 import { pb } from "@/lib/pocketbase";
 import { toast } from "sonner";
-import AnilistIcon from "@/icons/anilist";
-import MALIcon from "@/icons/mal";
 import Image from "next/image";
 import CoverImage from "@/assets/cover.png";
 import AnimeLists from "./components/anime-lists";
 import AnimeHeatmap from "./components/anime-heatmap";
+import Loading from "@/app/loading";
+import AnilistImport from "./components/anilist-import";
 
 type Props = {};
 
-function ProfilePage({ }: Props) {
+function ProfilePage({}: Props) {
   const { auth, setAuth } = useAuthStore();
   const router = useRouter();
   const fileInputRef = React.useRef<HTMLInputElement>(null);
+  const hasHydrated = useAuthHydrated();
 
   useEffect(() => {
-    if (auth === null) {
+    if (hasHydrated && !auth) {
       router.replace("/");
     }
-  }, [auth, router]);
+  }, [auth, hasHydrated]);
+
+  if (!hasHydrated) {
+    return <Loading />;
+  }
 
   if (!auth) {
     return null;
@@ -88,15 +93,16 @@ function ProfilePage({ }: Props) {
         <div className="w-full md:w-2/3">
           <div className="w-full">
             <div className="float-right flex gap-2 items-center mb-2">
-              <AnilistIcon />
-              <MALIcon />
+              <p className="text-sm text-gray-500">Import:</p>
+              <AnilistImport />
             </div>
             <Tabs defaultValue="watching" className="w-full">
-              <TabsList className="grid w-full grid-cols-4">
+              <TabsList className="grid w-full grid-cols-1 sm:grid-cols-5">
                 <TabsTrigger value="watching">Watching</TabsTrigger>
                 <TabsTrigger value="plan-to-watch">Plan To Watch</TabsTrigger>
                 <TabsTrigger value="on-hold">On Hold</TabsTrigger>
                 <TabsTrigger value="completed">Completed</TabsTrigger>
+                <TabsTrigger value="dropped">Dropped</TabsTrigger>
               </TabsList>
 
               <TabsContent value="watching" className="mt-4">
@@ -110,6 +116,9 @@ function ProfilePage({ }: Props) {
               </TabsContent>
               <TabsContent value="completed" className="mt-4">
                 <AnimeLists status="completed" />
+              </TabsContent>
+              <TabsContent value="dropped" className="mt-4">
+                <AnimeLists status="dropped" />
               </TabsContent>
             </Tabs>
           </div>
