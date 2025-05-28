@@ -48,5 +48,5 @@ jobs:
           key: ${{ secrets.SSH_PRIVATE_KEY }}
           port: 22
           script: |
-            cd ~/kitsune
+            cd ~/kitsunee
             docker compose up --detach --pull always
