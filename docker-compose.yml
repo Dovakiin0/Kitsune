@@ -1,17 +1,13 @@
 services:
   kitsune:
-    image: dovakiin0/kitsune-v2:latest
+    image: dovakiin0/kitsune:latest
     ports:
       - "3000:3000"
     environment:
-      - BASE_URL=http://kitsune:3000
-      - NEXT_PUBLIC_PROXY_URL=http://proxy:8080
+      - NEXT_PUBLIC_POCKETBASE_URL=http://localhost:8090
+      - NEXT_PUBLIC_PROXY_URL=http://localhost:8080
 
   proxy:
-    image: dovakiin0/m3u8-proxy:latest
+    image: dovakiin0/proxy:latest
     ports:
-      - "8080:8080"
-    environment:
-      - host=0.0.0.0
-      - port=8080
-      - public_url=http://proxy:8080
+      - "4040:4040"

@@ -10,6 +10,7 @@ import { useAnimeStore } from "@/store/anime-store";
 import { useHasAnimeWatched } from "@/hooks/use-is-anime-watched";
 import { Captions, Mic } from "lucide-react";
 import Link from "next/link";
+import { WatchHistory } from "@/hooks/use-get-bookmark";
 
 type Props = {
   className?: string;
@@ -18,6 +19,7 @@ type Props = {
   animeId: string;
   variant?: "card" | "list";
   subOrDub?: { sub: number; dub: number };
+  watchedEpisodes?: WatchHistory[] | null;
 };
 
 const EpisodeCard = ({
@@ -29,6 +31,7 @@ const EpisodeCard = ({
   const { hasWatchedEpisode } = useHasAnimeWatched(
     props.animeId,
     props.episode.episodeId,
+    props.watchedEpisodes!,
   );
 
   if (showCard && variant === "card") {
@@ -79,10 +82,10 @@ const EpisodeCard = ({
         href={`${ROUTES.WATCH}?anime=${props.animeId}&episode=${props.episode.episodeId}`}
       >
         <div
-          className="flex gap-5 items-center w-full relative h-fit rounded-md p-2 hover:!bg-slate-600"
+          className="flex gap-5 items-center w-full relative h-fit rounded-md p-2"
           style={
             selectedEpisode === props.episode.episodeId
-              ? { backgroundColor: "#18181a" }
+              ? { backgroundColor: "#e9376b" }
               : hasWatchedEpisode
                 ? {
                     backgroundColor: "#0f172a",
@@ -106,12 +109,6 @@ const EpisodeCard = ({
           )}
           {props.subOrDub && props.episode.number <= props.subOrDub.dub && (
             <Mic className="text-gray-400" />
-          )}
-
-          {selectedEpisode === props.episode.episodeId && (
-            <span className="absolute bottom-2 right-3 text-xs font-thin">
-              Now Playing
-            </span>
           )}
         </div>
       </Link>

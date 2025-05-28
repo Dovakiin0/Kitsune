@@ -1,7 +1,12 @@
 import { useState, useEffect } from "react";
 import { IWatchedAnime } from "@/types/watched-anime";
+import { WatchHistory } from "./use-get-bookmark";
 
-export const useHasAnimeWatched = (animeId: string, episodeId?: string) => {
+export const useHasAnimeWatched = (
+  animeId: string,
+  episodeId?: string,
+  watchedEpisodes?: WatchHistory[],
+) => {
   const [hasWatchedAnime, setHasWatchedAnime] = useState(false);
   const [hasWatchedEpisode, setHasWatchedEpisode] = useState(false);
 
@@ -29,6 +34,15 @@ export const useHasAnimeWatched = (animeId: string, episodeId?: string) => {
       setHasWatchedEpisode(false); // Episode has not been watched
     }
   }, [animeId, episodeId]);
+
+  if (watchedEpisodes && watchedEpisodes.length > 0) {
+    if (episodeId) {
+      const episodeWatched = watchedEpisodes.some(
+        (episode) => episode.episodeId === episodeId,
+      );
+      return { hasWatchedAnime: true, hasWatchedEpisode: episodeWatched };
+    }
+  }
 
   return { hasWatchedAnime, hasWatchedEpisode };
 };

@@ -1,0 +1,24 @@
+/* Empty/No Contribution Days */
+.colorEmpty {
+  fill: #1c1c1c;
+}
+
+/* Lightest Pink/Red */
+.colorScale1 {
+  fill: #f7acbc;
+}
+
+/* Medium Light Pink/Red */
+.colorScale2 {
+  fill: #f17896;
+}
+
+/* Primary Color */
+.colorScale3 {
+  fill: #e9376b;
+}
+
+/* Darker Shade */
+.colorScale4 {
+  fill: #b82a53;
+}

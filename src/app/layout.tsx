@@ -10,16 +10,18 @@ import { PublicEnvScript } from "next-runtime-env";
 
 import { ThemeProvider } from "@/components/theme-provider";
 
+import { Toaster } from "@/components/ui/sonner";
+
 const geistSans = localFont({
   src: "./fonts/GeistVF.woff",
   variable: "--font-geist-sans",
   weight: "100 900",
 });
-const geistMono = localFont({
-  src: "./fonts/GeistMonoVF.woff",
-  variable: "--font-geist-mono",
-  weight: "100 900",
-});
+// const geistMono = localFont({
+//   src: "./fonts/GeistMonoVF.woff",
+//   variable: "--font-geist-mono",
+//   weight: "100 900",
+// });
 
 const APP_NAME = "Kitsune";
 const APP_DEFAULT_TITLE = "Kitsune | Anime Streaming";
@@ -57,24 +59,26 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en">
-      <Script
-        src="https://www.googletagmanager.com/gtag/js?id=G-X9RZ58XPH1"
-        strategy="afterInteractive"
-      />
-      <Script id="google-analytics" strategy="afterInteractive">
-        {`
-  window.dataLayer = window.dataLayer || [];
-  function gtag(){dataLayer.push(arguments);}
-  gtag('js', new Date());
+    <html lang="en" suppressHydrationWarning>
+      <head>
+        <Script
+          src="https://www.googletagmanager.com/gtag/js?id=G-X9RZ58XPH1"
+          strategy="afterInteractive"
+        />
+        <Script id="google-analytics" strategy="afterInteractive">
+          {`
+          window.dataLayer = window.dataLayer || [];
+          function gtag(){dataLayer.push(arguments);}
+          gtag('js', new Date());
 
-  gtag('config', 'G-X9RZ58XPH1');`}
-      </Script>
-      <PublicEnvScript />
-      <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased max-w-[100vw] overflow-x-hidden`}
-      >
+          gtag('config', 'G-X9RZ58XPH1');`}
+        </Script>
+        <PublicEnvScript />
         <link rel="icon" href="/icon.png" type="image/png" sizes="192x192" />
+      </head>
+      <body
+        className={`${geistSans.className} antialiased max-w-[100vw] overflow-x-hidden`}
+      >
         <ThemeProvider
           attribute="class"
           defaultTheme="dark"
@@ -87,6 +91,7 @@ export default function RootLayout({
             <Footer />
           </QueryProvider>
         </ThemeProvider>
+        <Toaster />
       </body>
     </html>
   );

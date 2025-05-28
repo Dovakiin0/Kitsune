@@ -1,19 +1,32 @@
 "use client";
 
 import EpisodeCard from "./common/episode-card";
-import React, { useEffect, useRef } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { useSearchParams } from "next/navigation";
 
 import { useAnimeStore } from "@/store/anime-store";
-import { useGetAllEpisodes } from "@/query/get-all-episodes";
+import { Episode, IEpisodes } from "@/types/episodes";
+import Select, { ISelectOptions } from "./common/select";
+import { Input } from "./ui/input";
+import { Bookmark } from "@/hooks/use-get-bookmark";
 
 type Props = {
   animeId: string;
   title: string;
   subOrDub?: { sub: number; dub: number };
+  episodes: IEpisodes;
+  isLoading: boolean;
+  bookmarks?: Bookmark[] | null;
 };
 
-const EpisodePlaylist = ({ animeId, title, subOrDub }: Props) => {
+const EpisodePlaylist = ({
+  animeId,
+  title,
+  subOrDub,
+  episodes,
+  isLoading,
+  bookmarks,
+}: Props) => {
   const searchParams = useSearchParams();
 
   const episodeId = searchParams.get("episode");
@@ -22,10 +35,21 @@ const EpisodePlaylist = ({ animeId, title, subOrDub }: Props) => {
 
   const { setSelectedEpisode } = useAnimeStore();
 
-  const { data: episodes, isLoading } = useGetAllEpisodes(animeId);
-
   const scrollContainerRef = useRef<HTMLDivElement | null>(null);
   const episodeRefs = useRef<(HTMLDivElement | null)[]>([]);
+
+  const [currentGroup, setCurrentGroup] = useState(
+    `1 - ${Math.min(50, episodes?.totalEpisodes!)}`,
+  );
+  const [search, setSearch] = useState("");
+
+  const [start, end] = currentGroup.split(" - ").map(Number);
+  const filtered = episodes.episodes.filter((_, index) => {
+    return index >= start - 1 && index <= end - 1;
+  });
+
+  const [filteredEpisodes, setFilteredEpisodes] =
+    React.useState<Episode[]>(filtered);
 
   useEffect(() => {
     if (
@@ -43,6 +67,16 @@ const EpisodePlaylist = ({ animeId, title, subOrDub }: Props) => {
     }
     //eslint-disable-next-line
   }, [episodes]);
+
+  useEffect(() => {
+    if (!episodes || currentGroup === "") return;
+    const [start, end] = currentGroup.split(" - ").map(Number);
+    const filtered = episodes.episodes.filter((_, index) => {
+      return index >= start - 1 && index <= end - 1;
+    });
+
+    setFilteredEpisodes(filtered);
+  }, [episodes, currentGroup]);
 
   useEffect(() => {
     const episodeIndex = episodes?.episodes.findIndex(
@@ -72,31 +106,95 @@ const EpisodePlaylist = ({ animeId, title, subOrDub }: Props) => {
     //eslint-disable-next-line
   }, [animeId, episodes]);
 
+  const handleOnSearchChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    if (!episodes) return;
+    const value = e.target.value;
+    setSearch(value);
+
+    if (!value) {
+      // check if group is selected and filter based on that
+      const [start, end] = currentGroup.split(" - ").map(Number);
+      const filtered = episodes.episodes.filter((_, index) => {
+        return index >= start - 1 && index <= end - 1;
+      });
+      setFilteredEpisodes(filtered);
+      return;
+    }
+
+    const filtered = episodes?.episodes.filter((episode) =>
+      episode.number.toString().toLowerCase().includes(value.toLowerCase()),
+    );
+
+    setFilteredEpisodes(filtered);
+  };
+
+  const handleOnSelectChange = (range: string) => {
+    setCurrentGroup(range);
+    if (scrollContainerRef.current) {
+      scrollContainerRef.current.scrollTop = 0;
+    }
+  };
+
+  const groupOptions = (): ISelectOptions[] => {
+    let start = 1;
+    const end = episodes?.totalEpisodes;
+    const options: ISelectOptions[] = [];
+    // group episodes in range of 50
+    while (start <= end!) {
+      const range = `${start} - ${Math.min(start + 49, end!)}`;
+      options.push({
+        label: range,
+        value: range,
+      });
+      start += 50;
+    }
+    return options;
+  };
+
   return (
-    <div className="col-span-1 flex flex-col w-full gap-5 border-[.0313rem] border-secondary rounded-md overflow-hidden min-h-[20vh] sm:min-h-[30vh] max-h-[60vh] md:min-h-[40vh] lg:min-h-[60vh]">
-      <div className="h-fit bg-[#18181a] px-5 py-3">
-        <h3 className="text-lg font-semibold"> Episode Playlist</h3>
-        <span className="text-sm font-thin">{title}</span>
-      </div>
-      <div
-        ref={scrollContainerRef}
-        className="flex flex-col gap-1 px-2 pb-3 flex-grow overflow-y-auto"
-      >
-        {episodes?.episodes.map((episode, idx) => (
-          //@ts-expect-error type mismatch
-          <div key={idx} ref={(el) => (episodeRefs.current[idx] = el)}>
-            <EpisodeCard
-              subOrDub={subOrDub}
-              variant="list"
-              episode={episode}
-              animeId={animeId}
+    episodes && (
+      <div className="col-span-1 flex flex-col w-full gap-5 border-[.0313rem] border-secondary rounded-md overflow-hidden min-h-[20vh] sm:min-h-[30vh] md:min-h-[40vh] lg:min-h-[60vh] max-h-[500px]">
+        <div className="h-fit bg-[#18181a] px-5 py-3">
+          <h3 className="text-lg font-semibold"> Episode Playlist</h3>
+          <span className="text-sm font-thin">{title}</span>
+          <div className="flex flex-row w-full items-center justify-between gap-2 mt-2">
+            <Input
+              placeholder="Search Episode"
+              value={search}
+              onChange={handleOnSearchChange}
+              className="w-1/2"
+            />
+            <Select
+              value={currentGroup}
+              placeholder={currentGroup}
+              onChange={handleOnSelectChange}
+              options={groupOptions()}
+              className="w-1/2"
             />
           </div>
-        ))}
-        {!episodes?.episodes.length && !isLoading && "No Episodes"}
-        {isLoading && <PlaylistSkeleton />}
+        </div>
+        <div
+          ref={scrollContainerRef}
+          className={`flex flex-col flex-grow gap-1 px-2 pb-3 overflow-y-auto`}
+        >
+          {filteredEpisodes &&
+            filteredEpisodes.map((episode, idx) => (
+              //@ts-expect-error type mismatch
+              <div key={idx} ref={(el) => (episodeRefs.current[idx] = el)}>
+                <EpisodeCard
+                  subOrDub={subOrDub}
+                  variant={"list"}
+                  episode={episode}
+                  animeId={animeId}
+                  watchedEpisodes={bookmarks?.[0].expand.watchHistory}
+                />
+              </div>
+            ))}
+          {!filteredEpisodes?.length && !isLoading && "No Episodes"}
+          {isLoading && <PlaylistSkeleton />}
+        </div>
       </div>
-    </div>
+    )
   );
 };
 

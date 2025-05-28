@@ -25,13 +25,19 @@ jobs:
           username: ${{ secrets.DOCKER_USERNAME }}
           password: ${{ secrets.DOCKER_TOKEN }}
 
+      - name: Create env file
+        uses: SpicyPizza/create-envfile@v2.0
+        with:
+          envkey_NEXT_PUBLIC_PROXY_URL: ${{secrets.NEXT_PUBLIC_PROXY_URL}}
+          envkey_NEXT_PUBLIC_POCKETBASE_URL: ${{secrets.NEXT_PUBLIC_POCKETBASE_URL}}
+
       # Build and push Docker image
       - name: Build and push Docker image
         uses: docker/build-push-action@v4
         with:
           context: .
           push: true
-          tags: dovakiin0/kitsune-v2:latest, dovakiin0/kitsune-v2:${{ github.sha }}
+          tags: dovakiin0/kitsune:latest, dovakiin0/kitsune:${{ github.sha }}
 
       # Deploy to VPS via SSH
       - name: Deploy to VPS
@@ -42,12 +48,5 @@ jobs:
           key: ${{ secrets.SSH_PRIVATE_KEY }}
           port: 22
           script: |
-            # Pull the latest Docker image
-            docker pull dovakiin0/kitsune-v2:latest
-
-            # Stop and remove the existing container
-            docker stop kitsune-v2 || true
-            docker rm kitsune-v2 || true
-
-            # Run the new container
-            docker run -d --name kitsune-v2 -p 3000:3000 dovakiin0/kitsune-v2
+            cd ~/kitsune
+            docker compose up --detach --pull always

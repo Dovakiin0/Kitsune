@@ -11,6 +11,7 @@ const HeroSection = dynamic(() => import("@/components/hero-section"));
 const LatestEpisodesAnime = dynamic(
   () => import("@/components/latest-episodes-section"),
 );
+const AnimeSchedule = dynamic(() => import("@/components/anime-schedule"));
 const AnimeSections = dynamic(() => import("@/components/anime-sections"));
 
 export default function Home() {
@@ -51,9 +52,12 @@ export default function Home() {
         trendingAnime={data?.trendingAnimes as IAnime[]}
         loading={isLoading}
       />
+
+      <AnimeSchedule />
+
       <AnimeSections
-        title={"Top Airing Anime"}
-        trendingAnime={data?.topAiringAnimes as IAnime[]}
+        title={"Upcoming Animes"}
+        trendingAnime={data?.topUpcomingAnimes as IAnime[]}
         loading={isLoading}
       />
     </div>

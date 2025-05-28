@@ -10,6 +10,9 @@ import { useGetEpisodeServers } from "@/query/get-episode-servers";
 import { getFallbackServer } from "@/utils/fallback-server";
 import { Captions, Mic } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { Switch } from "@/components/ui/switch";
+import { useAuthStore } from "@/store/auth-store";
+import { pb } from "@/lib/pocketbase";
 
 const VideoPlayerSection = () => {
   const { selectedEpisode, anime } = useAnimeStore();
@@ -18,6 +21,11 @@ const VideoPlayerSection = () => {
 
   const [serverName, setServerName] = useState<string>("");
   const [key, setKey] = useState<string>("");
+
+  const { auth, setAuth } = useAuthStore();
+  const [autoSkip, setAutoSkip] = useState<boolean>(
+    auth?.autoSkip || Boolean(localStorage.getItem("autoSkip")) || false,
+  );
 
   useEffect(() => {
     const { serverName, key } = getFallbackServer(serversData);
@@ -42,7 +50,22 @@ const VideoPlayerSection = () => {
     localStorage.setItem("serverPreference", JSON.stringify(preference));
   }
 
+  async function onHandleAutoSkipChange(value: boolean) {
+    setAutoSkip(value);
+    if (!auth) {
+      localStorage.setItem("autoSkip", JSON.stringify(value));
+      return;
+    }
+    const res = await pb.collection("users").update(auth.id, {
+      autoSkip: value,
+    });
+    if (res) {
+      setAuth({ ...auth, autoSkip: value });
+    }
+  }
+
   useEffect(() => {
+    if (auth) return;
     if (!Array.isArray(watchedDetails)) {
       localStorage.removeItem("watched");
       return;
@@ -93,57 +116,70 @@ const VideoPlayerSection = () => {
       }
     }
     //eslint-disable-next-line
-  }, [episodeData, selectedEpisode]);
+  }, [episodeData, selectedEpisode, auth]);
 
   if (isLoading || !episodeData)
     return (
-      <div className="min-h-[20vh] sm:min-h-[30vh] max-h-[60vh] md:min-h-[40vh] lg:min-h-[60vh] w-full animate-pulse bg-slate-700 rounded-md"></div>
+      <div className="h-auto aspect-video lg:max-h-[calc(100vh-150px)] min-h-[20vh] sm:min-h-[30vh] md:min-h-[40vh] lg:min-h-[60vh] w-full animate-pulse bg-slate-700 rounded-md"></div>
     );
 
   return (
-    <>
+    <div>
       <KitsunePlayer
         key={episodeData?.sources[0].url}
         episodeInfo={episodeData!}
+        serversData={serversData!}
         animeInfo={{
+          id: anime.anime.info.id,
           title: anime.anime.info.name,
           image: anime.anime.info.poster,
         }}
-        subOrDub={key}
+        subOrDub={key as "sub" | "dub"}
+        autoSkip={autoSkip}
       />
-      <div className="bg-[#0f172a] p-5">
-        <div className="flex flex-row items-center space-x-5">
-          <Captions className="text-red-300" />
-          <p className="font-bold text-sm">SUB</p>
-          {serversData?.sub.map((s, i) => (
-            <Button
-              size="sm"
-              key={i}
-              className={`uppercase font-bold ${serverName === s.serverName && key === "sub" && "bg-red-300"}`}
-              onClick={() => changeServer(s.serverName, "sub")}
-            >
-              {s.serverName}
-            </Button>
-          ))}
-        </div>
-        {!!serversData?.dub.length && (
-          <div className="flex flex-row items-center space-x-5 mt-2">
-            <Mic className="text-green-300" />
-            <p className="font-bold text-sm">DUB</p>
-            {serversData?.dub.map((s, i) => (
+      <div className="flex flex-row bg-[#0f172a]  items-start justify-between w-full p-5">
+        <div>
+          <div className="flex flex-row items-center space-x-5">
+            <Captions className="text-red-300" />
+            <p className="font-bold text-sm">SUB</p>
+            {serversData?.sub.map((s, i) => (
               <Button
                 size="sm"
                 key={i}
-                className={`uppercase font-bold ${serverName === s.serverName && key === "dub" && "bg-green-300"}`}
-                onClick={() => changeServer(s.serverName, "dub")}
+                className={`uppercase font-bold ${serverName === s.serverName && key === "sub" && "bg-red-300"}`}
+                onClick={() => changeServer(s.serverName, "sub")}
               >
                 {s.serverName}
               </Button>
             ))}
           </div>
-        )}
+          {!!serversData?.dub.length && (
+            <div className="flex flex-row items-center space-x-5 mt-2">
+              <Mic className="text-green-300" />
+              <p className="font-bold text-sm">DUB</p>
+              {serversData?.dub.map((s, i) => (
+                <Button
+                  size="sm"
+                  key={i}
+                  className={`uppercase font-bold ${serverName === s.serverName && key === "dub" && "bg-green-300"}`}
+                  onClick={() => changeServer(s.serverName, "dub")}
+                >
+                  {s.serverName}
+                </Button>
+              ))}
+            </div>
+          )}
+        </div>
+        <div className="flex flex-row items-center space-x-2 text-sm">
+          <Switch
+            checked={autoSkip}
+            onCheckedChange={(e) => onHandleAutoSkipChange(e)}
+            id="auto-skip"
+          />
+          <p>Auto Skip</p>
+        </div>
       </div>
-    </>
+    </div>
   );
 };
 

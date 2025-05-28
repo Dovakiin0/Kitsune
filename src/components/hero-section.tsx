@@ -82,8 +82,8 @@ const HeroCarouselItem = ({ anime }: { anime: SpotlightAnime }) => {
     <div
       className={`w-full bg-cover bg-no-repeat bg-center h-[80vh] relative`}
       style={{ backgroundImage: `url(${anime?.poster})` }}
-    // onMouseEnter={handleMouseEnter}
-    // onMouseLeave={handleMouseLeave}
+      // onMouseEnter={handleMouseEnter}
+      // onMouseLeave={handleMouseLeave}
     >
       {/* {isHovered && (
         <div className="absolute inset-0 z-0">
@@ -159,7 +159,7 @@ const LoadingSkeleton = () => {
           </div>
         </Container>
       </div>
-      <div className="absolute hidden md:flex items-center gap-5 right-10 bottom-0 z-50 isolate">
+      <div className="absolute hidden md:flex items-center gap-5 right-10 bottom-32 z-50 isolate">
         <span className="h-10 w-10 rounded-full animate-pulse bg-slate-700"></span>
         <span className="h-10 w-10 rounded-full animate-pulse bg-slate-700"></span>
       </div>

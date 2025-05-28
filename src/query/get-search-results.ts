@@ -1,24 +1,19 @@
 import { SEARCH_ANIME } from "@/constants/query-keys";
 import { api } from "@/lib/api";
-import { IAnime } from "@/types/anime";
+import { IAnimeSearch, SearchAnimeParams } from "@/types/anime";
 import { useQuery } from "react-query";
 
-const searchAnime = async (q: string) => {
-  if (q === "") {
-    return;
-  }
+const searchAnime = async (params: SearchAnimeParams) => {
   const res = await api.get("/api/search", {
-    params: {
-      q: q,
-    },
+    params,
   });
 
-  return res.data.data.animes as IAnime[];
+  return res.data.data as IAnimeSearch;
 };
 
-export const useGetSearchAnimeResults = (query: string) => {
+export const useGetSearchAnimeResults = (params: SearchAnimeParams) => {
   return useQuery({
-    queryFn: () => searchAnime(query),
-    queryKey: [SEARCH_ANIME, query],
+    queryFn: () => searchAnime(params),
+    queryKey: [SEARCH_ANIME, { ...params }],
   });
 };
