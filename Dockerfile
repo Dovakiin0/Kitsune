@@ -25,6 +25,12 @@ RUN npm run build
 FROM base AS runner
 WORKDIR /app
 
+LABEL org.opencontainers.image.title="Kitsune" \
+  org.opencontainers.image.description="Anime streaming app" \
+  org.opencontainers.image.maintainer="dovakiin0@kitsunee.online" \
+  org.opencontainers.image.source="https://github.com/dovakiin0/Kitsune.git" \
+  org.opencontainers.image.vendor="kitsunee.online"
+
 RUN addgroup -g 1001 -S nodejs
 RUN adduser -S nextjs -u 1001
 
