@@ -17,7 +17,6 @@ import useScrollPosition from "@/hooks/use-scroll-position";
 import { Sheet, SheetClose, SheetContent, SheetTrigger } from "./ui/sheet";
 import LoginPopoverButton from "./login-popover-button";
 import { useAuthStore } from "@/store/auth-store";
-import Avatar from "./common/avatar";
 import { pb } from "@/lib/pocketbase";
 import NavbarAvatar from "./navbar-avatar";
 
