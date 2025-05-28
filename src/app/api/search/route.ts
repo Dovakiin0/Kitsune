@@ -32,7 +32,7 @@ const parseSearchParams = (
   const getNumber = (key: string) => {
     const val = searchParams.get(key);
     const num = val ? parseInt(val, 10) : undefined;
-    return isNaN(num!) ? undefined : num;
+    return num === undefined || isNaN(num) ? undefined : num;
   };
 
   return {
