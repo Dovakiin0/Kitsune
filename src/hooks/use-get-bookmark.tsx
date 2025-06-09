@@ -67,6 +67,7 @@ function useBookMarks({
           .getList(page, per_page, {
             filter: filters,
             expand: "watchHistory",
+            sort: "-created",
           });
 
         if (res.totalItems > 0) {
