@@ -123,10 +123,16 @@ const VideoPlayerSection = () => {
       <div className="h-auto aspect-video lg:max-h-[calc(100vh-150px)] min-h-[20vh] sm:min-h-[30vh] md:min-h-[40vh] lg:min-h-[60vh] w-full animate-pulse bg-slate-700 rounded-md"></div>
     );
 
-  return (
+  return episodeData?.sources.length === 0 ? (
+<div
+      className={"relative w-full h-auto aspect-video  min-h-[20vh] sm:min-h-[30vh] md:min-h-[40vh] lg:min-h-[60vh] max-h-[500px] lg:max-h-[calc(100vh-150px)] bg-black overflow-hidde  n p-4"}
+    >
+  No Source Found :(
+    </div>
+  ) : (
     <div>
       <KitsunePlayer
-        key={episodeData?.sources[0].url}
+        key={episodeData?.sources?.[0].url}
         episodeInfo={episodeData!}
         serversData={serversData!}
         animeInfo={{

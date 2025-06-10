@@ -18,7 +18,7 @@
         "@radix-ui/react-toggle": "^1.1.9",
         "@radix-ui/react-toggle-group": "^1.1.10",
         "@radix-ui/react-tooltip": "^1.2.0",
-        "aniwatch": "^2.23.0",
+        "aniwatch": "^2.23.1",
         "artplayer": "^5.2.2",
         "artplayer-plugin-ambilight": "^1.0.0",
         "artplayer-plugin-hls-control": "^1.0.1",
@@ -594,7 +594,7 @@
 
     "ajv-keywords": ["ajv-keywords@3.5.2", "", { "peerDependencies": { "ajv": "^6.9.1" } }, "sha512-5p6WTN0DdTGVQk6VjcEju19IgaHudalcfabD7yhDGeA6bcQnmL+CpveLJq/3hvfwd1aof6L386Ougkx6RfyMIQ=="],
 
-    "aniwatch": ["aniwatch@2.23.0", "", { "dependencies": { "axios": "^1.7.9", "cheerio": "1.0.0", "crypto-js": "^4.2.0", "pino": "^9.6.0" } }, "sha512-HiSVtFNEqeaL60JNPnRN6ke+rKlATYe9EDxoQsCdZ35y+fsSISc9yN3YGFNTMbcAfuXRTsiINY84J35GM32NDw=="],
+    "aniwatch": ["aniwatch@2.23.1", "", { "dependencies": { "axios": "^1.7.9", "cheerio": "1.0.0", "crypto-js": "^4.2.0", "pino": "^9.6.0" } }, "sha512-bZkqxtslZ0Z2fwPnJRvxqyc8+j4CFZzXhraTAcYpgQpCHknb+THAkM2WP5XfD5eLWwWpEvfIs2Cd0FjWXcMZDg=="],
 
     "ansi-regex": ["ansi-regex@5.0.1", "", {}, "sha512-quJQXlTSUGL2LH9SUXo8VwsY4soanhgo6LNSm84E1LBcE8s3O0wpdiRzyR9z/ZZJMlMWv37qOOb9pdJlMUEKFQ=="],
 
