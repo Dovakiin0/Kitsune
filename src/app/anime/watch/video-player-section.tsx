@@ -8,11 +8,12 @@ import KitsunePlayer from "@/components/kitsune-player";
 import { useGetEpisodeData } from "@/query/get-episode-data";
 import { useGetEpisodeServers } from "@/query/get-episode-servers";
 import { getFallbackServer } from "@/utils/fallback-server";
-import { Captions, Mic } from "lucide-react";
+import { AlertCircleIcon, Captions, Mic } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Switch } from "@/components/ui/switch";
 import { useAuthStore } from "@/store/auth-store";
 import { pb } from "@/lib/pocketbase";
+import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 
 const VideoPlayerSection = () => {
   const { selectedEpisode, anime } = useAnimeStore();
@@ -124,11 +125,33 @@ const VideoPlayerSection = () => {
     );
 
   return episodeData?.sources.length === 0 ? (
-<div
-      className={"relative w-full h-auto aspect-video  min-h-[20vh] sm:min-h-[30vh] md:min-h-[40vh] lg:min-h-[60vh] max-h-[500px] lg:max-h-[calc(100vh-150px)] bg-black overflow-hidde  n p-4"}
-    >
-  No Source Found :(
-    </div>
+    <>
+      <div
+        className={
+          "relative w-full h-auto aspect-video  min-h-[20vh] sm:min-h-[30vh] md:min-h-[40vh] lg:min-h-[60vh] max-h-[500px] lg:max-h-[calc(100vh-150px)] bg-black overflow-hidde  n p-4"
+        }
+      >
+        <iframe
+          src={`https://megaplay.buzz/stream/s-2/${serversData?.episodeId.split("?ep=")[1]}/sub`}
+          width="100%"
+          height="100%"
+          allowFullScreen
+        ></iframe>
+      </div>
+      <div className="mt-4">
+        <Alert variant="destructive" className="text-red-400">
+          <AlertTitle className="font-bold flex items-center space-x-2">
+            <AlertCircleIcon size="20" />
+            <p>Fallback Video Player Activated</p>
+          </AlertTitle>
+          <AlertDescription>
+            The original video source for this episode is currently unavailable.
+            A fallback player has been provided for your convenience. We
+            recommend using an ad blocker for a smoother viewing experience.
+          </AlertDescription>
+        </Alert>
+      </div>
+    </>
   ) : (
     <div>
       <KitsunePlayer

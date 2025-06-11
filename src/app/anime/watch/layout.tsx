@@ -165,12 +165,7 @@ const Layout = (props: Props) => {
               options={SelectOptions}
               onChange={handleSelect}
             />
-            <h1
-              className="text-2xl md:font-black font-extrabold z-[100] cursor-pointer"
-              onClick={() => {
-                router.push(ROUTES.ANIME_DETAILS + "/" + anime?.anime.info.id);
-              }}
-            >
+            <h1 className="text-2xl md:font-black font-extrabold z-[100]">
               {anime?.anime.info.name}
             </h1>
             <p>{parse(anime?.anime.info.description as string)}</p>
