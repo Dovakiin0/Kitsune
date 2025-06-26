@@ -241,21 +241,18 @@ function KitsunePlayer({
     skipTimesRef.current.outroEnd = outroEnd; // Store the raw value
 
     // Subtitle Track Selector Options
-    const trackOptions: any = (episodeInfo?.tracks ?? [])
-      .filter((track) => track.kind === "captions")
-      .map((track) => ({
-        default: track.label === "English", // Example default logic
-        html: track.label,
-        url: track.file,
-      }));
+    const trackOptions: any = (episodeInfo?.tracks ?? []).map((track) => ({
+      default: track.lang === "English", // Example default logic
+      html: track.lang,
+      url: track.url,
+    }));
 
     // Direct Subtitle Option based on subOrDub
     const subtitleConfig: Option["subtitle"] =
       subOrDub === "sub"
         ? {
-          url: episodeInfo?.tracks?.find(
-            (track) => track.label === "English" && track.kind === "captions", // Be specific
-          )?.file,
+          url: episodeInfo?.tracks?.find((track) => track.lang === "English")
+            ?.url,
           type: "vtt",
           style: {
             // Example styles

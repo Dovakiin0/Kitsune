@@ -40,10 +40,8 @@ export interface IEpisodeServers {
 }
 
 export interface Track {
-  file: string;
-  label?: string;
-  kind: string;
-  default?: boolean;
+  lang: string;
+  url: string;
 }
 
 export interface Intro {

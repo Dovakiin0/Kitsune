@@ -125,9 +125,7 @@
     },
     "passwordAuth": {
       "enabled": true,
-      "identityFields": [
-        "email"
-      ]
+      "identityFields": ["email"]
     },
     "mfa": {
       "enabled": false,
@@ -334,17 +332,14 @@
       "mappedFields": {
         "id": "",
         "name": "",
-        "username": "",
+        "username": "username",
         "avatarURL": "avatar"
       },
       "enabled": true
     },
     "passwordAuth": {
       "enabled": true,
-      "identityFields": [
-        "email",
-        "username"
-      ]
+      "identityFields": ["email", "username"]
     },
     "mfa": {
       "enabled": false,
