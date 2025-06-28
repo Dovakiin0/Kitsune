@@ -24,7 +24,7 @@ const ContinueWatching = (props: Props) => {
   const { auth } = useAuthStore();
   const { bookmarks } = useBookMarks({
     page: 1,
-    per_page: 8,
+    per_page: 14,
     status: "watching",
   });
 
@@ -58,8 +58,8 @@ const ContinueWatching = (props: Props) => {
           poster: anime.thumbnail,
           episode: anime.expand.watchHistory
             ? anime.expand.watchHistory.sort(
-                (a, b) => b.episodeNumber - a.episodeNumber,
-              )[0]
+              (a, b) => b.episodeNumber - a.episodeNumber,
+            )[0]
             : null,
         }));
         setAnime(animes as WatchedAnime[]);
