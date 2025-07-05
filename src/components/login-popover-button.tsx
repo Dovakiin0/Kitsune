@@ -23,6 +23,7 @@ function LoginPopoverButton() {
     password: "",
     confirm_password: "",
   });
+  const [tabValue, setTabValue] = useState<"login" | "signup">("login");
 
   const loginWithEmail = async () => {
     try {
@@ -72,33 +73,32 @@ function LoginPopoverButton() {
     }
 
     try {
-      await pb.collection("users").create({
+      let user = await pb.collection("users").create({
         username: formData.username,
         email: formData.email,
         password: formData.password,
         passwordConfirm: formData.confirm_password,
       });
 
-      await pb.collection("users").update(pb.authStore.record?.id!, {
-        verified: true,
-      });
-
-      if (pb.authStore.isValid && pb.authStore.record) {
-        toast.success("Account created successfully");
+      if (user) {
+        toast.success("Account created successfully. Please login.", {
+          style: { background: "green" },
+        });
         clearForm();
-        auth.setAuth({
-          id: pb.authStore.record.id,
-          email: pb.authStore.record.email,
-          username: pb.authStore.record.username,
-          avatar: pb.authStore.record.avatar,
-          collectionId: pb.authStore.record.collectionId,
-          collectionName: pb.authStore.record.collectionName,
-          autoSkip: pb.authStore.record.autoSkip,
+        setTabValue("login");
+      }
+    } catch (e: any) {
+      if (e.response?.data) {
+        for (const key in e.response?.data) {
+          toast.error(`${key}: ${e.response.data[key].message}`, {
+            style: { background: "red" },
+          });
+        }
+      } else {
+        toast.error("Signup failed. Please try again.", {
+          style: { background: "red" },
         });
       }
-    } catch (e) {
-      console.error("Signup error:", e);
-      toast.error("Error creating account", { style: { background: "red" } });
     }
   };
 
@@ -148,7 +148,11 @@ function LoginPopoverButton() {
         side="bottom"
         className="bg-black bg-opacity-50 backdrop-blur-sm w-[300px] mt-4 mr-4 p-4"
       >
-        <Tabs defaultValue="login">
+        <Tabs
+          defaultValue={tabValue}
+          value={tabValue}
+          onValueChange={(value) => setTabValue(value as "login" | "signup")}
+        >
           <TabsList>
             <TabsTrigger onClick={clearForm} value="login">
               Login

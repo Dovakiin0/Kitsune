@@ -19,6 +19,7 @@ import LoginPopoverButton from "./login-popover-button";
 import { useAuthStore } from "@/store/auth-store";
 import { pb } from "@/lib/pocketbase";
 import NavbarAvatar from "./navbar-avatar";
+import { toast } from "sonner";
 
 const menuItems: Array<{ title: string; href?: string }> = [
   // {
@@ -48,16 +49,24 @@ const NavBar = () => {
         localStorage.getItem("pocketbase_auth") as string,
       );
       if (auth_token) {
-        const user = await pb.collection("users").authRefresh();
-        if (user) {
-          auth.setAuth({
-            id: user.record.id,
-            email: user.record.email,
-            username: user.record.username,
-            avatar: user.record.avatar,
-            collectionId: user.record.collectionId,
-            collectionName: user.record.collectionName,
-            autoSkip: user.record.autoSkip,
+        try {
+          const user = await pb.collection("users").authRefresh();
+          if (user) {
+            auth.setAuth({
+              id: user.record.id,
+              email: user.record.email,
+              username: user.record.username,
+              avatar: user.record.avatar,
+              collectionId: user.record.collectionId,
+              collectionName: user.record.collectionName,
+              autoSkip: user.record.autoSkip,
+            });
+          }
+        } catch (error) {
+          localStorage.removeItem("pocketbase_auth");
+          auth.clearAuth();
+          toast.error("Login session expired.", {
+            style: { background: "red" },
           });
         }
       }
