@@ -62,7 +62,8 @@ const NavBar = () => {
               autoSkip: user.record.autoSkip,
             });
           }
-        } catch (error) {
+        } catch (e) {
+          console.error("Auth refresh error:", e);
           localStorage.removeItem("pocketbase_auth");
           auth.clearAuth();
           toast.error("Login session expired.", {

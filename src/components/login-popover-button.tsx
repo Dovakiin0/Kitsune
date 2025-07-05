@@ -73,7 +73,7 @@ function LoginPopoverButton() {
     }
 
     try {
-      let user = await pb.collection("users").create({
+      const user = await pb.collection("users").create({
         username: formData.username,
         email: formData.email,
         password: formData.password,
