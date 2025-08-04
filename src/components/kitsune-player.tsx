@@ -89,6 +89,8 @@ function KitsunePlayer({
     setIsAutoSkipEnabled(autoSkip);
   }, [autoSkip]);
 
+  const proxyBaseURI = `${env("NEXT_PUBLIC_PROXY_URL")}/m3u8-proxy`;
+
   // --- Construct Proxy URI ---
   const uri = useMemo(() => {
     const firstSourceUrl = episodeInfo?.sources?.[0]?.url;
@@ -96,9 +98,8 @@ function KitsunePlayer({
     if (!firstSourceUrl || !referer) return null;
 
     try {
-      const baseURI = `${env("NEXT_PUBLIC_PROXY_URL")}/m3u8-proxy`;
       const url = encodeURIComponent(firstSourceUrl);
-      return `${baseURI}?url=${url}&referer=${referer}`;
+      return `${proxyBaseURI}?url=${url}&referer=${referer}`;
     } catch (error) {
       console.error("Error constructing proxy URI:", error);
       return null;
@@ -244,25 +245,32 @@ function KitsunePlayer({
     const trackOptions: any = (episodeInfo?.tracks ?? []).map((track) => ({
       default: track.lang === "English", // Example default logic
       html: track.lang,
-      url: track.url,
+      url: `${proxyBaseURI}?url=${encodeURIComponent(track.url)}`,
     }));
+
+    const defaultTrack = episodeInfo?.tracks?.find(
+      (track) => track.lang === "English",
+    )?.url;
 
     // Direct Subtitle Option based on subOrDub
     const subtitleConfig: Option["subtitle"] =
       subOrDub === "sub"
         ? {
-          url: episodeInfo?.tracks?.find((track) => track.lang === "English")
-            ?.url,
-          type: "vtt",
-          style: {
-            // Example styles
-            color: "#FFFFFF",
-            fontSize: "22px", // Base size, will be adjusted
-            textShadow: "1px 1px 3px rgba(0,0,0,0.8)",
-          },
-          encoding: "utf-8",
-          escape: false, // Allow potential styling tags in VTT
-        }
+            url: `${
+              defaultTrack
+                ? `${proxyBaseURI}?url=${encodeURIComponent(defaultTrack)}`
+                : ""
+            }`,
+            type: "vtt",
+            style: {
+              // Example styles
+              color: "#FFFFFF",
+              fontSize: "22px", // Base size, will be adjusted
+              textShadow: "2px 2px 4px rgba(0,0,0,0.8)",
+            },
+            encoding: "utf-8",
+            escape: false, // Allow potential styling tags in VTT
+          }
         : {}; // Explicitly hide if 'dub'
 
     const manualSkipControl = {
@@ -283,7 +291,7 @@ function KitsunePlayer({
         marginRight: "10px", // Space from toggle
         padding: "3px 0", // Adjust padding for vertical centering
       },
-      click: function(controlItem: any) {
+      click: function (controlItem: any) {
         const art = artInstanceRef.current;
         if (!art) return;
         const { introEnd, outroStart, outroEnd, validIntro, validOutro } =
@@ -407,7 +415,7 @@ function KitsunePlayer({
               html: "Display",
               tooltip: subOrDub === "sub" ? "Hide" : "Show", // Initial state based on prop
               switch: subOrDub === "sub", // Switch is ON if sub
-              onSwitch: function(item) {
+              onSwitch: function (item) {
                 const showSubtitle = !item.switch; // The new state
                 art.subtitle.show = showSubtitle;
                 item.tooltip = showSubtitle ? "Hide" : "Show";
@@ -417,10 +425,12 @@ function KitsunePlayer({
             },
             ...trackOptions, // Add subtitle track choices
           ],
-          onSelect: function(item: any) {
+          onSelect: function (item: any) {
             // Type the item
             if (item.url && typeof item.url === "string") {
-              art.subtitle.switch(item.url, { name: item.html });
+              art.subtitle.switch(`${proxyBaseURI}?url=${item.url}`, {
+                name: item.html,
+              });
               return item.html ?? "Subtitle";
             }
             return item.html ?? "Subtitle"; // Return name for display
