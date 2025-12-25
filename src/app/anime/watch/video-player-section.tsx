@@ -4,15 +4,15 @@ import React, { useEffect, useState } from "react";
 import { useAnimeStore } from "@/store/anime-store";
 
 import { IWatchedAnime } from "@/types/watched-anime";
-import KitsunePlayer from "@/components/kitsune-player";
+// import KitsunePlayer from "@/components/kitsune-player";
 import { useGetEpisodeData } from "@/query/get-episode-data";
 import { useGetEpisodeServers } from "@/query/get-episode-servers";
 import { getFallbackServer } from "@/utils/fallback-server";
-import { AlertCircleIcon, Captions, Mic } from "lucide-react";
-import { Button } from "@/components/ui/button";
-import { Switch } from "@/components/ui/switch";
+import { AlertCircleIcon } from "lucide-react";
+// import { Button } from "@/components/ui/button";
+// import { Switch } from "@/components/ui/switch";
 import { useAuthStore } from "@/store/auth-store";
-import { pb } from "@/lib/pocketbase";
+// import { pb } from "@/lib/pocketbase";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import { useSearchParams } from "next/navigation";
 
@@ -26,10 +26,10 @@ const VideoPlayerSection = () => {
   const [serverName, setServerName] = useState<string>("");
   const [key, setKey] = useState<string>("");
 
-  const { auth, setAuth } = useAuthStore();
-  const [autoSkip, setAutoSkip] = useState<boolean>(
-    auth?.autoSkip || Boolean(localStorage.getItem("autoSkip")) || false,
-  );
+  const { auth } = useAuthStore();
+  // const [autoSkip, setAutoSkip] = useState<boolean>(
+  //   auth?.autoSkip || Boolean(localStorage.getItem("autoSkip")) || false,
+  // );
 
   useEffect(() => {
     const { serverName, key } = getFallbackServer(serversData);
@@ -37,7 +37,7 @@ const VideoPlayerSection = () => {
     setKey(key);
   }, [serversData]);
 
-  const { data: episodeData, isLoading } = useGetEpisodeData(
+  const { data: episodeData } = useGetEpisodeData(
     selectedEpisode,
     serverName,
     key,
@@ -47,26 +47,26 @@ const VideoPlayerSection = () => {
     JSON.parse(localStorage.getItem("watched") as string) || [],
   );
 
-  function changeServer(serverName: string, key: string) {
-    setServerName(serverName);
-    setKey(key);
-    const preference = { serverName, key };
-    localStorage.setItem("serverPreference", JSON.stringify(preference));
-  }
+  // function changeServer(serverName: string, key: string) {
+  //   setServerName(serverName);
+  //   setKey(key);
+  //   const preference = { serverName, key };
+  //   localStorage.setItem("serverPreference", JSON.stringify(preference));
+  // }
 
-  async function onHandleAutoSkipChange(value: boolean) {
-    setAutoSkip(value);
-    if (!auth) {
-      localStorage.setItem("autoSkip", JSON.stringify(value));
-      return;
-    }
-    const res = await pb.collection("users").update(auth.id, {
-      autoSkip: value,
-    });
-    if (res) {
-      setAuth({ ...auth, autoSkip: value });
-    }
-  }
+  // async function onHandleAutoSkipChange(value: boolean) {
+  //   setAutoSkip(value);
+  //   if (!auth) {
+  //     localStorage.setItem("autoSkip", JSON.stringify(value));
+  //     return;
+  //   }
+  //   const res = await pb.collection("users").update(auth.id, {
+  //     autoSkip: value,
+  //   });
+  //   if (res) {
+  //     setAuth({ ...auth, autoSkip: value });
+  //   }
+  // }
 
   useEffect(() => {
     if (auth) return;
