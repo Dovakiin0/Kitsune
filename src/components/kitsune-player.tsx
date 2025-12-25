@@ -8,7 +8,7 @@ import React, {
   HTMLAttributes,
 } from "react";
 import Artplayer from "artplayer";
-import type { Option } from "artplayer/types/option";
+import type {Option} from "artplayer";
 import Hls from "hls.js";
 
 // Helper functions and types (keep or import from your types file)
