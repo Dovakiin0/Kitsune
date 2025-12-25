@@ -34,7 +34,7 @@ const VideoPlayerSection = () => {
     setKey(key);
   }, [serversData]);
 
-  const { data: episodeData, isLoading } = useGetEpisodeData(
+  const { data: episodeData } = useGetEpisodeData(
     selectedEpisode,
     serverName,
     key,
