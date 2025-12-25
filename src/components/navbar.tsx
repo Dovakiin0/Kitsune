@@ -91,7 +91,7 @@ const NavBar = () => {
           href={ROUTES.HOME}
           className="flex items-center gap-1 cursor-pointer"
         >
-          <Image src="/icon.png" alt="logo" width={70} height={70} />
+          <Image src="/icon.png" alt="logo" width={70} height={70} suppressHydrationWarning />
           <h1
             className={cn([
               nightTokyo.className,
@@ -113,7 +113,7 @@ const NavBar = () => {
           {auth.auth ? <NavbarAvatar auth={auth} /> : <LoginPopoverButton />}
         </div>
         <div className="lg:hidden flex items-center gap-5">
-          <MobileMenuSheet trigger={<MenuIcon />} />
+          <MobileMenuSheet trigger={<MenuIcon suppressHydrationWarning />} />
           {auth.auth ? <NavbarAvatar auth={auth} /> : <LoginPopoverButton />}
         </div>
       </Container>

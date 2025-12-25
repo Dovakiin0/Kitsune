@@ -14,8 +14,11 @@ import { Switch } from "@/components/ui/switch";
 import { useAuthStore } from "@/store/auth-store";
 import { pb } from "@/lib/pocketbase";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
+import { useSearchParams } from "next/navigation";
 
 const VideoPlayerSection = () => {
+  const searchParams = useSearchParams();
+  const episodeId = searchParams.get("episode");
   const { selectedEpisode, anime } = useAnimeStore();
 
   const { data: serversData } = useGetEpisodeServers(selectedEpisode);
@@ -34,7 +37,7 @@ const VideoPlayerSection = () => {
     setKey(key);
   }, [serversData]);
 
-  const { data: episodeData } = useGetEpisodeData(
+  const { data: episodeData, isLoading } = useGetEpisodeData(
     selectedEpisode,
     serverName,
     key,
@@ -119,12 +122,10 @@ const VideoPlayerSection = () => {
     //eslint-disable-next-line
   }, [episodeData, selectedEpisode, auth]);
 
-  // if (isLoading || !episodeData)
-  //   return (
-  //     <div className="h-auto aspect-video lg:max-h-[calc(100vh-150px)] min-h-[20vh] sm:min-h-[30vh] md:min-h-[40vh] lg:min-h-[60vh] w-full animate-pulse bg-slate-700 rounded-md"></div>
-  //   );
-
-  return true ? (
+  /** 
+  Temporary fallback player for now
+  **/
+  return episodeId && (
     <>
       <div
         className={
@@ -132,7 +133,7 @@ const VideoPlayerSection = () => {
         }
       >
         <iframe
-          src={`https://megaplay.buzz/stream/s-2/${serversData?.episodeId.split("?ep=")[1]}/sub`}
+          src={`https://megaplay.buzz/stream/s-2/${episodeId.split("?ep=")[1]}/sub`}
           width="100%"
           height="100%"
           allowFullScreen
@@ -152,64 +153,99 @@ const VideoPlayerSection = () => {
         </Alert>
       </div>
     </>
-  ) : (
-    <div>
-      <KitsunePlayer
-        key={episodeData?.sources?.[0].url}
-        episodeInfo={episodeData!}
-        serversData={serversData!}
-        animeInfo={{
-          id: anime.anime.info.id,
-          title: anime.anime.info.name,
-          image: anime.anime.info.poster,
-        }}
-        subOrDub={key as "sub" | "dub"}
-        autoSkip={autoSkip}
-      />
-      <div className="flex flex-row bg-[#0f172a]  items-start justify-between w-full p-5">
-        <div>
-          <div className="flex flex-row items-center space-x-5">
-            <Captions className="text-red-300" />
-            <p className="font-bold text-sm">SUB</p>
-            {serversData?.sub.map((s, i) => (
-              <Button
-                size="sm"
-                key={i}
-                className={`uppercase font-bold ${serverName === s.serverName && key === "sub" && "bg-red-300"}`}
-                onClick={() => changeServer(s.serverName, "sub")}
-              >
-                {s.serverName}
-              </Button>
-            ))}
-          </div>
-          {!!serversData?.dub.length && (
-            <div className="flex flex-row items-center space-x-5 mt-2">
-              <Mic className="text-green-300" />
-              <p className="font-bold text-sm">DUB</p>
-              {serversData?.dub.map((s, i) => (
-                <Button
-                  size="sm"
-                  key={i}
-                  className={`uppercase font-bold ${serverName === s.serverName && key === "dub" && "bg-green-300"}`}
-                  onClick={() => changeServer(s.serverName, "dub")}
-                >
-                  {s.serverName}
-                </Button>
-              ))}
-            </div>
-          )}
-        </div>
-        <div className="flex flex-row items-center space-x-2 text-sm">
-          <Switch
-            checked={autoSkip}
-            onCheckedChange={(e) => onHandleAutoSkipChange(e)}
-            id="auto-skip"
-          />
-          <p>Auto Skip</p>
-        </div>
-      </div>
-    </div>
   );
+
+  // if (isLoading || !episodeData)
+  //   return (
+  //     <div className="h-auto aspect-video lg:max-h-[calc(100vh-150px)] min-h-[20vh] sm:min-h-[30vh] md:min-h-[40vh] lg:min-h-[60vh] w-full animate-pulse bg-slate-700 rounded-md"></div>
+  //   );
+  //
+  // return !episodeData || episodeData?.sources.length === 0 ? (
+  //   <>
+  //     <div
+  //       className={
+  //         "relative w-full h-auto aspect-video min-h-[20vh] sm:min-h-[30vh] md:min-h-[40vh] lg:min-h-[60vh] max-h-[500px] lg:max-h-[calc(100vh-150px)] bg-black overflow-hidden p-4"
+  //       }
+  //     >
+  //       <iframe
+  //         src={`https://megaplay.buzz/stream/s-2/${serversData?.episodeId.split("?ep=")[1]}/sub`}
+  //         width="100%"
+  //         height="100%"
+  //         allowFullScreen
+  //       ></iframe>
+  //     </div>
+  //     <div className="mt-4">
+  //       <Alert variant="destructive" className="text-red-400">
+  //         <AlertTitle className="font-bold flex items-center space-x-2">
+  //           <AlertCircleIcon size="20" />
+  //           <p>Fallback Video Player Activated</p>
+  //         </AlertTitle>
+  //         <AlertDescription>
+  //           The original video source for this episode is currently unavailable.
+  //           A fallback player has been provided for your convenience. We
+  //           recommend using an ad blocker for a smoother viewing experience.
+  //         </AlertDescription>
+  //       </Alert>
+  //     </div>
+  //   </>
+  // ) : (
+  //   <div>
+  //     <KitsunePlayer
+  //       key={episodeData?.sources?.[0].url}
+  //       episodeInfo={episodeData!}
+  //       serversData={serversData!}
+  //       animeInfo={{
+  //         id: anime.anime.info.id,
+  //         title: anime.anime.info.name,
+  //         image: anime.anime.info.poster,
+  //       }}
+  //       subOrDub={key as "sub" | "dub"}
+  //       autoSkip={autoSkip}
+  //     />
+  //     <div className="flex flex-row bg-[#0f172a]  items-start justify-between w-full p-5">
+  //       <div>
+  //         <div className="flex flex-row items-center space-x-5">
+  //           <Captions className="text-red-300" />
+  //           <p className="font-bold text-sm">SUB</p>
+  //           {serversData?.sub.map((s, i) => (
+  //             <Button
+  //               size="sm"
+  //               key={i}
+  //               className={`uppercase font-bold ${serverName === s.serverName && key === "sub" && "bg-red-300"}`}
+  //               onClick={() => changeServer(s.serverName, "sub")}
+  //             >
+  //               {s.serverName}
+  //             </Button>
+  //           ))}
+  //         </div>
+  //         {!!serversData?.dub.length && (
+  //           <div className="flex flex-row items-center space-x-5 mt-2">
+  //             <Mic className="text-green-300" />
+  //             <p className="font-bold text-sm">DUB</p>
+  //             {serversData?.dub.map((s, i) => (
+  //               <Button
+  //                 size="sm"
+  //                 key={i}
+  //                 className={`uppercase font-bold ${serverName === s.serverName && key === "dub" && "bg-green-300"}`}
+  //                 onClick={() => changeServer(s.serverName, "dub")}
+  //               >
+  //                 {s.serverName}
+  //               </Button>
+  //             ))}
+  //           </div>
+  //         )}
+  //       </div>
+  //       <div className="flex flex-row items-center space-x-2 text-sm">
+  //         <Switch
+  //           checked={autoSkip}
+  //           onCheckedChange={(e) => onHandleAutoSkipChange(e)}
+  //           id="auto-skip"
+  //         />
+  //         <p>Auto Skip</p>
+  //       </div>
+  //     </div>
+  //   </div>
+  // );
 };
 
 export default VideoPlayerSection;

@@ -59,7 +59,7 @@ const SearchBar = ({
 
   return (
     <div className={cn([" relative w-full min-h-fit", className])}>
-      <SearchIcon className="absolute inset-y-0 left-2 m-auto h-4 w-4" />
+        <SearchIcon suppressHydrationWarning className="absolute inset-y-0 left-2 m-auto h-4 w-4" />
       <Input
         className="w-full h-10 pl-8 text-white border-white"
         placeholder="Enter your keywords to search..."
@@ -77,7 +77,7 @@ const SearchBar = ({
         }}
       >
         <Tooltip side="bottom" content="Filter">
-          <SlidersHorizontal className="h-4 w-4" />
+            <SlidersHorizontal suppressHydrationWarning className="h-4 w-4" />
         </Tooltip>
       </Button>
       {isFocused && searchValue && (
