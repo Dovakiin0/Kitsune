@@ -102,9 +102,9 @@ const VideoPlayerSection = () => {
           const updatedWatchedDetails = watchedDetails.map((watchedAnime) =>
             watchedAnime.anime.id === anime.anime.info.id
               ? {
-                  ...watchedAnime,
-                  episodes: [...watchedAnime.episodes, selectedEpisode],
-                }
+                ...watchedAnime,
+                episodes: [...watchedAnime.episodes, selectedEpisode],
+              }
               : watchedAnime,
           );
 
@@ -119,16 +119,16 @@ const VideoPlayerSection = () => {
     //eslint-disable-next-line
   }, [episodeData, selectedEpisode, auth]);
 
-  if (isLoading || !episodeData)
-    return (
-      <div className="h-auto aspect-video lg:max-h-[calc(100vh-150px)] min-h-[20vh] sm:min-h-[30vh] md:min-h-[40vh] lg:min-h-[60vh] w-full animate-pulse bg-slate-700 rounded-md"></div>
-    );
+  // if (isLoading || !episodeData)
+  //   return (
+  //     <div className="h-auto aspect-video lg:max-h-[calc(100vh-150px)] min-h-[20vh] sm:min-h-[30vh] md:min-h-[40vh] lg:min-h-[60vh] w-full animate-pulse bg-slate-700 rounded-md"></div>
+  //   );
 
-  return !episodeData || episodeData?.sources.length === 0 ? (
+  return true ? (
     <>
       <div
         className={
-          "relative w-full h-auto aspect-video  min-h-[20vh] sm:min-h-[30vh] md:min-h-[40vh] lg:min-h-[60vh] max-h-[500px] lg:max-h-[calc(100vh-150px)] bg-black overflow-hidde  n p-4"
+          "relative w-full h-auto aspect-video min-h-[20vh] sm:min-h-[30vh] md:min-h-[40vh] lg:min-h-[60vh] max-h-[500px] lg:max-h-[calc(100vh-150px)] bg-black overflow-hidden p-4"
         }
       >
         <iframe

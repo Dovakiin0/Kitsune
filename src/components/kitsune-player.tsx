@@ -256,21 +256,20 @@ function KitsunePlayer({
     const subtitleConfig: Option["subtitle"] =
       subOrDub === "sub"
         ? {
-            url: `${
-              defaultTrack
-                ? `${proxyBaseURI}?url=${encodeURIComponent(defaultTrack)}`
-                : ""
+          url: `${defaultTrack
+              ? `${proxyBaseURI}?url=${encodeURIComponent(defaultTrack)}`
+              : ""
             }`,
-            type: "vtt",
-            style: {
-              // Example styles
-              color: "#FFFFFF",
-              fontSize: "22px", // Base size, will be adjusted
-              textShadow: "2px 2px 4px rgba(0,0,0,0.8)",
-            },
-            encoding: "utf-8",
-            escape: false, // Allow potential styling tags in VTT
-          }
+          type: "vtt",
+          style: {
+            // Example styles
+            color: "#FFFFFF",
+            fontSize: "22px", // Base size, will be adjusted
+            textShadow: "2px 2px 4px rgba(0,0,0,0.8)",
+          },
+          encoding: "utf-8",
+          escape: false, // Allow potential styling tags in VTT
+        }
         : {}; // Explicitly hide if 'dub'
 
     const manualSkipControl = {
@@ -291,7 +290,7 @@ function KitsunePlayer({
         marginRight: "10px", // Space from toggle
         padding: "3px 0", // Adjust padding for vertical centering
       },
-      click: function (controlItem: any) {
+      click: function(controlItem: any) {
         const art = artInstanceRef.current;
         if (!art) return;
         const { introEnd, outroStart, outroEnd, validIntro, validOutro } =
@@ -415,7 +414,7 @@ function KitsunePlayer({
               html: "Display",
               tooltip: subOrDub === "sub" ? "Hide" : "Show", // Initial state based on prop
               switch: subOrDub === "sub", // Switch is ON if sub
-              onSwitch: function (item) {
+              onSwitch: function(item) {
                 const showSubtitle = !item.switch; // The new state
                 art.subtitle.show = showSubtitle;
                 item.tooltip = showSubtitle ? "Hide" : "Show";
@@ -425,7 +424,7 @@ function KitsunePlayer({
             },
             ...trackOptions, // Add subtitle track choices
           ],
-          onSelect: function (item: any) {
+          onSelect: function(item: any) {
             // Type the item
             if (item.url && typeof item.url === "string") {
               art.subtitle.switch(`${proxyBaseURI}?url=${item.url}`, {
