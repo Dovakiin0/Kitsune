@@ -34,3 +34,25 @@ jobs:
           context: .
           push: true
           tags: dovakiin0/kitsune:latest, dovakiin0/kitsune:${{ github.sha }}
+
+      - name: Update infra
+        env:
+          APP_TOKEN: ${{ secrets.APP_TOKEN }}
+          INFRA_REPO: ${{ secrets.INFRA_REPO }}
+          IMAGE: dovakiin0/kitsune
+          TAG: ${{ github.sha }}
+        run: |
+          set -e
+
+          git config --global user.email "bot@kitsunee.online"
+          git config --global user.name "kitsunee-bot"
+
+          rm -rf infra
+          git clone --depth 1 "https://x-access-token:${APP_TOKEN}@github.com/${INFRA_REPO}.git" infra
+          cd infra
+
+          sed -i "s|${IMAGE}:[a-zA-Z0-9._-]*|${IMAGE}:${TAG}|g" docker-compose.yml
+
+          git add .
+          git commit -m "chore(deploy): bump kitsune to ${TAG}" || exit 0
+          git push
