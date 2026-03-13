@@ -44,7 +44,7 @@ jobs:
         run: |
           set -e
 
-          git config --global user.email "bot@kitsunee.online"
+          git config --global user.email "bot@kitsunee.moe"
           git config --global user.name "kitsunee-bot"
 
           rm -rf infra
