@@ -14,7 +14,7 @@ export interface IEpisodeSource {
   headers: {
     Referer: string;
   };
-  tracks: Track[];
+  subtitles: Track[];
   intro: Intro;
   outro: Outro;
   sources: Source[];

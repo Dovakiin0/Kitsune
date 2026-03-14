@@ -8,7 +8,7 @@ import React, {
   HTMLAttributes,
 } from "react";
 import Artplayer from "artplayer";
-import type {Option} from "artplayer";
+import type { Option } from "artplayer";
 import Hls from "hls.js";
 
 // Helper functions and types (keep or import from your types file)
@@ -242,13 +242,13 @@ function KitsunePlayer({
     skipTimesRef.current.outroEnd = outroEnd; // Store the raw value
 
     // Subtitle Track Selector Options
-    const trackOptions: any = (episodeInfo?.tracks ?? []).map((track) => ({
+    const trackOptions: any = (episodeInfo?.subtitles ?? []).map((track) => ({
       default: track.lang === "English", // Example default logic
       html: track.lang,
       url: `${proxyBaseURI}?url=${encodeURIComponent(track.url)}`,
     }));
 
-    const defaultTrack = episodeInfo?.tracks?.find(
+    const defaultTrack = episodeInfo?.subtitles?.find(
       (track) => track.lang === "English",
     )?.url;
 
@@ -523,7 +523,7 @@ function KitsunePlayer({
         // Auto Skip Logic
         if (manualSkip?.style?.display !== "none") {
           // Ensure manual button is hidden
-          if (manualSkip.style) manualSkip.style.display = "none";
+          if (manualSkip?.style) manualSkip.style.display = "none";
         }
         if (inIntro && typeof introEnd === "number") {
           art.seek = introEnd;
