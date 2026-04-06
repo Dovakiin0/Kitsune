@@ -48,7 +48,7 @@ const NavBar = () => {
       if (typeof window !== "undefined" && window.localStorage) {
         return localStorage.getItem("seenDomainChangeBanner") === "true";
       }
-      return false;
+      return true;
     });
 
   useEffect(() => {

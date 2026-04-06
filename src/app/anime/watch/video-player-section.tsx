@@ -11,13 +11,14 @@ import { IWatchedAnime } from "@/types/watched-anime";
 import { useGetEpisodeData } from "@/query/get-episode-data";
 import { useGetEpisodeServers } from "@/query/get-episode-servers";
 import { getFallbackServer } from "@/utils/fallback-server";
-import { AlertCircleIcon } from "lucide-react";
+import { AlertCircleIcon, Captions, Mic } from "lucide-react";
 // import { Button } from "@/components/ui/button";
 // import { Switch } from "@/components/ui/switch";
 import { useAuthStore } from "@/store/auth-store";
 // import { pb } from "@/lib/pocketbase";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import { useSearchParams } from "next/navigation";
+import { Button } from "@/components/ui/button";
 
 const VideoPlayerSection = () => {
   const searchParams = useSearchParams();
@@ -25,6 +26,13 @@ const VideoPlayerSection = () => {
   const { selectedEpisode, anime } = useAnimeStore();
 
   const { data: serversData } = useGetEpisodeServers(selectedEpisode);
+
+  const [preferDub, setPreferDub] = useState<boolean>(() => {
+    if (typeof window !== "undefined" && window.localStorage) {
+      return localStorage.getItem("preferDub") === "true";
+    }
+    return true;
+  });
 
   const [serverName, setServerName] = useState<string>("");
   const [key, setKey] = useState<string>("");
@@ -79,6 +87,8 @@ const VideoPlayerSection = () => {
   //     setAuth({ ...auth, autoSkip: value });
   //   }
   // }
+  const hasDub = !!(serversData?.dub ?? []).length;
+  const isUsingSub = !preferDub || !hasDub;
 
   useEffect(() => {
     if (auth) return;
@@ -117,9 +127,9 @@ const VideoPlayerSection = () => {
           const updatedWatchedDetails = watchedDetails.map((watchedAnime) =>
             watchedAnime.anime.id === anime.anime.info.id
               ? {
-                ...watchedAnime,
-                episodes: [...watchedAnime.episodes, selectedEpisode],
-              }
+                  ...watchedAnime,
+                  episodes: [...watchedAnime.episodes, selectedEpisode],
+                }
               : watchedAnime,
           );
 
@@ -138,7 +148,8 @@ const VideoPlayerSection = () => {
   // Temporary fallback player for now
   // **/
   return (
-    episodeId && (
+    episodeId &&
+    serversData && (
       <>
         <div
           className={
@@ -146,13 +157,41 @@ const VideoPlayerSection = () => {
           }
         >
           <iframe
-            src={`https://megaplay.buzz/stream/s-2/${episodeId.split("?ep=")[1]}/sub`}
+            src={`https://megaplay.buzz/stream/s-2/${episodeId.split("?ep=")[1]}/${isUsingSub ? "sub" : "dub"}`}
             width="100%"
             height="100%"
             allowFullScreen
           ></iframe>
         </div>
-        <div className="mt-4">
+        <div className="flex space-x-3 p-2 bg-[#0f172a] items-center">
+          <p>Sub/Dub: </p>
+          {!!(serversData.sub ?? []).length && (
+            <Button
+              className={`${isUsingSub && "bg-red-500 hover:bg-red-600"}`}
+              size="icon"
+              onClick={() => {
+                localStorage.setItem("preferDub", "false");
+                setPreferDub(false);
+              }}
+            >
+              <Captions className={`${isUsingSub && "text-white"}`} />
+            </Button>
+          )}
+
+          {hasDub && (
+            <Button
+              className={`${preferDub && "bg-green-500 hover:bg-green-600"}`}
+              size="icon"
+              onClick={() => {
+                localStorage.setItem("preferDub", "true");
+                setPreferDub(true);
+              }}
+            >
+              <Mic className={`${preferDub && "text-white"}`} />
+            </Button>
+          )}
+        </div>
+        <div className="mt-4 ">
           <Alert variant="destructive" className="text-red-400">
             <AlertTitle className="font-bold flex items-center space-x-2">
               <AlertCircleIcon size="20" />
