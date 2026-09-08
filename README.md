@@ -1,4 +1,4 @@
-![logo.png](logo.png)
+ami jod![logo.png](logo.png)
 
 Watch your favourite anime anywhere, anytime. No Ads.
 
