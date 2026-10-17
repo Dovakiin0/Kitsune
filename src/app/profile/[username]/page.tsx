@@ -14,7 +14,7 @@ import AnimeLists from "./components/anime-lists";
 import ActivityProgression from "./components/activity-progression";
 import Loading from "@/app/loading";
 import AnilistImport from "./components/anilist-import";
-import { useQuery } from "react-query";
+import { useQuery } from "@tanstack/react-query";
 import { Camera, UserX } from "lucide-react";
 
 export type TargetProfileUser = {

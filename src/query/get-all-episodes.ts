@@ -1,12 +1,13 @@
 import { GET_ALL_EPISODES } from "@/constants/query-keys";
 import { api } from "@/lib/api";
 import { Episode, IEpisodes } from "@/types/episodes";
-import { EpisodeResponse } from "@/types/miruro-api";
-import { useQuery } from "react-query";
+import { EpisodeResponse, NextAiringEpisode } from "@/types/miruro-api";
+import { useQuery } from "@tanstack/react-query";
 
 export interface IEpisodesData extends IEpisodes {
   rawResponse?: EpisodeResponse;
   availableProviders?: string[];
+  nextAiringEpisode?: NextAiringEpisode | null;
 }
 
 const fetchAniListEpisodesFallback = async (
@@ -49,7 +50,7 @@ const fetchAniListEpisodesFallback = async (
           number: epNum,
           isFiller: false,
           hasSub: true,
-          hasDub: true,
+          hasDub: false,
         };
       },
     );
@@ -67,7 +68,7 @@ const fetchAniListEpisodesFallback = async (
       number: i + 1,
       isFiller: false,
       hasSub: true,
-      hasDub: true,
+      hasDub: false,
     }));
     return {
       totalEpisodes: 12,
@@ -142,6 +143,7 @@ const getAllEpisodes = async (animeId: string): Promise<IEpisodesData> => {
       episodes: episodeList,
       rawResponse: data,
       availableProviders: providerNames,
+      nextAiringEpisode: data.mappings?.nextAiringEpisode || null,
     };
   } catch (err) {
     console.warn(

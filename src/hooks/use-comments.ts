@@ -1,6 +1,6 @@
 import { pb } from "@/lib/pocketbase";
 import { IComment } from "@/types/comment";
-import { useQuery, useInfiniteQuery, useMutation, useQueryClient } from "react-query";
+import { useQuery, useInfiniteQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { toast } from "sonner";
 import { useAuthStore } from "@/store/auth-store";
 
@@ -61,7 +61,9 @@ export const useGetInfiniteComments = ({
 }) => {
   return useInfiniteQuery({
     queryKey: [GET_COMMENTS_KEY, { animeId, episodeNumber, perPage }],
+    initialPageParam: 1,
     queryFn: async ({ pageParam = 1 }) => {
+      const pageNum = Number(pageParam) || 1;
       const filters = [];
       if (animeId) filters.push(`animeId = "${animeId}"`);
       if (episodeNumber !== undefined && episodeNumber !== null && episodeNumber > 0) {
@@ -73,7 +75,7 @@ export const useGetInfiniteComments = ({
       try {
         const res = await pb
           .collection<IComment>("comments")
-          .getList(pageParam, perPage, {
+          .getList(pageNum, perPage, {
             filter: filterString,
             expand: "user",
             sort: "-created",
@@ -84,14 +86,14 @@ export const useGetInfiniteComments = ({
           comments: res.items,
           totalItems: res.totalItems,
           totalPages: res.totalPages,
-          page: pageParam,
+          page: pageNum,
         };
       } catch (err) {
         console.warn("Retrying comments query without expand:", err);
         try {
           const res = await pb
             .collection<IComment>("comments")
-            .getList(pageParam, perPage, {
+            .getList(pageNum, perPage, {
               filter: filterString,
               sort: "-created",
               requestKey: null,
@@ -101,7 +103,7 @@ export const useGetInfiniteComments = ({
             comments: res.items,
             totalItems: res.totalItems,
             totalPages: res.totalPages,
-            page: pageParam,
+            page: pageNum,
           };
         } catch (innerErr) {
           console.error("Failed to fetch comments:", innerErr);
@@ -109,7 +111,7 @@ export const useGetInfiniteComments = ({
             comments: [],
             totalItems: 0,
             totalPages: 1,
-            page: pageParam,
+            page: pageNum,
           };
         }
       }
@@ -183,8 +185,8 @@ export const useAddComment = () => {
       toast.success("Comment posted successfully!", {
         style: { background: "green" },
       });
-      queryClient.invalidateQueries(GET_COMMENTS_KEY);
-      queryClient.invalidateQueries(GET_RECENT_COMMENTS_KEY);
+      queryClient.invalidateQueries({ queryKey: [GET_COMMENTS_KEY] });
+      queryClient.invalidateQueries({ queryKey: [GET_RECENT_COMMENTS_KEY] });
     },
     onError: (error: any) => {
       toast.error(error?.message || "Failed to post comment", {

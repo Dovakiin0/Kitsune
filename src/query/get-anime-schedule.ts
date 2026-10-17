@@ -2,10 +2,12 @@ import { GET_ANIME_SCHEDULE } from "@/constants/query-keys";
 import { api } from "@/lib/api";
 import { IAnimeSchedule } from "@/types/anime-schedule";
 import { ScheduleItem, PaginatedResponse } from "@/types/miruro-api";
-import { useQuery } from "react-query";
+import { useQuery } from "@tanstack/react-query";
 
-const getAnimeSchedule = async (): Promise<IAnimeSchedule> => {
-  const res = await api.get<PaginatedResponse<ScheduleItem>>("/schedule");
+const getAnimeSchedule = async (date?: string): Promise<IAnimeSchedule> => {
+  const res = await api.get<PaginatedResponse<ScheduleItem>>("/schedule", {
+    params: date ? { date } : undefined,
+  });
   const items = res.data.results || [];
 
   const scheduledAnimes = items.map((item) => {
@@ -30,7 +32,7 @@ const getAnimeSchedule = async (): Promise<IAnimeSchedule> => {
 
 export const useGetAnimeSchedule = (date?: string) => {
   return useQuery({
-    queryFn: () => getAnimeSchedule(),
+    queryFn: () => getAnimeSchedule(date),
     queryKey: [GET_ANIME_SCHEDULE, date],
   });
 };

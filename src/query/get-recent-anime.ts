@@ -1,6 +1,6 @@
 import { api } from "@/lib/api";
 import { MediaList, PaginatedResponse } from "@/types/miruro-api";
-import { useQuery } from "react-query";
+import { useQuery } from "@tanstack/react-query";
 
 export const GET_RECENT_ANIME = "GET_RECENT_ANIME";
 

@@ -4,7 +4,6 @@ import {
   AvatarFallback,
   AvatarImage,
 } from "@/components/ui/avatar";
-import { env } from "next-runtime-env";
 
 type Props = {
   url?: string;
@@ -23,7 +22,7 @@ function Avatar({
   collectionID,
   onClick,
 }: Props) {
-  const src = `${env("NEXT_PUBLIC_POCKETBASE_URL")}/api/files/${collectionID}/${id}/${url}`;
+  const src = `${process.env.NEXT_PUBLIC_POCKETBASE_URL || "http://localhost:8090"}/api/files/${collectionID}/${id}/${url}`;
 
   return (
     <AvatarCN className={className} onClick={onClick}>

@@ -1,5 +1,5 @@
 import { pb } from "@/lib/pocketbase";
-import { useQuery } from "react-query";
+import { useQuery } from "@tanstack/react-query";
 
 export const GET_SOURCE_AVAILABLE_KEY = "GET_SOURCE_AVAILABLE";
 

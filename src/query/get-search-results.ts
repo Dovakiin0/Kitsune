@@ -2,7 +2,7 @@ import { SEARCH_ANIME } from "@/constants/query-keys";
 import { api } from "@/lib/api";
 import { IAnimeSearch, SearchAnimeParams } from "@/types/anime";
 import { MediaList, PaginatedResponse } from "@/types/miruro-api";
-import { useQuery } from "react-query";
+import { useQuery } from "@tanstack/react-query";
 
 const searchAnime = async (params: SearchAnimeParams): Promise<IAnimeSearch> => {
   const requestParams: Record<string, any> = {

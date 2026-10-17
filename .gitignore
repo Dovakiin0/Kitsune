@@ -41,3 +41,7 @@ next-env.d.ts
 graphify-out/
 GEMINI.md
 .gemini
+.agents/
+.codegraph/
+.specify/
+specs/

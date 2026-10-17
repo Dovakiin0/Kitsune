@@ -12,7 +12,7 @@ import { ROUTES } from "@/constants/routes";
 import React, { ReactNode, useEffect, useState } from "react";
 
 import SearchBar from "./search-bar";
-import { InfoIcon, MenuIcon, X } from "lucide-react";
+import { MenuIcon, X } from "lucide-react";
 import useScrollPosition from "@/hooks/use-scroll-position";
 import { Sheet, SheetClose, SheetContent, SheetTrigger } from "./ui/sheet";
 import LoginPopoverButton from "./login-popover-button";
@@ -20,7 +20,6 @@ import { useAuthStore } from "@/store/auth-store";
 import { pb } from "@/lib/pocketbase";
 import NavbarAvatar from "./navbar-avatar";
 import { toast } from "sonner";
-import { Alert, AlertTitle } from "@/components/ui/alert";
 
 const menuItems: Array<{ title: string; href?: string }> = [
   // {
@@ -41,15 +40,7 @@ const menuItems: Array<{ title: string; href?: string }> = [
 const NavBar = () => {
   const auth = useAuthStore();
   const { y } = useScrollPosition();
-  const isHeaderFixed = true;
   const isHeaderSticky = y > 0;
-  const [hasSeenDomainChangeBanner, setHasSeenDomainChangeBanner] =
-    useState<boolean>(() => {
-      if (typeof window !== "undefined" && window.localStorage) {
-        return localStorage.getItem("seenDomainChangeBanner") === "true";
-      }
-      return true;
-    });
 
   useEffect(() => {
     const refreshAuth = async () => {
@@ -87,38 +78,13 @@ const NavBar = () => {
   return (
     <div
       className={cn([
-        "h-fit w-full",
-        "sticky top-0 z-[100] duration-300",
-        isHeaderFixed ? "fixed bg-gradient-to-b from-slate-700" : "",
+        "fixed top-0 left-0 right-0 h-fit w-full z-[100] transition-all duration-300",
+        "backdrop-blur-xl backdrop-saturate-150 border-b",
         isHeaderSticky
-          ? "bg-clip-padding backdrop-filter backdrop-blur-md bg-opacity-10 bg-slate-900"
-          : "",
+          ? "bg-slate-950/65 border-white/10 shadow-[0_8px_32px_0_rgba(0,0,0,0.37)]"
+          : "bg-slate-950/35 border-white/5",
       ])}
     >
-      {!hasSeenDomainChangeBanner && (
-        <Alert variant="default" className="text-amber-300 bg-opacity-5">
-          <AlertTitle className="font-bold flex items-center justify-center space-x-2">
-            <div className="flex items-center gap-2">
-              <InfoIcon size="20" />
-              <p>
-                The domain has been changed from <i>kitsunee.online</i>. Please
-                bookmark the new domain <i>kitsunee.moe</i>
-              </p>
-            </div>
-            <p
-              className="cursor-pointer"
-              onClick={() => {
-                localStorage.setItem("seenDomainChangeBanner", "true");
-                setHasSeenDomainChangeBanner(true);
-              }}
-            >
-              <i>
-                <u>Close</u>
-              </i>
-            </p>
-          </AlertTitle>
-        </Alert>
-      )}
       <Container className="flex items-center justify-between py-2 gap-20 ">
         <Link
           href={ROUTES.HOME}

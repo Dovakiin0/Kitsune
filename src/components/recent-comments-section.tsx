@@ -16,10 +16,6 @@ const RecentCommentsSection = () => {
     setRevealed((prev) => ({ ...prev, [id]: !prev[id] }));
   };
 
-  if (!isLoading && (!comments || comments.length === 0)) {
-    return null;
-  }
-
   return (
     <Container className="space-y-6 my-12">
       <div className="flex items-center justify-between">
@@ -39,6 +35,11 @@ const RecentCommentsSection = () => {
               className="h-40 bg-slate-800/60 animate-pulse rounded-xl border border-slate-800"
             ></div>
           ))}
+        </div>
+      ) : !comments || comments.length === 0 ? (
+        <div className="flex flex-col items-center justify-center p-8 bg-[#0f172a]/40 rounded-xl border border-slate-800 text-center">
+          <MessageSquare className="h-8 w-8 text-slate-600 mb-2" />
+          <p className="text-sm font-medium text-gray-400">No recent comments yet.</p>
         </div>
       ) : (
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">

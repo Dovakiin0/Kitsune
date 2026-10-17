@@ -1,6 +1,6 @@
 import { pb } from "@/lib/pocketbase";
 import { useAuthStore } from "@/store/auth-store";
-import { useQuery, useQueryClient } from "react-query";
+import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { toast } from "sonner";
 
 export const GET_BOOKMARKS_KEY = "GET_BOOKMARKS";
@@ -150,7 +150,7 @@ function useBookMarks({
       }
 
       // Invalidate bookmark queries so React Query updates smoothly
-      queryClient.invalidateQueries(GET_BOOKMARKS_KEY);
+      queryClient.invalidateQueries({ queryKey: [GET_BOOKMARKS_KEY] });
       return bookmarkId;
     } catch (error) {
       console.log(error);
@@ -204,7 +204,7 @@ function useBookMarks({
 
       if (targetRecordId) {
         await pb.collection("watched").update(targetRecordId, dataToSave);
-        queryClient.invalidateQueries(GET_BOOKMARKS_KEY);
+        queryClient.invalidateQueries({ queryKey: [GET_BOOKMARKS_KEY] });
         return targetRecordId;
       } else {
         const newWatchedRecord = await pb
@@ -215,7 +215,7 @@ function useBookMarks({
           await pb.collection("bookmarks").update(bookmarkId, {
             "watchHistory+": newWatchedRecord.id,
           });
-          queryClient.invalidateQueries(GET_BOOKMARKS_KEY);
+          queryClient.invalidateQueries({ queryKey: [GET_BOOKMARKS_KEY] });
           return newWatchedRecord.id;
         } catch (error) {
           console.error(

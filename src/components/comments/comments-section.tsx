@@ -121,11 +121,11 @@ const CommentsSection = ({ animeId, animeTitle, episodeNumber }: Props) => {
 
                 <Button
                   type="submit"
-                  disabled={addCommentMutation.isLoading || !content.trim()}
+                  disabled={addCommentMutation.isPending || !content.trim()}
                   className="bg-[#e9376b] hover:bg-[#e9376b]/90 text-white text-xs font-bold px-4 h-8 rounded-lg flex items-center gap-1.5 transition disabled:opacity-50"
                 >
                   <Send className="h-3.5 w-3.5" />
-                  {addCommentMutation.isLoading ? "Posting..." : "Post Comment"}
+                  {addCommentMutation.isPending ? "Posting..." : "Post Comment"}
                 </Button>
               </div>
             </form>

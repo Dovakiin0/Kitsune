@@ -271,17 +271,21 @@ const VideoPlayerSection = () => {
     );
   }
 
-  // Fallback player if API stream fails, throws error, returns no sources, or sys_source_available is false
-  if (isFallbackActive) {
+  // Embedded player when direct HLS stream sources are not used
+  if (isFallbackActive || !episodeData) {
     const fallbackAnimeId = animeIdParam || anime?.anime?.info?.id || "1";
     const fallbackEpId = currentEpNumber || "1";
-    const fallbackSrc = `https://megaplay.buzz/stream/ani/${fallbackAnimeId}/${fallbackEpId}/${activeCategory}`;
+    const fallbackSrc = `https://megaplay.buzz/stream/ani/${fallbackAnimeId}/${fallbackEpId}/sub`;
+
+    const nextAiring = allEpisodesData?.nextAiringEpisode;
+    const nextAiringDays = nextAiring ? Math.floor(nextAiring.timeUntilAiring / 86400) : 0;
+    const nextAiringHours = nextAiring ? Math.floor((nextAiring.timeUntilAiring % 86400) / 3600) : 0;
 
     return (
       <div className="flex flex-col gap-4 w-full">
         <div className="relative w-full h-auto aspect-video min-h-[20vh] sm:min-h-[30vh] md:min-h-[40vh] lg:min-h-[60vh] max-h-[500px] lg:max-h-[calc(100vh-150px)] bg-black overflow-hidden rounded-xl border border-slate-800">
           <iframe
-            key={`${fallbackAnimeId}-${fallbackEpId}-${activeCategory}`}
+            key={`${fallbackAnimeId}-${fallbackEpId}-sub`}
             src={fallbackSrc}
             width="100%"
             height="100%"
@@ -289,52 +293,25 @@ const VideoPlayerSection = () => {
             className="w-full h-full border-0"
           ></iframe>
         </div>
-        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 p-4 bg-[#0f172a] rounded-xl border border-slate-800">
-          <div className="flex flex-wrap items-center gap-3">
-            <span className="text-xs font-bold text-gray-400 tracking-wider">CATEGORY:</span>
-            <Button
-              size="sm"
-              variant="ghost"
-              disabled={!hasSub}
-              onClick={() => handleCategoryChange("sub")}
-              className={`h-8 px-4 text-xs font-semibold rounded-lg flex items-center gap-1.5 transition ${
-                activeCategory === "sub"
-                  ? "bg-[#e9376b] text-white hover:bg-[#e9376b]"
-                  : "bg-slate-800 text-gray-400 hover:bg-slate-700"
-              }`}
-            >
-              <Captions className="h-3.5 w-3.5" /> SUB
-            </Button>
-            <Button
-              size="sm"
-              variant="ghost"
-              disabled={!hasDub}
-              onClick={() => handleCategoryChange("dub")}
-              className={`h-8 px-4 text-xs font-semibold rounded-lg flex items-center gap-1.5 transition ${
-                activeCategory === "dub"
-                  ? "bg-green-600 text-white hover:bg-green-600"
-                  : "bg-slate-800 text-gray-400 hover:bg-slate-700"
-              }`}
-            >
-              <Mic className="h-3.5 w-3.5" /> DUB
-            </Button>
-          </div>
-          <Button
-            size="sm"
-            variant="outline"
-            onClick={() => setUseFallback(false)}
-            className="h-8 px-3 text-xs border-slate-700 bg-slate-800/80 hover:bg-slate-700 text-gray-200 flex items-center gap-1.5 shrink-0 self-start sm:self-auto"
-          >
-            <Tv className="h-3.5 w-3.5 text-blue-400" /> Try Primary Player
-          </Button>
-        </div>
-        <Alert variant="destructive" className="border-red-800/80 bg-red-950/40 text-red-300 rounded-xl">
-          <AlertCircle className="h-4 w-4 text-red-400" />
+        <Alert variant="destructive" className="border-amber-800/80 bg-amber-950/40 text-amber-200 rounded-xl">
+          <AlertCircle className="h-4 w-4 text-amber-400" />
           <AlertTitle className="font-bold">Fallback Video Player Activated</AlertTitle>
-          <AlertDescription className="text-xs text-red-300/80 mt-1">
-            The primary video stream is currently unavailable or encountered an error. A fallback player has been automatically loaded for your viewing convenience.
+          <AlertDescription className="text-xs text-amber-200/80 mt-1">
+            The primary video player is currently under maintenance. Please use an adblocker (e.g. uBlock Origin or Brave Shield) for a smooth, ad-free streaming experience.
           </AlertDescription>
         </Alert>
+        {nextAiring && nextAiring.timeUntilAiring > 0 && (
+          <Alert className="border-indigo-800/80 bg-indigo-950/40 text-indigo-200 rounded-xl">
+            <AlertCircle className="h-4 w-4 text-indigo-400" />
+            <AlertTitle className="font-bold">
+              Episode {nextAiring.episode} Airing Soon
+            </AlertTitle>
+            <AlertDescription className="text-xs text-indigo-200/80 mt-1">
+              Next episode airs in {nextAiringDays > 0 ? `${nextAiringDays}d ` : ""}
+              {nextAiringHours}h.
+            </AlertDescription>
+          </Alert>
+        )}
       </div>
     );
   }

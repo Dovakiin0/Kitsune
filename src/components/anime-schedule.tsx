@@ -11,11 +11,7 @@ import { Clock, Play } from "lucide-react";
 
 function AnimeSchedule() {
   const currentDate = new Date();
-  const currentDay = currentDate
-    .toLocaleString("en-US", { weekday: "long" })
-    .toLowerCase();
-  const currentDayIndex = currentDate.getDay();
-  const daysOfWeek = [
+  const baseDays = [
     "sunday",
     "monday",
     "tuesday",
@@ -24,24 +20,31 @@ function AnimeSchedule() {
     "friday",
     "saturday",
   ];
+  const currentDayIndex = currentDate.getDay();
+  const daysOfWeek = [
+    ...baseDays.slice(currentDayIndex),
+    ...baseDays.slice(0, currentDayIndex),
+  ];
+  const currentDay = daysOfWeek[0];
   const [currentSelectedTab, setCurrentSelectedTab] =
     React.useState<string>(currentDay);
 
-  const defaultTab = daysOfWeek.includes(currentDay) ? currentDay : "monday";
+  const defaultTab = currentDay;
 
   const selectedDate = useMemo(() => {
     const date = getDateForWeekday(currentSelectedTab);
-    date.setDate(date.getDate() + 1);
-    return date.toLocaleDateString("en-US");
-  }, [currentSelectedTab, getDateForWeekday]);
+    const yyyy = date.getFullYear();
+    const mm = String(date.getMonth() + 1).padStart(2, "0");
+    const dd = String(date.getDate()).padStart(2, "0");
+    return `${yyyy}-${mm}-${dd}`;
+  }, [currentSelectedTab]);
 
   const { isLoading, data } = useGetAnimeSchedule(selectedDate);
 
   function getDateForWeekday(targetDay: string) {
-    const targetIndex = daysOfWeek.indexOf(targetDay);
+    const offset = Math.max(0, daysOfWeek.indexOf(targetDay));
     const date = new Date(currentDate);
-    const diff = targetIndex - currentDayIndex;
-    date.setDate(currentDate.getDate() + diff);
+    date.setDate(currentDate.getDate() + offset);
     return date;
   }
 

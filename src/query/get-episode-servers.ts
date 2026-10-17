@@ -1,6 +1,6 @@
 import { GET_EPISODE_SERVERS } from "@/constants/query-keys";
 import { IEpisodeServers } from "@/types/episodes";
-import { useQuery } from "react-query";
+import { useQuery } from "@tanstack/react-query";
 
 const getEpisodeServers = async (episodeId: string): Promise<IEpisodeServers> => {
   const parts = episodeId ? episodeId.split("/") : [];

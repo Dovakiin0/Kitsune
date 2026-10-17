@@ -24,7 +24,7 @@ function NavbarAvatar({ auth }: Props) {
             collectionID={auth.auth.collectionId}
           />
         </PopoverTrigger>
-        <PopoverContent className="bg-black bg-opacity-50 backdrop-blur-sm w-[200px] mt-4 mr-4 text-sm flex flex-col space-y-2">
+        <PopoverContent className="z-[110] bg-slate-950/75 backdrop-blur-xl backdrop-saturate-150 border border-white/10 shadow-[0_8px_32px_0_rgba(0,0,0,0.45)] rounded-xl w-[200px] mt-4 mr-4 text-sm flex flex-col space-y-2">
           <div className="mb-2">
             <p>
               Hello, <span className="text-red-500">@{auth.auth.username}</span>

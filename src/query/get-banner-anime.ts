@@ -1,6 +1,6 @@
 import { GET_ANIME_BANNER } from "@/constants/query-keys";
 import { api } from "@/lib/api";
-import { useQuery } from "react-query";
+import { useQuery } from "@tanstack/react-query";
 
 interface IAnimeBanner {
   Media: {

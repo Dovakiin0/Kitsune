@@ -1,6 +1,6 @@
 import { api } from "@/lib/api";
 import { AnilistAnimes } from "@/types/anilist-animes";
-import { useMutation } from "react-query";
+import { useMutation } from "@tanstack/react-query";
 
 const getAnilistAnimes = async (username: string) => {
   const res = await api.post("https://graphql.anilist.co", {

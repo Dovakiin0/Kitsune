@@ -65,7 +65,7 @@ function KitsunePlayer({
   serversData,
   onError,
   ...rest // Spread other div attributes like className, id, etc.
-}: ArtPlayerProps): JSX.Element {
+}: ArtPlayerProps): React.JSX.Element {
   const artContainerRef = useRef<HTMLDivElement>(null); // Ref for the mounting div
   const artInstanceRef = useRef<Artplayer | null>(null); // Ref for the ArtPlayer instance
   const hlsInstanceRef = useRef<Hls | null>(null); // Ref for the Hls.js instance

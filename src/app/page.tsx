@@ -92,9 +92,9 @@ export default function Home() {
         onPageChange={(p) => setTrendingPage(p)}
       />
 
-      <AnimeSchedule />
-
       <RecentCommentsSection />
+
+      <AnimeSchedule />
 
       <AnimeSections
         title="Upcoming Animes"

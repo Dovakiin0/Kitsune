@@ -256,6 +256,7 @@ export interface EpisodeResponse {
     anilistId: number;
     malId?: number;
     kitsuId?: number;
+    nextAiringEpisode?: NextAiringEpisode | null;
     [key: string]: any;
   };
   providers: Record<

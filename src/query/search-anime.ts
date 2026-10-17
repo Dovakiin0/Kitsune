@@ -2,7 +2,7 @@ import { SEARCH_ANIME } from "@/constants/query-keys";
 import { api } from "@/lib/api";
 import { ISuggestionAnime } from "@/types/anime";
 import { SearchSuggestionsResponse } from "@/types/miruro-api";
-import { useQuery } from "react-query";
+import { useQuery } from "@tanstack/react-query";
 
 const searchAnime = async (q: string): Promise<ISuggestionAnime[]> => {
   if (!q) return [];

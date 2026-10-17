@@ -1,6 +1,6 @@
 import { api } from "@/lib/api";
 import { MediaList } from "@/types/miruro-api";
-import { useQuery } from "react-query";
+import { useQuery } from "@tanstack/react-query";
 
 export const GET_ANIME_RELATIONS = "GET_ANIME_RELATIONS";
 

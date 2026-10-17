@@ -102,7 +102,7 @@ const SearchResults = () => {
 
   return (
     <div className="flex flex-col gap-10 mt-28 lg:mt-36 pb-20 min-h-[75vh]">
-      <div className="bg-slate-800 bg-opacity-50 backdrop-blur-sm rounded-lg p-5 flex flex-col gap-5">
+      <div className="bg-slate-800/50 backdrop-blur-md border border-white/10 rounded-lg p-5 flex flex-col gap-5">
         <p className="text-lg font-semibold">Filters</p>
         <div className="flex flex-wrap gap-3">
           <Select
