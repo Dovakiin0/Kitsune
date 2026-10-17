@@ -1,16 +1,27 @@
 services:
   kitsune:
-    image: dovakiin0/kitsune:latest
+    build:
+      context: .
+      dockerfile: Dockerfile
+    image: kitsune:latest
+    container_name: kitsune
+    restart: unless-stopped
     ports:
       - "3000:3000"
     environment:
       - NEXT_PUBLIC_POCKETBASE_URL=http://localhost:8090
-      - NEXT_PUBLIC_PROXY_URL=http://localhost:4040
+      - REDIS_URL=redis://redis:6379
+    depends_on:
+      - redis
 
-  proxy:
-    image: dovakiin0/proxy-m3u8:latest
+  redis:
+    image: redis:8-alpine
+    container_name: kitsune-redis
+    restart: unless-stopped
     ports:
-      - "4040:4040"
-    environment:
-      - PORT=4040
-      - CORS_DOMAIN=localhost:3000
+      - "6379:6379"
+    volumes:
+      - redis_data:/data
+
+volumes:
+  redis_data:

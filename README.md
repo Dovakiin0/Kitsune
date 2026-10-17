@@ -1,63 +1,163 @@
 ![logo.png](logo.png)
 
-Watch your favourite anime anywhere, anytime. No Ads.
+# Kitsune
 
-Kitsune is a free, open-source anime streaming website. It is built using the [Next Js](https://nextjs.org/) framework, [Shadcn/ui](https://ui.shadcn.com), and [Tailwind CSS](https://tailwindcss.com/).
+Watch your favourite anime anywhere, anytime. No ads, no popups.
 
-_Kitsune is still under development and may encounter many bugs. Feel free to open any issue regarding bugs or features_
+Kitsune is a modern, open-source anime streaming web application built with [Next.js](https://nextjs.org/), [Tailwind CSS](https://tailwindcss.com/), and [shadcn/ui](https://ui.shadcn.com/).
+
+---
 
 ## Features
 
-- **No Ads** - No ads, no popups, no redirects, no bullshit.
-- **PWA Support** - Kitsune is a PWA, which means you can install it on your phone.
+- **Ad-Free Experience**: No popups, redirects, or third-party ads.
+- **PWA Ready**: Installable as a Progressive Web App on mobile and desktop.
+- **Rich Anime Discovery**: Explore trending, popular, seasonal anime, search suggestions, and filters powered by AniList.
+- **Advanced Player**: Integrated ArtPlayer with custom HLS playback, audio/subtitles selector, and auto-skip for intro/outro.
+- **User Profiles & Sync**: Bookmarks and watch progress tracking powered by [PocketBase](https://pocketbase.io).
+- **Kitsune Companion**: Lightweight optional desktop helper to bypass ISP restrictions and CORS blocking.
+
+---
+
+## Prerequisites
+
+- **Node.js**: `v20.x` or later (Node 20+ recommended)
+- **PocketBase**: For user authentication, bookmarks, and watch history
+- **(Optional) Redis**: For faster caching of AniList metadata and video manifests (in-memory cache is used if omitted)
+- **(Optional) Go**: `1.22+` if you want to run or build the Kitsune Companion from source
+
+---
+
+## Environment Variables
+
+Copy the example environment file:
+
+```bash
+cp .env.example .env
+```
+
+| Variable                      | Required | Default                  | Description                                             |
+| ----------------------------- | -------- | ------------------------ | ------------------------------------------------------- |
+| `NEXT_PUBLIC_POCKETBASE_URL`  | Yes      | `http://localhost:8090`  | PocketBase instance URL                                 |
+| `REDIS_URL`                   | No       | _None_                   | Redis connection string (e.g. `redis://localhost:6379`) |
+| `NEXT_PUBLIC_LOCAL_PROXY_URL` | No       | `http://127.0.0.1:43210` | URL of the local Kitsune Companion                      |
+| `DOMAIN_URL`                  | No       | `localhost:3000`         | Host domain for OpenGraph cards                         |
+
+---
+
+## Running Locally
+
+1. **Clone the repository**:
+
+   ```bash
+   git clone https://github.com/dovakiin0/Kitsune.git
+   cd Kitsune
+   ```
+
+2. **Install dependencies**:
+
+   ```bash
+   npm install
+   ```
+
+3. **Configure environment**:
+
+   ```bash
+   cp .env.example .env
+   ```
+
+4. **Start the development server**:
+   ```bash
+   npm run dev
+   ```
+
+Open [http://localhost:3000](http://localhost:3000) in your browser.
+
+---
+
+## PocketBase Setup
+
+Kitsune uses PocketBase to manage users, authentication, bookmarks, and watch history.
+
+1. Download and run [PocketBase](https://pocketbase.io/docs/):
+   ```bash
+   ./pocketbase serve --http="0.0.0.0:8090"
+   ```
+2. Open the Admin UI at `http://localhost:8090/_/` and create your superadmin account.
+3. In the PocketBase dashboard, navigate to **Settings > Import Collections**.
+4. Import the schema file located in [docs/pb.json](docs/pb.json).
+5. (Optional) Under **Settings > Auth Providers**, configure OAuth2 providers (Discord) if desired.
+
+---
+
+## Kitsune Companion
+
+The **Kitsune Companion** is an optional desktop utility that runs locally on your computer (`http://127.0.0.1:43210`). It routes video streams directly from your personal IP address, bypassing ISP blocks, Cloudflare challenges, and browser CORS limitations.
+
+The web app automatically detects when Companion is running.
+
+### Option A: Run from Source
+
+Requires [Go](https://go.dev/dl/) installed:
+
+```bash
+cd companion
+go run .
+```
+
+To build a standalone executable:
+
+```bash
+cd companion
+go build -o kitsune-companion .
+./kitsune-companion
+```
+
+### Option B: Download Prebuilt Binary
+
+Download the precompiled binary for Windows, macOS, or Linux from the [GitHub Releases](https://github.com/dovakiin0/Kitsune/releases/latest) page and run it. It runs in the system tray and includes a local web UI at `http://127.0.0.1:43210/ui`.
+
+---
+
+## Docker Setup
+
+### Option 1: Docker Compose (Recommended)
+
+Start Kitsune with an accompanying Redis instance:
+
+```bash
+docker compose up -d --build
+```
+
+Access the app at `http://localhost:3000`.
+
+### Option 2: Dockerfile Build
+
+1. **Build the container image**:
+
+   ```bash
+   docker build -t kitsune .
+   ```
+
+2. **Run the container**:
+   ```bash
+   docker run -p 3000:3000 \
+     -e NEXT_PUBLIC_POCKETBASE_URL="http://host.docker.internal:8090" \
+     kitsune
+   ```
+
+---
 
 ## Contributing
 
-```
-fork the repo
+1. Fork the repo
+2. Create your feature branch (`git checkout -b feat/my-feature`)
+3. Commit your changes (`git commit -m "feat: add feature"`)
+4. Push to the branch (`git push origin feat/my-feature`)
+5. Open a Pull Request
 
-git clone <forked-repo>
-git checkout -b <new-feature>
-git add <changed-file>
-git commit -m "New feature"
-git push origin <new-feature>
+---
 
-then submit a pull request
-```
+## Community & Support
 
-## Local Development
-
-### Prerequisite
-
-- Node js
-- Golang (if you wish to use my proxy server)
-- [Pocketbase](https://pocketbase.io)
-
-### Proxy Server
-
-Head over to [Proxy-M3U8](https://github.com/Dovakiin0/proxy-m3u8) and follow the instruction to setup. or if you wish to use your own proxy server, feel free.
-
-### Pocketbase
-
-Follow the instruction from the official website. Setup initial superadmin credentials. Once inside dashboard, go to settings > Import Collections and paste the content from [collection-JSON](https://github.com/Dovakiin0/Kitsune/blob/master/docs/pb.json) and click import.
-
-You will need discord client secret if you wish to use login from discord feature.
-
-### Frontend
-
-Clone the repo and `cd Kitsune/`.  
-Open `.env` file and change the port. if you are using the above proxy and pocketbase then you are good to go. Then,
-
-```
-npm install
-npm run dev
-```
-
-### Using Docker
-
-There is a `docker-compose.yaml` file which you can use to run the both frontend and server.  
-Simply run `docker compose up -d`.
-
-## Support
-
-Join the Discord server: <https://discord.gg/6yAJ3XDHTt>
+- Discord: [https://discord.gg/6yAJ3XDHTt](https://discord.gg/6yAJ3XDHTt)
