@@ -281,6 +281,12 @@ func (s *CompanionState) handleProxy(w http.ResponseWriter, r *http.Request) {
 	finalBody, unwrapped := unwrapFlixImageSegment(rawBody)
 	if unwrapped {
 		w.Header().Set("Content-Type", "video/mp2t")
+	} else if strings.HasSuffix(urlWithoutQuery, ".vtt") || strings.Contains(strings.ToLower(contentType), "vtt") {
+		w.Header().Set("Content-Type", "text/vtt; charset=utf-8")
+	} else if strings.HasSuffix(urlWithoutQuery, ".srt") {
+		w.Header().Set("Content-Type", "text/plain; charset=utf-8")
+	} else if strings.HasSuffix(urlWithoutQuery, ".ass") {
+		w.Header().Set("Content-Type", "text/x-ssa; charset=utf-8")
 	} else if contentType != "" {
 		w.Header().Set("Content-Type", contentType)
 	} else {

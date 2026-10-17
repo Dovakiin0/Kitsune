@@ -296,20 +296,15 @@ function KitsunePlayer({
     skipTimesRef.current.outroEnd = outroEnd; // Store the raw value
 
     // Subtitle Track Selector Options
-    const trackOptions: any = (episodeInfo?.subtitles ?? []).map((track) => ({
-      default: track.lang === "English" || track.lang === "en",
-      html: track.lang,
-      url: track.url,
-    }));
-
     const defaultTrack =
       episodeInfo?.subtitles?.find(
         (track) =>
-          track.default ||
-          track.lang === "English" ||
-          track.lang === "en" ||
-          track.lang?.toLowerCase().includes("english"),
-      )?.url || episodeInfo?.subtitles?.[0]?.url;
+          (track.default ||
+            track.lang === "English" ||
+            track.lang === "en" ||
+            track.lang?.toLowerCase().includes("english")) &&
+          !track.url.includes("thumbnails"),
+      )?.url || episodeInfo?.subtitles?.find((t) => !t.url.includes("thumbnails"))?.url;
 
     const defaultTrackProxyUrl = defaultTrack
       ? buildStreamProxyUrl({
@@ -319,12 +314,26 @@ function KitsunePlayer({
         })
       : undefined;
 
+    const trackOptions: any = (episodeInfo?.subtitles ?? [])
+      .filter((track) => track.url && !track.url.includes("thumbnails"))
+      .map((track) => ({
+        default: track.url === defaultTrack,
+        html: track.lang || "Subtitle",
+        url: track.url,
+      }));
+
+    const defaultTrackExt = defaultTrack
+      ? defaultTrack.split("?")[0].split("#")[0].split(".").pop()?.toLowerCase()
+      : "vtt";
+    const defaultTrackType =
+      defaultTrackExt === "srt" || defaultTrackExt === "ass" ? defaultTrackExt : "vtt";
+
     // Direct Subtitle Option based on subOrDub
     const subtitleConfig: Option["subtitle"] =
       subOrDub === "sub" && defaultTrackProxyUrl
         ? {
             url: defaultTrackProxyUrl,
-            type: "vtt",
+            type: defaultTrackType,
             style: {
               color: "#FFFFFF",
               fontSize: "22px",
@@ -489,15 +498,23 @@ function KitsunePlayer({
             },
             ...trackOptions, // Add subtitle track choices
           ],
-          onSelect: function(item: any) {
+          onSelect: async function(item: any) {
             if (item.url && typeof item.url === "string") {
               const proxiedUrl = buildStreamProxyUrl({
                 url: item.url,
                 referer: firstSource?.referer || episodeInfo?.headers?.Referer,
                 headers: firstSource?.headers,
               });
-              art.subtitle.switch(proxiedUrl, {
+              const cleanUrl = item.url.split("?")[0].split("#")[0];
+              const ext = cleanUrl.split(".").pop()?.toLowerCase();
+              const subType = ext === "srt" || ext === "ass" ? ext : "vtt";
+
+              art.subtitle.show = true;
+              await art.subtitle.switch(proxiedUrl, {
                 name: item.html,
+                type: subType,
+                escape: false,
+                encoding: "utf-8",
               });
               return item.html ?? "Subtitle";
             }
@@ -558,6 +575,10 @@ function KitsunePlayer({
     const handleTimeUpdate = () => {
       const art = artInstanceRef.current;
       if (!art || art.loading.show) return;
+
+      if (art.subtitle?.show) {
+        (art.subtitle as any).update();
+      }
 
       const currentTime = art.currentTime;
       const duration = art.duration;
@@ -651,8 +672,23 @@ function KitsunePlayer({
 
     // --- Event Listeners ---
     art.on("ready", () => {
+      try {
+        Object.defineProperty(art.subtitle, "textTrack", {
+          configurable: true,
+          get: () =>
+            art.template.$track?.track ||
+            art.template.$video?.textTracks?.[0],
+        });
+      } catch (e) {
+        void e;
+      }
+
+      if (subOrDub === "sub" && defaultTrackProxyUrl) {
+        art.subtitle.show = true;
+      }
+
       art.subtitle.style({
-        fontSize: art.height * 0.04 + "px",
+        fontSize: Math.max(14, Math.min(32, art.height * 0.04)) + "px",
       });
       // --- SEEK TO LAST POSITION ---
       const seekTime = initialSeekTimeRef.current;

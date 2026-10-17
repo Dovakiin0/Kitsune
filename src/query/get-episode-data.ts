@@ -66,6 +66,7 @@ const getEpisodeData = async (
   for (const sub of rawSubtitles) {
     const subUrl = sub?.file || sub?.url;
     if (!subUrl || seenUrls.has(subUrl)) continue;
+    if ((sub as any)?.kind === "thumbnails" || subUrl.includes("thumbnails")) continue;
     seenUrls.add(subUrl);
     subtitles.push({
       lang: sub.label || sub.lang || sub.srclang || "English",

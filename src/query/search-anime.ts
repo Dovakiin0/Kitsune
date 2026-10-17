@@ -32,7 +32,7 @@ const searchAnime = async (q: string): Promise<ISuggestionAnime[]> => {
 export const useSearchAnime = (query: string) => {
   return useQuery({
     queryFn: () => searchAnime(query),
-    queryKey: [SEARCH_ANIME, query],
+    queryKey: ["search-suggestions", query],
     enabled: !!query,
   });
 };

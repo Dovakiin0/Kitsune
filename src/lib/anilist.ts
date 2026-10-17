@@ -175,6 +175,7 @@ export async function fetchMediaPage(options: {
   seasonYear?: number;
   format?: string;
   genre_in?: string[];
+  tag_in?: string[];
   search?: string;
 }): Promise<PaginatedResponse<MediaList>> {
   const page = Math.max(1, Number(options.page) || 1);
@@ -191,6 +192,7 @@ export async function fetchMediaPage(options: {
       $seasonYear: Int
       $format: MediaFormat
       $genre_in: [String]
+      $tag_in: [String]
       $search: String
     ) {
       Page(page: $page, perPage: $perPage) {
@@ -209,6 +211,7 @@ export async function fetchMediaPage(options: {
           seasonYear: $seasonYear
           format: $format
           genre_in: $genre_in
+          tag_in: $tag_in
           search: $search
         ) {
           ...MediaListFields
@@ -227,6 +230,7 @@ export async function fetchMediaPage(options: {
   if (options.seasonYear) variables.seasonYear = options.seasonYear;
   if (options.format) variables.format = options.format;
   if (options.genre_in?.length) variables.genre_in = options.genre_in;
+  if (options.tag_in?.length) variables.tag_in = options.tag_in;
   if (options.search) variables.search = options.search;
 
   const data = await anilistQuery(query, variables);

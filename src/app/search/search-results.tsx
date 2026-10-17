@@ -35,14 +35,28 @@ const SearchResults = () => {
   const [filters, setFilters] = React.useState<SearchAnimeParams>({
     q: params.q,
     page: params.page,
-    type: params.type,
-    status: params.status,
-    rated: params.rated,
-    season: params.season,
-    language: params.language,
-    sort: params.sort,
-    genres: params.genres,
+    type: params.type || "",
+    status: params.status || "",
+    rated: params.rated || "",
+    season: params.season || "",
+    language: params.language || "",
+    sort: params.sort || "",
+    genres: params.genres || "",
   });
+
+  React.useEffect(() => {
+    setFilters({
+      q: params.q,
+      page: params.page,
+      type: params.type || "",
+      status: params.status || "",
+      rated: params.rated || "",
+      season: params.season || "",
+      language: params.language || "",
+      sort: params.sort || "",
+      genres: params.genres || "",
+    });
+  }, [params]);
 
   const handleNextPage = () => {
     if (searchResults?.hasNextPage) {
@@ -68,26 +82,25 @@ const SearchResults = () => {
   };
 
   const applyFilters = () => {
-    const searchParams = new URLSearchParams();
+    const nextParams = new URLSearchParams();
+    const merged = { ...filters, q: params.q };
 
-    onChange("q", params.q);
-
-    Object.entries(filters).forEach(([key, value]) => {
+    Object.entries(merged).forEach(([key, value]) => {
       if (typeof value === "string" && value.trim() !== "") {
-        searchParams.set(key, value);
+        nextParams.set(key, value);
       } else if (typeof value === "number" && !isNaN(value)) {
-        searchParams.set(key, value.toString());
+        nextParams.set(key, value.toString());
       }
     });
 
-    searchParams.delete("page");
+    nextParams.delete("page");
 
-    router.push(`/search?${searchParams.toString()}`);
+    router.push(`/search?${nextParams.toString()}`);
   };
 
   const resetFilters = () => {
     setFilters({
-      q: "",
+      q: params.q,
       page: 1,
       type: "",
       status: "",
@@ -97,7 +110,7 @@ const SearchResults = () => {
       sort: "",
       genres: "",
     });
-    router.push('/search?q=""');
+    router.push(params.q ? `/search?q=${encodeURIComponent(params.q)}` : '/search?q=""');
   };
 
   return (

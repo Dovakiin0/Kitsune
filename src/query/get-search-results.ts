@@ -5,28 +5,20 @@ import { MediaList, PaginatedResponse } from "@/types/miruro-api";
 import { useQuery } from "@tanstack/react-query";
 
 const searchAnime = async (params: SearchAnimeParams): Promise<IAnimeSearch> => {
+  const cleanQuery = params.q ? params.q.replace(/^"+|"+$/g, "").trim() : "";
+
   const requestParams: Record<string, any> = {
     page: params.page || 1,
     per_page: 20,
     genre: params.genres || undefined,
-    season: params.season ? params.season.toUpperCase() : undefined,
-    format: params.type ? params.type.toUpperCase() : undefined,
-    status: params.status ? params.status.toUpperCase() : undefined,
-    sort: params.sort ? params.sort.toUpperCase() : undefined,
+    season: params.season || undefined,
+    format: params.type || undefined,
+    status: params.status || undefined,
+    sort: params.sort || undefined,
+    query: cleanQuery || undefined,
   };
 
-  const cleanQuery = params.q ? params.q.replace(/^"+|"+$/g, "").trim() : "";
-
-  // If search term is present without specific filter override, use /search or pass to filter query
-  const endpoint = cleanQuery && !params.genres && !params.season && !params.type && !params.status
-    ? "/search"
-    : "/filter";
-
-  if (endpoint === "/search") {
-    requestParams.query = cleanQuery;
-  }
-
-  const res = await api.get<PaginatedResponse<MediaList>>(endpoint, {
+  const res = await api.get<PaginatedResponse<MediaList>>("/filter", {
     params: requestParams,
   });
 

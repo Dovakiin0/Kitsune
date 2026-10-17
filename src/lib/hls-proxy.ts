@@ -264,13 +264,22 @@ export async function handleHlsProxyRequest(
 
     const { body: finalBody, unwrapped } = unwrapFlixImageSegment(rawBuffer);
 
+    let finalContentType = unwrapped ? "video/mp2t" : contentType;
+    if (urlWithoutQuery.endsWith(".vtt") || contentType.includes("vtt")) {
+      finalContentType = "text/vtt; charset=utf-8";
+    } else if (urlWithoutQuery.endsWith(".srt")) {
+      finalContentType = "text/plain; charset=utf-8";
+    } else if (urlWithoutQuery.endsWith(".ass")) {
+      finalContentType = "text/x-ssa; charset=utf-8";
+    } else if (!finalContentType) {
+      finalContentType = "application/octet-stream";
+    }
+
     return new Response(new Uint8Array(finalBody), {
       status: 200,
       headers: {
         ...CORS_PNA_HEADERS,
-        "Content-Type": unwrapped
-          ? "video/mp2t"
-          : contentType || "application/octet-stream",
+        "Content-Type": finalContentType,
         "Cache-Control": "public, max-age=3600",
       },
     });
