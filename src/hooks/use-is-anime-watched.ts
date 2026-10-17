@@ -6,6 +6,7 @@ export const useHasAnimeWatched = (
   animeId: string,
   episodeId?: string,
   watchedEpisodes?: WatchHistory[],
+  episodeNumber?: number,
 ) => {
   const [hasWatchedAnime, setHasWatchedAnime] = useState(false);
   const [hasWatchedEpisode, setHasWatchedEpisode] = useState(false);
@@ -36,9 +37,12 @@ export const useHasAnimeWatched = (
   }, [animeId, episodeId]);
 
   if (watchedEpisodes && watchedEpisodes.length > 0) {
-    if (episodeId) {
+    if (episodeId || episodeNumber !== undefined) {
       const episodeWatched = watchedEpisodes.some(
-        (episode) => episode.episodeId === episodeId,
+        (episode) =>
+          (episodeId && episode.episodeId === episodeId) ||
+          (episodeNumber !== undefined &&
+            Number(episode.episodeNumber) === Number(episodeNumber)),
       );
       return { hasWatchedAnime: true, hasWatchedEpisode: episodeWatched };
     }

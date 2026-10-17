@@ -38,6 +38,7 @@ const EpisodeCard = ({
     props.animeId,
     props.episode.episodeId,
     props.watchedEpisodes!,
+    props.episode.number,
   );
 
   const isSelected =

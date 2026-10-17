@@ -27,9 +27,7 @@ jobs:
       - name: Create env file
         uses: SpicyPizza/create-envfile@v2.0
         with:
-          envkey_NEXT_PUBLIC_PROXY_URL: ${{secrets.NEXT_PUBLIC_PROXY_URL}}
           envkey_NEXT_PUBLIC_POCKETBASE_URL: ${{secrets.NEXT_PUBLIC_POCKETBASE_URL}}
-          envkey_REDIS_URL: ${{secrets.REDIS_URL}}
 
       - name: Build and push Docker image
         uses: docker/build-push-action@v4

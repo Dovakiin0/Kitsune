@@ -1,7 +1,6 @@
 import net from "node:net";
 import tls from "node:tls";
 
-const REDIS_URL = process.env.REDIS_URL || "";
 const COMMAND_TIMEOUT_MS = 300;
 
 interface PendingCommand {
@@ -12,6 +11,7 @@ interface PendingCommand {
 
 class LightweightRedisClient {
   private url: URL | null = null;
+  private lastUrlStr = "";
   private socket: net.Socket | null = null;
   private connected = false;
   private connecting: Promise<boolean> | null = null;
@@ -19,17 +19,22 @@ class LightweightRedisClient {
   private buffer: Buffer = Buffer.alloc(0);
   private lastFailAt = 0;
 
-  constructor(urlStr: string) {
-    if (!urlStr) return;
-    try {
-      this.url = new URL(urlStr);
-    } catch {
-      this.url = null;
+  private getUrl(): URL | null {
+    const raw = process.env.REDIS_URL || "";
+    if (!raw) return null;
+    if (raw !== this.lastUrlStr) {
+      this.lastUrlStr = raw;
+      try {
+        this.url = new URL(raw);
+      } catch {
+        this.url = null;
+      }
     }
+    return this.url;
   }
 
   public isConfigured(): boolean {
-    return this.url !== null;
+    return this.getUrl() !== null;
   }
 
   private encodeCommand(args: Array<string | number>): Buffer {
@@ -120,13 +125,13 @@ class LightweightRedisClient {
   }
 
   private async ensureConnected(): Promise<boolean> {
-    if (!this.url) return false;
+    const u = this.getUrl();
+    if (!u) return false;
     if (this.connected && this.socket && !this.socket.destroyed) return true;
     if (Date.now() - this.lastFailAt < 5_000) return false;
     if (this.connecting) return this.connecting;
 
     this.connecting = new Promise<boolean>((resolve) => {
-      const u = this.url!;
       const port = Number(u.port) || 6379;
       const host = u.hostname || "127.0.0.1";
       const isTls = u.protocol === "rediss:";
@@ -225,7 +230,7 @@ class LightweightRedisClient {
   }
 }
 
-const redisClient = new LightweightRedisClient(REDIS_URL);
+const redisClient = new LightweightRedisClient();
 
 export async function redisGet(key: string): Promise<string | null> {
   const res = await redisClient.exec(["GET", `kitsune:${key}`]);

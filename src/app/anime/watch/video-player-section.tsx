@@ -401,7 +401,7 @@ const VideoPlayerSection = () => {
             raw: [],
           }}
           animeInfo={{
-            id: anime?.anime?.info?.id || animeIdParam || "0",
+            id: String(animeIdParam || anime?.anime?.info?.id || "0"),
             title: anime?.anime?.info?.name || "Anime",
             image: anime?.anime?.info?.poster || "",
           }}
