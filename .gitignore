@@ -45,3 +45,9 @@ GEMINI.md
 .codegraph/
 .specify/
 specs/
+**/.cache/
+companion/dist/
+companion/kitsune-companion*
+companion/*.syso
+companion/*.icns
+*.exe

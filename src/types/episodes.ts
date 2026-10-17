@@ -15,6 +15,7 @@ export interface Episode {
 export interface IEpisodeSource {
   headers: {
     Referer: string;
+    [key: string]: string;
   };
   subtitles: Track[];
   intro: Intro;
@@ -44,6 +45,7 @@ export interface IEpisodeServers {
 export interface Track {
   lang: string;
   url: string;
+  default?: boolean;
 }
 
 export interface Intro {
@@ -59,4 +61,8 @@ export interface Outro {
 export interface Source {
   url: string;
   type: string;
+  server?: string;
+  referer?: string;
+  headers?: Record<string, string>;
+  playlist_key?: string;
 }

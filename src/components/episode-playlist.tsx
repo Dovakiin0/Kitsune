@@ -52,7 +52,9 @@ const EpisodePlaylist = ({
     React.useState<Episode[]>(filtered);
 
   useEffect(() => {
+    const epQuery = searchParams.get("ep");
     if (
+      !epQuery &&
       (!episodeId || !episodeId.includes("ep")) &&
       !!episodes &&
       !!episodes.episodes.length

@@ -270,13 +270,32 @@ export interface EpisodeResponse {
 export interface StreamSourceItem {
   url: string;
   type: string;
-  quality: string;
+  quality?: string;
+  server?: string;
+  referer?: string;
+  headers?: Record<string, string>;
+  playlist_key?: string;
+  key?: string;
+  subtitles?: Array<{
+    url?: string;
+    file?: string;
+    label?: string;
+    lang?: string;
+    srclang?: string;
+    default?: boolean;
+  }>;
+  priority?: number;
+  isActive?: boolean;
 }
 
 export interface SubtitleItem {
-  file: string;
-  label: string;
+  file?: string;
+  url?: string;
+  label?: string;
+  lang?: string;
+  srclang?: string;
   kind?: string;
+  default?: boolean;
 }
 
 export interface SkipInterval {
@@ -285,8 +304,12 @@ export interface SkipInterval {
 }
 
 export interface WatchSourcesResponse {
+  anilistId?: number;
+  episode?: number;
+  audio?: "sub" | "dub";
   streams: StreamSourceItem[];
-  subtitles: SubtitleItem[];
-  intro: SkipInterval;
-  outro: SkipInterval;
+  subtitles?: SubtitleItem[];
+  intro?: SkipInterval;
+  outro?: SkipInterval;
+  headers?: Record<string, string>;
 }

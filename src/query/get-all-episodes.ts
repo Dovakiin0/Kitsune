@@ -1,8 +1,24 @@
 import { GET_ALL_EPISODES } from "@/constants/query-keys";
 import { api } from "@/lib/api";
+import { resolveApiEndpoint } from "@/lib/local-proxy";
 import { Episode, IEpisodes } from "@/types/episodes";
 import { EpisodeResponse, NextAiringEpisode } from "@/types/miruro-api";
 import { useQuery } from "@tanstack/react-query";
+
+const KNOWN_PROVIDERS = [
+  "anizone",
+  "reanime",
+  "anikoto",
+  "aniwaves",
+  "animegg",
+  "animenosub",
+  "kaa",
+  "animedunya",
+  "animeonsen",
+  "senshi",
+  "anipm",
+  "mkissa",
+];
 
 export interface IEpisodesData extends IEpisodes {
   rawResponse?: EpisodeResponse;
@@ -21,6 +37,8 @@ const fetchAniListEpisodesFallback = async (
           episodes
           nextAiringEpisode {
             episode
+            airingAt
+            timeUntilAiring
           }
         }
       }
@@ -59,6 +77,7 @@ const fetchAniListEpisodesFallback = async (
       totalEpisodes: episodes.length,
       episodes,
       availableProviders: [],
+      nextAiringEpisode: media?.nextAiringEpisode || null,
     };
   } catch (err) {
     console.error("AniList fallback error:", err);
@@ -80,21 +99,39 @@ const fetchAniListEpisodesFallback = async (
 
 const getAllEpisodes = async (animeId: string): Promise<IEpisodesData> => {
   try {
-    const res = await api.get<EpisodeResponse>(`/episodes/${animeId}`);
-    const data = res.data;
+    const endpointUrl = await resolveApiEndpoint(`/episodes/${animeId}`);
+    const res = endpointUrl.startsWith("http")
+      ? await fetch(endpointUrl).then(async (r) => ({ data: await r.json() }))
+      : await api.get<EpisodeResponse>(`/episodes/${animeId}`);
+    const data: any = res.data;
 
-    const providerNames = Object.keys(data.providers || {});
+    const providersMap: Record<string, any> = { ...(data.providers || {}) };
+    for (const p of KNOWN_PROVIDERS) {
+      if (!providersMap[p] && data[p] && !data[p].error && data[p].episodes) {
+        const subLen = data[p].episodes?.sub?.length || 0;
+        const dubLen = data[p].episodes?.dub?.length || 0;
+        if (subLen > 0 || dubLen > 0) {
+          providersMap[p] = data[p];
+        }
+      }
+    }
+
+    const providerNames = Object.keys(providersMap).sort((a, b) => {
+      const idxA = KNOWN_PROVIDERS.indexOf(a);
+      const idxB = KNOWN_PROVIDERS.indexOf(b);
+      return (idxA === -1 ? 99 : idxA) - (idxB === -1 ? 99 : idxB);
+    });
 
     const subEpNumbers = new Set<number>();
     const dubEpNumbers = new Set<number>();
 
     for (const pName of providerNames) {
-      const pData = data.providers[pName]?.episodes;
+      const pData = providersMap[pName]?.episodes;
       if (pData?.sub) {
-        pData.sub.forEach((ep) => subEpNumbers.add(ep.number));
+        pData.sub.forEach((ep: any) => subEpNumbers.add(Number(ep.number)));
       }
       if (pData?.dub) {
-        pData.dub.forEach((ep) => dubEpNumbers.add(ep.number));
+        pData.dub.forEach((ep: any) => dubEpNumbers.add(Number(ep.number)));
       }
     }
 
@@ -102,16 +139,18 @@ const getAllEpisodes = async (animeId: string): Promise<IEpisodesData> => {
       ...Array.from(subEpNumbers),
       ...Array.from(dubEpNumbers),
     ]);
-    const allEpisodeNumbers = Array.from(allEpNumbersSet).sort((a, b) => a - b);
+    const allEpisodeNumbers = Array.from(allEpNumbersSet)
+      .filter((n) => Number.isFinite(n) && n > 0)
+      .sort((a, b) => a - b);
 
     const episodeList: Episode[] = allEpisodeNumbers.map((epNum) => {
       let epDetail: any = null;
       let fallbackId = "";
 
       for (const pName of providerNames) {
-        const pData = data.providers[pName]?.episodes;
-        const subMatch = pData?.sub?.find((e) => e.number === epNum);
-        const dubMatch = pData?.dub?.find((e) => e.number === epNum);
+        const pData = providersMap[pName]?.episodes;
+        const subMatch = pData?.sub?.find((e: any) => Number(e.number) === epNum);
+        const dubMatch = pData?.dub?.find((e: any) => Number(e.number) === epNum);
 
         if (subMatch) {
           epDetail = subMatch;
@@ -138,10 +177,16 @@ const getAllEpisodes = async (animeId: string): Promise<IEpisodesData> => {
       return await fetchAniListEpisodesFallback(animeId);
     }
 
+    const normalizedRawResponse: EpisodeResponse = {
+      ...data,
+      mappings: data.mappings || { anilistId: Number(animeId) },
+      providers: providersMap,
+    };
+
     return {
       totalEpisodes: episodeList.length,
       episodes: episodeList,
-      rawResponse: data,
+      rawResponse: normalizedRawResponse,
       availableProviders: providerNames,
       nextAiringEpisode: data.mappings?.nextAiringEpisode || null,
     };

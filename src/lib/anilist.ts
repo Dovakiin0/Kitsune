@@ -1,3 +1,5 @@
+import { createHash } from "node:crypto";
+import { redisGet, redisSet } from "@/lib/redis";
 import {
   EpisodeResponse,
   MediaFull,
@@ -11,7 +13,6 @@ import {
 
 const ANILIST_ENDPOINT = "https://graphql.anilist.co";
 
-// ponytail: in-memory TTL cache sufficient for single-instance deployment; swap to Redis only if multi-region serverless needed
 const cache = new Map<string, { data: any; expiresAt: number }>();
 
 const DEFAULT_TTL_MS = 5 * 60 * 1000; // 5 minutes
@@ -80,9 +81,24 @@ export async function anilistQuery<T = any>(
   variables: Record<string, any> = {},
   ttlMs = DEFAULT_TTL_MS,
 ): Promise<T> {
-  const cacheKey = JSON.stringify({ query: query.trim(), variables });
+  const rawKey = JSON.stringify({ query: query.trim(), variables });
+  const redisKey = `kitsune:anilist:${createHash("sha1").update(rawKey).digest("hex")}`;
   const now = Date.now();
-  const hit = cache.get(cacheKey);
+
+  // 1. Primary cache: Redis (when REDIS_URL is configured and reachable)
+  const redisRaw = await redisGet(redisKey);
+  if (redisRaw) {
+    try {
+      const parsed = JSON.parse(redisRaw);
+      cache.set(rawKey, { data: parsed, expiresAt: now + ttlMs });
+      return parsed as T;
+    } catch {
+      // Fall through to in-memory / network on malformed payload
+    }
+  }
+
+  // 2. Fallback cache: In-memory Map
+  const hit = cache.get(rawKey);
   if (hit && hit.expiresAt > now) {
     return hit.data as T;
   }
@@ -108,7 +124,8 @@ export async function anilistQuery<T = any>(
     throw new Error(json.errors[0]?.message || "AniList GraphQL error");
   }
 
-  cache.set(cacheKey, { data: json.data, expiresAt: now + ttlMs });
+  cache.set(rawKey, { data: json.data, expiresAt: now + ttlMs });
+  void redisSet(redisKey, JSON.stringify(json.data), ttlMs);
   return json.data as T;
 }
 

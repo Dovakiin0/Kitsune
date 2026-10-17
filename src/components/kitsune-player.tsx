@@ -17,6 +17,7 @@ import loadingImage from "@/assets/genkai.gif"; // Adjust path as needed
 import artplayerPluginHlsControl from "artplayer-plugin-hls-control";
 import artplayerPluginAmbilight from "artplayer-plugin-ambilight";
 import { cn } from "@/lib/utils";
+import { buildStreamProxyUrl } from "@/lib/local-proxy";
 import { useAuthStore } from "@/store/auth-store";
 import useBookMarks from "@/hooks/use-get-bookmark";
 import { pb } from "@/lib/pocketbase";
@@ -90,15 +91,17 @@ function KitsunePlayer({
     setIsAutoSkipEnabled(autoSkip);
   }, [autoSkip]);
 
-  // --- Construct Stream URI via Next.js internal /api/proxy ---
+  // --- Construct Stream URI via active HLS proxy (/api/proxy or local companion) ---
+  const firstSource = episodeInfo?.sources?.[0];
   const uri = useMemo(() => {
-    const firstSourceUrl = episodeInfo?.sources?.[0]?.url;
-    if (!firstSourceUrl) return null;
-    const referer = episodeInfo?.headers?.Referer;
-    const encodedUrl = encodeURIComponent(firstSourceUrl);
-    const refererParam = referer ? `&referer=${encodeURIComponent(referer)}` : "";
-    return `/api/proxy?url=${encodedUrl}${refererParam}`;
-  }, [episodeInfo]);
+    if (!firstSource?.url) return null;
+    return buildStreamProxyUrl({
+      url: firstSource.url,
+      referer: firstSource.referer || episodeInfo?.headers?.Referer,
+      headers: firstSource.headers,
+      playlistKey: firstSource.playlist_key,
+    });
+  }, [firstSource, episodeInfo]);
 
   const skipTimesRef = useRef<{
     introStart?: number;
@@ -247,11 +250,19 @@ function KitsunePlayer({
 
     const defaultTrack =
       episodeInfo?.subtitles?.find(
-        (track) => track.lang === "English" || track.lang === "en",
+        (track) =>
+          track.default ||
+          track.lang === "English" ||
+          track.lang === "en" ||
+          track.lang?.toLowerCase().includes("english"),
       )?.url || episodeInfo?.subtitles?.[0]?.url;
 
     const defaultTrackProxyUrl = defaultTrack
-      ? `/api/proxy?url=${encodeURIComponent(defaultTrack)}`
+      ? buildStreamProxyUrl({
+          url: defaultTrack,
+          referer: firstSource?.referer || episodeInfo?.headers?.Referer,
+          headers: firstSource?.headers,
+        })
       : undefined;
 
     // Direct Subtitle Option based on subOrDub
@@ -334,7 +345,7 @@ function KitsunePlayer({
     const finalOptions: Option = {
       container: artContainerRef.current,
       url: uri,
-      type: "m3u8", // Explicitly set type for HLS
+      type: firstSource?.type === "mp4" ? "mp4" : "m3u8",
       customType: {
         m3u8: (
           videoElement: HTMLMediaElement,
@@ -426,7 +437,11 @@ function KitsunePlayer({
           ],
           onSelect: function(item: any) {
             if (item.url && typeof item.url === "string") {
-              const proxiedUrl = `/api/proxy?url=${encodeURIComponent(item.url)}`;
+              const proxiedUrl = buildStreamProxyUrl({
+                url: item.url,
+                referer: firstSource?.referer || episodeInfo?.headers?.Referer,
+                headers: firstSource?.headers,
+              });
               art.subtitle.switch(proxiedUrl, {
                 name: item.html,
               });

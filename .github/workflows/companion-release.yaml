@@ -1,0 +1,147 @@
+name: Build and Release Companion
+
+on:
+  push:
+    branches:
+      - master
+    paths:
+      - "companion/**"
+      - ".github/workflows/companion-release.yaml"
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Go
+        uses: actions/setup-go@v5
+        with:
+          go-version: "1.23"
+
+      - name: Determine release version
+        id: version
+        run: |
+          SHORT_SHA=$(git rev-parse --short HEAD)
+          DATE_TAG=$(date -u +"%Y.%m.%d")
+          VERSION="v${DATE_TAG}-${SHORT_SHA}"
+          echo "version=${VERSION}" >> "$GITHUB_OUTPUT"
+
+      - name: Cross-compile and package Companion for Windows, macOS, and Linux
+        working-directory: companion
+        env:
+          CGO_ENABLED: "0"
+          VERSION: ${{ steps.version.outputs.version }}
+        run: |
+          go generate ./...
+          mkdir -p dist
+
+          echo "Building windows/amd64 (with PE .syso icon + manifest, unstripped for Defender)..."
+          GOOS=windows GOARCH=amd64 go build \
+            -ldflags="-H=windowsgui -X main.Version=${VERSION}" \
+            -o dist/kitsune-companion-windows-amd64.exe .
+
+          for ARCH in amd64 arm64; do
+            echo "Building linux/${ARCH}..."
+            GOOS=linux GOARCH=${ARCH} go build \
+              -ldflags="-X main.Version=${VERSION}" \
+              -o dist/kitsune-companion-linux-${ARCH} .
+
+            LINUX_DIR="dist/kitsune-companion-linux-${ARCH}-bundle"
+            mkdir -p "${LINUX_DIR}"
+            cp "dist/kitsune-companion-linux-${ARCH}" "${LINUX_DIR}/kitsune-companion"
+            chmod +x "${LINUX_DIR}/kitsune-companion"
+            cp icon.png "${LINUX_DIR}/icon.png"
+            cat > "${LINUX_DIR}/kitsune-companion.desktop" <<EOF
+          [Desktop Entry]
+          Type=Application
+          Name=Kitsune Companion
+          Comment=Kitsune Companion App
+          Exec=./kitsune-companion
+          Icon=icon.png
+          Terminal=false
+          Categories=AudioVideo;Video;
+          EOF
+            tar -czf "dist/kitsune-companion-linux-${ARCH}.tar.gz" -C dist "kitsune-companion-linux-${ARCH}-bundle"
+            rm -rf "${LINUX_DIR}"
+          done
+
+          for ARCH in amd64 arm64; do
+            echo "Building darwin/${ARCH} and packaging Kitsune Companion.app..."
+            GOOS=darwin GOARCH=${ARCH} go build \
+              -ldflags="-X main.Version=${VERSION}" \
+              -o dist/kitsune-companion-darwin-${ARCH} .
+
+            APP_DIR="dist/macos-${ARCH}/Kitsune Companion.app/Contents"
+            mkdir -p "${APP_DIR}/MacOS" "${APP_DIR}/Resources"
+            cp "dist/kitsune-companion-darwin-${ARCH}" "${APP_DIR}/MacOS/kitsune-companion"
+            chmod +x "${APP_DIR}/MacOS/kitsune-companion"
+            cp icon.icns "${APP_DIR}/Resources/icon.icns"
+            cat > "${APP_DIR}/Info.plist" <<EOF
+          <?xml version="1.0" encoding="UTF-8"?>
+          <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+          <plist version="1.0">
+          <dict>
+            <key>CFBundleExecutable</key>
+            <string>kitsune-companion</string>
+            <key>CFBundleIconFile</key>
+            <string>icon.icns</string>
+            <key>CFBundleIdentifier</key>
+            <string>moe.kitsunee.companion</string>
+            <key>CFBundleName</key>
+            <string>Kitsune Companion</string>
+            <key>CFBundleDisplayName</key>
+            <string>Kitsune Companion</string>
+            <key>CFBundlePackageType</key>
+            <string>APPL</string>
+            <key>CFBundleShortVersionString</key>
+            <string>1.0.0</string>
+            <key>LSMinimumSystemVersion</key>
+            <string>11.0</string>
+            <key>LSUIElement</key>
+            <true/>
+            <key>NSHighResolutionCapable</key>
+            <true/>
+          </dict>
+          </plist>
+          EOF
+            (cd "dist/macos-${ARCH}" && zip -r "../kitsune-companion-macos-${ARCH}.zip" "Kitsune Companion.app")
+            rm -rf "dist/macos-${ARCH}"
+          done
+
+          cd dist
+          sha256sum kitsune-companion-* > checksums.txt
+
+      - name: Publish GitHub Release
+        uses: softprops/action-gh-release@v2
+        with:
+          tag_name: companion-${{ steps.version.outputs.version }}
+          name: Kitsune Companion ${{ steps.version.outputs.version }}
+          make_latest: "true"
+          generate_release_notes: true
+          body: |
+            ## Kitsune Companion (${{ steps.version.outputs.version }})
+
+            Lightweight companion app for smooth, ad-free playback in the Kitsune primary player.
+
+            ### Quick Start
+            - **Windows**: Download and launch `kitsune-companion-windows-amd64.exe`.
+            - **macOS**: Download `kitsune-companion-macos-arm64.zip` (Apple Silicon) or `kitsune-companion-macos-amd64.zip` (Intel), unzip, and open **Kitsune Companion.app** (if Gatekeeper prompts on first launch, right-click → **Open** or run `xattr -cr "Kitsune Companion.app"`).
+            - **Linux**: Download `kitsune-companion-linux-amd64.tar.gz` (or the standalone binary) and run `./kitsune-companion`.
+          files: |
+            companion/dist/kitsune-companion-windows-amd64.exe
+            companion/dist/kitsune-companion-macos-arm64.zip
+            companion/dist/kitsune-companion-macos-amd64.zip
+            companion/dist/kitsune-companion-linux-amd64.tar.gz
+            companion/dist/kitsune-companion-linux-arm64.tar.gz
+            companion/dist/kitsune-companion-linux-amd64
+            companion/dist/kitsune-companion-linux-arm64
+            companion/dist/kitsune-companion-darwin-amd64
+            companion/dist/kitsune-companion-darwin-arm64
+            companion/dist/checksums.txt

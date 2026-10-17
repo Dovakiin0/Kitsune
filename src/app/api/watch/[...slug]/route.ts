@@ -1,18 +1,35 @@
-import { CACHE_HEADERS, fetchWatchSources } from "@/lib/anilist";
+import anivexaWorker from "@/lib/anivexa/index.js";
+import { CORS_PNA_HEADERS } from "@/lib/hls-proxy";
 import { NextRequest, NextResponse } from "next/server";
 
+export const dynamic = "force-dynamic";
+
 export async function GET(
-  _req: NextRequest,
+  req: NextRequest,
   context: { params: Promise<{ slug: string[] }> },
 ) {
   try {
     const { slug } = await context.params;
-    // Expected format: [provider, anilistId, category, epNum]
-    const anilistId = Number(slug?.[1] || slug?.[0]) || 0;
-    const epNum = Number(slug?.[3] || slug?.[2] || 1) || 1;
-
-    const data = await fetchWatchSources(anilistId, epNum);
-    return NextResponse.json(data, { headers: CACHE_HEADERS });
+    const currentUrl = new URL(req.url);
+    const targetUrl = new URL(`/watch/${slug.join("/")}${currentUrl.search}`, req.url);
+    const res = await anivexaWorker.fetch(
+      new Request(targetUrl.toString(), { headers: req.headers }),
+      {},
+    );
+    if (!res.ok) {
+      const errBody = await res.json().catch(() => ({}));
+      return NextResponse.json(
+        {
+          streams: [],
+          subtitles: [],
+          intro: { start: 0, end: 0 },
+          outro: { start: 0, end: 0 },
+          error: errBody?.error || `Provider returned ${res.status}`,
+        },
+        { status: 200, headers: CORS_PNA_HEADERS },
+      );
+    }
+    return res;
   } catch (error: any) {
     return NextResponse.json(
       {
@@ -22,7 +39,7 @@ export async function GET(
         outro: { start: 0, end: 0 },
         error: error?.message,
       },
-      { status: 200 },
+      { status: 200, headers: CORS_PNA_HEADERS },
     );
   }
 }

@@ -4,6 +4,8 @@ on:
   push:
     branches:
       - master
+    paths-ignore:
+      - "companion/**"
 
 jobs:
   build:
@@ -27,7 +29,7 @@ jobs:
         with:
           envkey_NEXT_PUBLIC_PROXY_URL: ${{secrets.NEXT_PUBLIC_PROXY_URL}}
           envkey_NEXT_PUBLIC_POCKETBASE_URL: ${{secrets.NEXT_PUBLIC_POCKETBASE_URL}}
-          envkey_NEXT_PUBLIC_API_URL: ${{secrets.NEXT_PUBLIC_API_URL}}
+          envkey_REDIS_URL: ${{secrets.REDIS_URL}}
 
       - name: Build and push Docker image
         uses: docker/build-push-action@v4
@@ -38,18 +40,23 @@ jobs:
 
       - name: Update infra
         env:
-          APP_TOKEN: ${{ secrets.APP_TOKEN }}
+          INFRA_DEPLOY_KEY: ${{ secrets.INFRA_DEPLOY_KEY }}
           INFRA_REPO: ${{ secrets.INFRA_REPO }}
           IMAGE: dovakiin0/kitsune
           TAG: ${{ github.sha }}
         run: |
           set -e
 
+          mkdir -p ~/.ssh
+          echo "${INFRA_DEPLOY_KEY}" > ~/.ssh/deploy_key
+          chmod 600 ~/.ssh/deploy_key
+          export GIT_SSH_COMMAND="ssh -i ~/.ssh/deploy_key -o StrictHostKeyChecking=accept-new"
+
           git config --global user.email "bot@kitsunee.moe"
           git config --global user.name "kitsunee-bot"
 
           rm -rf infra
-          git clone --depth 1 "https://x-access-token:${APP_TOKEN}@github.com/${INFRA_REPO}.git" infra
+          git clone --depth 1 "git@github.com:${INFRA_REPO}.git" infra
           cd infra
 
           sed -i "s|${IMAGE}:[a-zA-Z0-9._-]*|${IMAGE}:${TAG}|g" apps/kitsune/docker-compose.yml
