@@ -96,6 +96,9 @@ async function getMedia(anilistId) {
       nextAiringEpisode: al.nextAiringEpisode ?? null,
       synonyms: Array.isArray(al.synonyms) ? al.synonyms : [],
     };
+    if (resolved.size >= 150) {
+      resolved.delete(resolved.keys().next().value);
+    }
     resolved.set(id, media);
     inflight.delete(id);
     return media;

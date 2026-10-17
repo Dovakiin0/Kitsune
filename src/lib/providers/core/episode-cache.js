@@ -6,14 +6,14 @@ import { get, set, getAsync, setAsync, needsRefresh, delAsync, delByPrefixAsync 
 const ANIZIP = "https://api.ani.zip/mappings";
 const MIN = 60_000;
 const HOUR = 60 * MIN;
-const DAY = 24 * HOUR;
-const FULL_TTL = 30 * DAY;
-const NORMAL_PROBE_INTERVAL = 15 * MIN;
+const FULL_TTL = 2 * HOUR;
+const NORMAL_PROBE_INTERVAL = 30 * MIN;
 const AIRING_PROBE_INTERVAL = 5 * MIN;
 const AIRING_EARLY_WINDOW = 10 * MIN;
 const AIRING_FAST_WINDOW = 6 * HOUR;
 
 const refreshing = new Set();
+const episodesInflight = new Map();
 
 function runBackground(env, promise) {
   const waitUntil = env?.context?.waitUntil ?? env?.waitUntil;
@@ -207,18 +207,31 @@ export async function getEpisodesResponse(anilistId, env) {
     return entry.data;
   }
 
-  const [media, anizip] = await resolveShared(anilistId);
-  const result = await buildResponse(anilistId, media, anizip);
-  await setAsync(cacheKey, result, FULL_TTL, NORMAL_PROBE_INTERVAL);
-  writeSyncState(anilistId, {
-    lastProbeAt: Date.now(),
-    lastSyncAt: Date.now(),
-    latestEpisode: latestEpisodeFromResponse(result),
-    nextEpisode: media?.nextAiringEpisode?.episode ?? null,
-    nextAiringAt: media?.nextAiringEpisode?.airingAt ?? null,
-    syncing: false,
-  });
-  return result;
+  if (episodesInflight.has(cacheKey)) {
+    return episodesInflight.get(cacheKey);
+  }
+
+  const promise = (async () => {
+    const [media, anizip] = await resolveShared(anilistId);
+    const result = await buildResponse(anilistId, media, anizip);
+    await setAsync(cacheKey, result, FULL_TTL, NORMAL_PROBE_INTERVAL);
+    writeSyncState(anilistId, {
+      lastProbeAt: Date.now(),
+      lastSyncAt: Date.now(),
+      latestEpisode: latestEpisodeFromResponse(result),
+      nextEpisode: media?.nextAiringEpisode?.episode ?? null,
+      nextAiringAt: media?.nextAiringEpisode?.airingAt ?? null,
+      syncing: false,
+    });
+    return result;
+  })();
+
+  episodesInflight.set(cacheKey, promise);
+  try {
+    return await promise;
+  } finally {
+    episodesInflight.delete(cacheKey);
+  }
 }
 
 export async function getFilteredEpisodesResponse(anilistId, providers, includeMap) {

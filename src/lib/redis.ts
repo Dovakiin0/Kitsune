@@ -1,7 +1,7 @@
 import net from "node:net";
 import tls from "node:tls";
 
-const COMMAND_TIMEOUT_MS = 300;
+const COMMAND_TIMEOUT_MS = 2500;
 
 interface PendingCommand {
   resolve: (val: any) => void;
@@ -101,8 +101,9 @@ class LightweightRedisClient {
       return { parsed: true, value: items };
     }
 
-    this.buffer = Buffer.alloc(0);
-    return { parsed: true, value: null };
+    // Corrupted RESP stream: reset socket to prevent frame misalignment
+    this.resetSocket(new Error("Invalid RESP frame"));
+    return { parsed: false };
   }
 
   private drainBuffer() {
@@ -116,6 +117,18 @@ class LightweightRedisClient {
     }
   }
 
+  private resetSocket(err: Error) {
+    const sock = this.socket;
+    this.socket = null;
+    this.connected = false;
+    this.connecting = null;
+    this.buffer = Buffer.alloc(0);
+    if (sock && !sock.destroyed) {
+      sock.destroy();
+    }
+    this.failAll(err);
+  }
+
   private failAll(err: Error) {
     while (this.queue.length > 0) {
       const p = this.queue.shift()!;
@@ -127,9 +140,9 @@ class LightweightRedisClient {
   private async ensureConnected(): Promise<boolean> {
     const u = this.getUrl();
     if (!u) return false;
+    if (this.connecting) return this.connecting;
     if (this.connected && this.socket && !this.socket.destroyed) return true;
     if (Date.now() - this.lastFailAt < 5_000) return false;
-    if (this.connecting) return this.connecting;
 
     this.connecting = new Promise<boolean>((resolve) => {
       const port = Number(u.port) || 6379;
@@ -150,7 +163,6 @@ class LightweightRedisClient {
       sock.on("connect", async () => {
         clearTimeout(connectTimer);
         this.socket = sock;
-        this.connected = true;
         this.buffer = Buffer.alloc(0);
 
         const password = decodeURIComponent(u.password || "");
@@ -168,34 +180,33 @@ class LightweightRedisClient {
           if (dbPath && Number.isFinite(Number(dbPath)) && Number(dbPath) > 0) {
             await this.sendRaw(["SELECT", Number(dbPath)]);
           }
+          this.connected = true;
           this.connecting = null;
           resolve(true);
         } catch {
-          sock.destroy();
-          this.connected = false;
           this.lastFailAt = Date.now();
-          this.connecting = null;
+          this.resetSocket(new Error("Redis auth/select failed"));
           resolve(false);
         }
       });
 
       sock.on("data", (chunk: Buffer) => {
+        if (sock !== this.socket) return;
         this.buffer = Buffer.concat([this.buffer, chunk]);
         this.drainBuffer();
       });
 
       sock.on("error", (err) => {
+        if (sock !== this.socket && this.socket !== null) return;
         clearTimeout(connectTimer);
-        this.connected = false;
         this.lastFailAt = Date.now();
-        this.connecting = null;
-        this.failAll(err);
+        this.resetSocket(err);
         resolve(false);
       });
 
       sock.on("close", () => {
-        this.connected = false;
-        this.failAll(new Error("Redis socket closed"));
+        if (sock !== this.socket) return;
+        this.resetSocket(new Error("Redis socket closed"));
       });
     });
 
@@ -208,9 +219,8 @@ class LightweightRedisClient {
         return reject(new Error("Socket not connected"));
       }
       const timer = setTimeout(() => {
-        const idx = this.queue.findIndex((q) => q.timer === timer);
-        if (idx !== -1) this.queue.splice(idx, 1);
-        reject(new Error("Redis command timeout"));
+        // Must reset socket on timeout so late replies never desync the FIFO queue
+        this.resetSocket(new Error("Redis command timeout"));
       }, COMMAND_TIMEOUT_MS);
 
       this.queue.push({ resolve, reject, timer });

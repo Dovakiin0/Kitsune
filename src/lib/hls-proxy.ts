@@ -1,9 +1,23 @@
+import { createHash } from "node:crypto";
+import { redisGet, redisSet } from "@/lib/redis";
+
 export const CORS_PNA_HEADERS: Record<string, string> = {
   "Access-Control-Allow-Origin": "*",
   "Access-Control-Allow-Methods": "GET, OPTIONS",
   "Access-Control-Allow-Headers": "*",
   "Access-Control-Allow-Private-Network": "true",
 };
+
+const PROXY_CACHE_TTL_MS = 30 * 60 * 1000; // 30 minutes
+const MAX_REDIS_CACHE_BYTES = 256 * 1024; // 256 KB cap: caches manifests/subtitles/keys without OOMing on video segments
+
+interface CachedProxyPayload {
+  contentType: string;
+  cacheControl: string;
+  bodyBase64: string;
+}
+
+const proxyInflight = new Map<string, Promise<{ status: number; headers: Record<string, string>; body: Uint8Array }>>();
 
 const FLIX_IMAGE_SEGMENT_XOR_KEY = Uint8Array.from([
   157, 42, 241, 71, 179, 142, 92, 112,
@@ -107,7 +121,46 @@ export async function handleHlsProxyRequest(
     });
   }
 
-  try {
+  const cacheKey = `proxy:v1:${createHash("sha1")
+    .update(`${proxyPathPrefix}|${targetUrl}|${refererParam}|${headersParam}|${playlistKey}`)
+    .digest("hex")}`;
+
+  const cachedRaw = await redisGet(cacheKey);
+  if (cachedRaw) {
+    try {
+      const parsed = JSON.parse(cachedRaw) as CachedProxyPayload;
+      if (parsed?.bodyBase64 && parsed?.contentType) {
+        return new Response(new Uint8Array(Buffer.from(parsed.bodyBase64, "base64")), {
+          status: 200,
+          headers: {
+            ...CORS_PNA_HEADERS,
+            "Content-Type": parsed.contentType,
+            "Cache-Control": parsed.cacheControl || "public, max-age=1800",
+          },
+        });
+      }
+    } catch {
+      // Fall through on malformed cache entry
+    }
+  }
+
+  if (proxyInflight.has(cacheKey)) {
+    try {
+      const shared = await proxyInflight.get(cacheKey)!;
+      return new Response(new Uint8Array(shared.body), {
+        status: shared.status,
+        headers: shared.headers,
+      });
+    } catch {
+      // Fall through if shared request failed
+    }
+  }
+
+  const workPromise = (async (): Promise<{
+    status: number;
+    headers: Record<string, string>;
+    body: Uint8Array;
+  }> => {
     const targetUri = new URL(targetUrl);
     const origin = targetUri.origin;
 
@@ -171,13 +224,13 @@ export async function handleHlsProxyRequest(
     }
 
     if (!response.ok) {
-      return new Response(
-        `Proxy target returned status: ${response.status} ${response.statusText}`,
-        {
-          status: response.status,
-          headers: CORS_PNA_HEADERS,
-        },
-      );
+      return {
+        status: response.status,
+        headers: CORS_PNA_HEADERS,
+        body: new TextEncoder().encode(
+          `Proxy target returned status: ${response.status} ${response.statusText}`,
+        ),
+      };
     }
 
     const contentType = (response.headers.get("content-type") || "").toLowerCase();
@@ -251,14 +304,25 @@ export async function handleHlsProxyRequest(
           })
           .join("\n");
 
-        return new Response(rewrittenManifest, {
+        const manifestBuf = Buffer.from(rewrittenManifest, "utf8");
+        if (manifestBuf.byteLength <= MAX_REDIS_CACHE_BYTES) {
+          const payload: CachedProxyPayload = {
+            contentType: "application/vnd.apple.mpegurl",
+            cacheControl: "no-cache",
+            bodyBase64: manifestBuf.toString("base64"),
+          };
+          void redisSet(cacheKey, JSON.stringify(payload), PROXY_CACHE_TTL_MS);
+        }
+
+        return {
           status: 200,
           headers: {
             ...CORS_PNA_HEADERS,
             "Content-Type": "application/vnd.apple.mpegurl",
             "Cache-Control": "no-cache",
           },
-        });
+          body: new Uint8Array(manifestBuf),
+        };
       }
     }
 
@@ -275,13 +339,33 @@ export async function handleHlsProxyRequest(
       finalContentType = "application/octet-stream";
     }
 
-    return new Response(new Uint8Array(finalBody), {
+    // Cache subtitles & small assets (<= 256KB) in Redis; skip large video segments to avoid OOM
+    if (!unwrapped && finalBody.byteLength <= MAX_REDIS_CACHE_BYTES && !finalContentType.includes("video/")) {
+      const payload: CachedProxyPayload = {
+        contentType: finalContentType,
+        cacheControl: "public, max-age=3600",
+        bodyBase64: finalBody.toString("base64"),
+      };
+      void redisSet(cacheKey, JSON.stringify(payload), PROXY_CACHE_TTL_MS);
+    }
+
+    return {
       status: 200,
       headers: {
         ...CORS_PNA_HEADERS,
         "Content-Type": finalContentType,
         "Cache-Control": "public, max-age=3600",
       },
+      body: new Uint8Array(finalBody),
+    };
+  })();
+
+  proxyInflight.set(cacheKey, workPromise);
+  try {
+    const result = await workPromise;
+    return new Response(new Uint8Array(result.body), {
+      status: result.status,
+      headers: result.headers,
     });
   } catch (error: any) {
     return new Response(
@@ -291,5 +375,7 @@ export async function handleHlsProxyRequest(
         headers: CORS_PNA_HEADERS,
       },
     );
+  } finally {
+    proxyInflight.delete(cacheKey);
   }
 }

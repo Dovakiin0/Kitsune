@@ -13,10 +13,21 @@ import {
 
 const ANILIST_ENDPOINT = "https://graphql.anilist.co";
 
+const MAX_MEM_ENTRIES = 150;
 const cache = new Map<string, { data: any; expiresAt: number }>();
+const inflight = new Map<string, Promise<any>>();
 
-const DEFAULT_TTL_MS = 5 * 60 * 1000; // 5 minutes
-const DETAIL_TTL_MS = 15 * 60 * 1000; // 15 minutes
+const DEFAULT_TTL_MS = 30 * 60 * 1000; // 30 minutes
+const DETAIL_TTL_MS = 30 * 60 * 1000; // 30 minutes
+
+function setMemCache(key: string, data: any, expiresAt: number) {
+  cache.delete(key);
+  if (cache.size >= MAX_MEM_ENTRIES) {
+    const oldest = cache.keys().next().value;
+    if (oldest !== undefined) cache.delete(oldest);
+  }
+  cache.set(key, { data, expiresAt });
+}
 
 export const CACHE_HEADERS = {
   "Cache-Control": "public, s-maxage=300, stale-while-revalidate=600",
@@ -82,16 +93,26 @@ export async function anilistQuery<T = any>(
   ttlMs = DEFAULT_TTL_MS,
 ): Promise<T> {
   const rawKey = JSON.stringify({ query: query.trim(), variables });
-  const redisKey = `kitsune:anilist:${createHash("sha1").update(rawKey).digest("hex")}`;
+  const redisKey = `anilist:v2:${createHash("sha1").update(rawKey).digest("hex")}`;
   const now = Date.now();
+
+  const isValidPayload = (d: any): boolean => {
+    if (!d || typeof d !== "object") return false;
+    if (variables.id !== undefined) {
+      return Number(d.Media?.id) === Number(variables.id);
+    }
+    return Boolean(d.Page || d.Media);
+  };
 
   // 1. Primary cache: Redis (when REDIS_URL is configured and reachable)
   const redisRaw = await redisGet(redisKey);
   if (redisRaw) {
     try {
       const parsed = JSON.parse(redisRaw);
-      cache.set(rawKey, { data: parsed, expiresAt: now + ttlMs });
-      return parsed as T;
+      if (isValidPayload(parsed)) {
+        setMemCache(rawKey, parsed, now + ttlMs);
+        return parsed as T;
+      }
     } catch {
       // Fall through to in-memory / network on malformed payload
     }
@@ -99,34 +120,53 @@ export async function anilistQuery<T = any>(
 
   // 2. Fallback cache: In-memory Map
   const hit = cache.get(rawKey);
-  if (hit && hit.expiresAt > now) {
+  if (hit && hit.expiresAt > now && isValidPayload(hit.data)) {
     return hit.data as T;
   }
 
-  const res = await fetch(ANILIST_ENDPOINT, {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-      Accept: "application/json",
-    },
-    body: JSON.stringify({ query, variables }),
-    next: { revalidate: Math.floor(ttlMs / 1000) },
-  });
-
-  if (!res.ok) {
-    if (hit) return hit.data as T;
-    throw new Error(`AniList API HTTP ${res.status}`);
+  if (inflight.has(rawKey)) {
+    return inflight.get(rawKey) as Promise<T>;
   }
 
-  const json = await res.json();
-  if (json.errors?.length && !json.data) {
-    if (hit) return hit.data as T;
-    throw new Error(json.errors[0]?.message || "AniList GraphQL error");
-  }
+  const reqPromise = (async (): Promise<T> => {
+    const res = await fetch(ANILIST_ENDPOINT, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        Accept: "application/json",
+      },
+      body: JSON.stringify({ query, variables }),
+      cache: "no-store",
+    });
 
-  cache.set(rawKey, { data: json.data, expiresAt: now + ttlMs });
-  void redisSet(redisKey, JSON.stringify(json.data), ttlMs);
-  return json.data as T;
+    if (res.status === 404) {
+      return null as T;
+    }
+
+    if (!res.ok) {
+      if (hit && isValidPayload(hit.data)) return hit.data as T;
+      throw new Error(`AniList API HTTP ${res.status}`);
+    }
+
+    const json = await res.json();
+    if (json.errors?.length && !isValidPayload(json.data)) {
+      if (hit && isValidPayload(hit.data)) return hit.data as T;
+      throw new Error(json.errors[0]?.message || "AniList GraphQL error");
+    }
+
+    if (isValidPayload(json.data)) {
+      setMemCache(rawKey, json.data, Date.now() + ttlMs);
+      void redisSet(redisKey, JSON.stringify(json.data), ttlMs);
+    }
+    return json.data as T;
+  })();
+
+  inflight.set(rawKey, reqPromise);
+  try {
+    return await reqPromise;
+  } finally {
+    inflight.delete(rawKey);
+  }
 }
 
 export function normalizeMediaList(raw: any): MediaList {

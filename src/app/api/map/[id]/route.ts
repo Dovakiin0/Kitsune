@@ -1,4 +1,4 @@
-import anivexaWorker from "@/lib/anivexa/index.js";
+import providerWorker from "@/lib/providers/index.js";
 import { NextRequest } from "next/server";
 
 export const dynamic = "force-dynamic";
@@ -9,5 +9,5 @@ export async function GET(
 ) {
   const { id } = await context.params;
   const targetUrl = new URL(`/map/${id}`, req.url);
-  return anivexaWorker.fetch(new Request(targetUrl.toString(), { headers: req.headers }), {});
+  return providerWorker.fetch(new Request(targetUrl.toString(), { headers: req.headers }), {});
 }

@@ -1,4 +1,4 @@
-import anivexaWorker from "@/lib/anivexa/index.js";
+import providerWorker from "@/lib/providers/index.js";
 import { CORS_PNA_HEADERS } from "@/lib/hls-proxy";
 import { NextRequest, NextResponse } from "next/server";
 
@@ -12,7 +12,7 @@ export async function GET(
     const { slug } = await context.params;
     const currentUrl = new URL(req.url);
     const targetUrl = new URL(`/watch/${slug.join("/")}${currentUrl.search}`, req.url);
-    const res = await anivexaWorker.fetch(
+    const res = await providerWorker.fetch(
       new Request(targetUrl.toString(), { headers: req.headers }),
       {},
     );

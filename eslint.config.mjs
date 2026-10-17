@@ -3,7 +3,7 @@ import tseslint from "typescript-eslint";
 
 export default tseslint.config(
   {
-    ignores: [".next/**", "node_modules/**", "public/**", "src/lib/anivexa/**", "companion/**"],
+    ignores: [".next/**", "node_modules/**", "public/**", "src/lib/providers/**", "companion/**"],
   },
   js.configs.recommended,
   ...tseslint.configs.recommended,

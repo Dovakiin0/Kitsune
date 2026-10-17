@@ -18,6 +18,7 @@ services:
     image: redis:8-alpine
     container_name: kitsune-redis
     restart: unless-stopped
+    command: redis-server --maxmemory 256mb --maxmemory-policy allkeys-lru --save "" --appendonly no
     ports:
       - "6379:6379"
     volumes:
