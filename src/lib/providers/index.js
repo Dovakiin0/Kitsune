@@ -61,6 +61,47 @@ async function fetchAniSkipIntervals(anilistId, epNum) {
   return { intro, outro };
 }
 
+const SUB_LANG_MAP = {
+  en: "English", eng: "English", enm: "English",
+  es: "Spanish", spa: "Spanish", "es-419": "Spanish (Latin America)",
+  pt: "Portuguese", por: "Portuguese", "pt-br": "Portuguese (Brazil)",
+  fr: "French", fre: "French", fra: "French",
+  de: "German", deu: "German", ger: "German",
+  it: "Italian", ita: "Italian",
+  ru: "Russian", rus: "Russian",
+  ar: "Arabic", ara: "Arabic",
+  ja: "Japanese", jpn: "Japanese",
+  ko: "Korean", kor: "Korean",
+  zh: "Chinese", chi: "Chinese", zho: "Chinese",
+  hi: "Hindi", hin: "Hindi",
+  id: "Indonesian", ind: "Indonesian",
+  ms: "Malay", may: "Malay",
+  th: "Thai", tha: "Thai",
+  vi: "Vietnamese", vie: "Vietnamese",
+  tr: "Turkish", tur: "Turkish",
+  bn: "Bengali", ben: "Bengali",
+  fa: "Persian", per: "Persian",
+  pl: "Polish", pol: "Polish",
+  sw: "Swahili", swa: "Swahili",
+};
+
+function resolveSubLabel(sub, fileUrl) {
+  const raw = (sub?.language || sub?.label || sub?.title || sub?.name || sub?.lang || sub?.srclang || "").trim();
+  if (raw) {
+    const rawLower = raw.toLowerCase();
+    if (SUB_LANG_MAP[rawLower]) return SUB_LANG_MAP[rawLower];
+    const prefix = rawLower.split(/[\s-_]/)[0];
+    if (SUB_LANG_MAP[prefix] && raw.length <= 6) return SUB_LANG_MAP[prefix];
+    return raw;
+  }
+  const match = fileUrl.match(/(?:^|[_/-])(en|eng|es|spa|pt|por|fr|fre|fra|de|deu|ger|it|ita|ru|rus|ar|ara|ja|jpn|ko|kor|zh|chi|hi|id|ms|th|vi|tr|bn|fa|pl|sw)(?:[_.-]|$)/i);
+  if (match) {
+    const code = match[1].toLowerCase();
+    if (SUB_LANG_MAP[code]) return SUB_LANG_MAP[code];
+  }
+  return "English";
+}
+
 function normalizeWatchPayload(data, skipTimes) {
   if (!data || typeof data !== "object") return data;
   const streams = Array.isArray(data.streams) ? data.streams : [];
@@ -68,14 +109,17 @@ function normalizeWatchPayload(data, skipTimes) {
     ...(Array.isArray(data.subtitles) ? data.subtitles : []),
     ...streams.flatMap((s) => (Array.isArray(s?.subtitles) ? s.subtitles : [])),
   ];
-  const seenSubUrls = new Set();
-  const subtitles = [];
+  const seenSubKeys = new Set();
+  const rawSubtitles = [];
   for (const sub of rawSubs) {
     const fileUrl = sub?.file || sub?.url;
-    if (!fileUrl || seenSubUrls.has(fileUrl)) continue;
-    seenSubUrls.add(fileUrl);
-    const label = sub?.label || sub?.lang || sub?.srclang || "English";
-    subtitles.push({
+    if (!fileUrl) continue;
+    if (sub?.kind === "thumbnails" || fileUrl.includes("thumbnails")) continue;
+    const pathKey = fileUrl.replace(/^https?:\/\/[^/]+/, "").split("?")[0];
+    if (seenSubKeys.has(pathKey)) continue;
+    seenSubKeys.add(pathKey);
+    const label = resolveSubLabel(sub, fileUrl);
+    rawSubtitles.push({
       file: fileUrl,
       url: fileUrl,
       label,
@@ -85,6 +129,21 @@ function normalizeWatchPayload(data, skipTimes) {
       default: Boolean(sub?.default),
     });
   }
+
+  const labelCounts = {};
+  for (const s of rawSubtitles) {
+    labelCounts[s.label] = (labelCounts[s.label] || 0) + 1;
+  }
+  const labelIndex = {};
+  const subtitles = rawSubtitles.map((s) => {
+    if (labelCounts[s.label] > 1) {
+      labelIndex[s.label] = (labelIndex[s.label] || 0) + 1;
+      const numbered = `${s.label} ${labelIndex[s.label]}`;
+      return { ...s, label: numbered, lang: numbered };
+    }
+    return s;
+  });
+
   return {
     ...data,
     streams,

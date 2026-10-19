@@ -295,16 +295,24 @@ function KitsunePlayer({
     skipTimesRef.current.outroStart = outroStart;
     skipTimesRef.current.outroEnd = outroEnd; // Store the raw value
 
-    // Subtitle Track Selector Options
+    // Subtitle Track Selector Options - prioritize English as default
+    const isEnglish = (lang?: string) => {
+      const l = (lang || "").toLowerCase();
+      return l === "en" || l === "eng" || l.includes("english");
+    };
+
+    const validSubtitles = (episodeInfo?.subtitles ?? []).filter(
+      (track) => track.url && !track.url.includes("thumbnails"),
+    );
+
     const defaultTrack =
-      episodeInfo?.subtitles?.find(
-        (track) =>
-          (track.default ||
-            track.lang === "English" ||
-            track.lang === "en" ||
-            track.lang?.toLowerCase().includes("english")) &&
-          !track.url.includes("thumbnails"),
-      )?.url || episodeInfo?.subtitles?.find((t) => !t.url.includes("thumbnails"))?.url;
+      validSubtitles.find((t) => isEnglish(t.lang) && t.default)?.url ||
+      validSubtitles.find((t) => isEnglish(t.lang))?.url ||
+      validSubtitles.find((t) => t.default)?.url ||
+      validSubtitles[0]?.url;
+
+    const defaultTrackObj = validSubtitles.find((t) => t.url === defaultTrack);
+    const defaultTrackTitle = defaultTrackObj?.lang || (validSubtitles.length > 0 ? "English" : "Off");
 
     const defaultTrackProxyUrl = defaultTrack
       ? buildStreamProxyUrl({
@@ -314,13 +322,11 @@ function KitsunePlayer({
         })
       : undefined;
 
-    const trackOptions: any = (episodeInfo?.subtitles ?? [])
-      .filter((track) => track.url && !track.url.includes("thumbnails"))
-      .map((track) => ({
-        default: track.url === defaultTrack,
-        html: track.lang || "Subtitle",
-        url: track.url,
-      }));
+    const trackOptions: any = validSubtitles.map((track) => ({
+      default: track.url === defaultTrack,
+      html: track.lang || "Subtitle",
+      url: track.url,
+    }));
 
     const defaultTrackExt = defaultTrack
       ? defaultTrack.split("?")[0].split("#")[0].split(".").pop()?.toLowerCase()
@@ -482,7 +488,7 @@ function KitsunePlayer({
         {
           width: 250,
           html: "Subtitle",
-          tooltip: "Subtitle",
+          tooltip: defaultTrackTitle,
           selector: [
             {
               html: "Display",

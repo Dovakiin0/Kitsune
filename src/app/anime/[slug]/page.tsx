@@ -68,12 +68,20 @@ const Page = () => {
     page: 1,
     per_page: 1,
   });
-  const [selected, setSelected] = useState(bookmarks?.[0]?.status || "");
+  const normalizeStatus = (s?: string) =>
+    s ? s.toLowerCase().replace(/_/g, " ").trim() : "";
+
+  const [selected, setSelected] = useState(
+    bookmarks?.[0]?.status ? normalizeStatus(bookmarks[0].status) : "",
+  );
 
   useEffect(() => {
     const currentStatus = bookmarks?.[0]?.status;
-    if (currentStatus && currentStatus !== selected) {
-      setSelected(currentStatus);
+    if (currentStatus) {
+      const normalized = normalizeStatus(currentStatus);
+      if (normalized !== selected) {
+        setSelected(normalized);
+      }
     }
   }, [bookmarks, selected]);
 
@@ -138,7 +146,7 @@ const Page = () => {
               {auth && (
                 <Select
                   placeholder="Add to list"
-                  value={bookmarks?.[0]?.status || selected}
+                  value={selected || normalizeStatus(bookmarks?.[0]?.status)}
                   options={SelectOptions}
                   onChange={handleSelect}
                   placeholderIcon={Heart}

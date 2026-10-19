@@ -67,16 +67,19 @@ const Layout = (props: Props) => {
     }
   }, [animeId, router]);
 
+  const normalizeStatus = (s?: string) =>
+    s ? s.toLowerCase().replace(/_/g, " ").trim() : "";
+
   const { bookmarks, createOrUpdateBookMark } = useBookMarks({
     animeID: currentAnimeId as string,
     page: 1,
     per_page: 1,
   });
-  const [selected, setSelected] = useState<string>("Plan to Watch");
+  const [selected, setSelected] = useState<string>("");
 
   useEffect(() => {
     if (bookmarks?.[0]?.status) {
-      setSelected(bookmarks[0].status);
+      setSelected(normalizeStatus(bookmarks[0].status));
     }
   }, [bookmarks]);
 
@@ -88,12 +91,12 @@ const Layout = (props: Props) => {
     },
     {
       label: "Plan to watch",
-      value: "plan_to_watch",
+      value: "plan to watch",
       icon: BookmarkCheck,
     },
     {
       label: "On Hold",
-      value: "on_hold",
+      value: "on hold",
       icon: Hand,
     },
     {
@@ -188,7 +191,7 @@ const Layout = (props: Props) => {
           <div className="flex flex-col gap-2">
             <Select
               placeholder="Add to list"
-              value={selected}
+              value={selected || normalizeStatus(bookmarks?.[0]?.status)}
               options={SelectOptions}
               onChange={handleSelect}
             />

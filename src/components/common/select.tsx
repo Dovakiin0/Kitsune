@@ -28,7 +28,7 @@ function Select(props: Props) {
   const value = props.options.find((option) => option.value === props.value);
 
   return (
-    <SelectCN defaultValue={props.value} onValueChange={props.onChange}>
+    <SelectCN value={props.value ?? ""} onValueChange={props.onChange}>
       <SelectTrigger className={cn("w-[180px]", props.className)}>
         {value?.icon ? (
           <value.icon />
@@ -42,10 +42,12 @@ function Select(props: Props) {
       <SelectContent className={cn("z-[101] text-sm", props.className)}>
         <SelectGroup>
           {props.options.map((option, i) => (
-            <div key={i} className="flex items-center">
-              {option.icon && <option.icon />}
-              <SelectItem value={option.value}>{option.label}</SelectItem>
-            </div>
+            <SelectItem key={option.value || i} value={option.value}>
+              <div className="flex items-center gap-2">
+                {option.icon && <option.icon />}
+                <span>{option.label}</span>
+              </div>
+            </SelectItem>
           ))}
         </SelectGroup>
       </SelectContent>
