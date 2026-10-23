@@ -1,4 +1,4 @@
-FROM node:20-alpine AS base
+FROM node:24.22.1-alpine AS base
 
 # 1. Install dependencies only when needed
 FROM base AS deps
@@ -26,10 +26,8 @@ FROM base AS runner
 WORKDIR /app
 
 LABEL org.opencontainers.image.title="Kitsune" \
-  org.opencontainers.image.description="Anime streaming app" \
-  org.opencontainers.image.maintainer="dovakiin0@kitsunee.online" \
   org.opencontainers.image.source="https://github.com/dovakiin0/Kitsune.git" \
-  org.opencontainers.image.vendor="kitsunee.online"
+  org.opencontainers.image.vendor="kitsunee.moe"
 
 RUN addgroup -g 1001 -S nodejs
 RUN adduser -S nextjs -u 1001
