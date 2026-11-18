@@ -111,7 +111,9 @@ function scoreCandidate(candidate, titles, seasonYear, anilistFormat) {
   const af = (anilistFormat || "").toUpperCase();
   if      (af === "MOVIE" && kaaType !== "movie")                        typeMult = 0.25;
   else if (af !== "MOVIE" && kaaType === "movie")                        typeMult = 0.25;
-  else if ((af === "OVA" || af === "ONA" || af === "SPECIAL") && kaaType === "tv") typeMult = 0.5;
+  else if ((af === "OVA" || af === "SPECIAL") && kaaType === "tv") typeMult = 0.5;
+  else if (af === "ONA" && kaaType === "tv") typeMult = 0.9;
+  else if (af === "TV" && kaaType === "ona") typeMult = 0.9;
   else if (af === "TV"   && (kaaType === "ova" || kaaType === "special")) typeMult = 0.5;
 
   return Math.min(1, base * yearMult) * typeMult;

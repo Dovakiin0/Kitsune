@@ -167,11 +167,15 @@ function validateCandidate(candidate, media, titles, expected) {
     && candidate.episodes.available === partOrdinal
     && titleScore >= 0.65;
   if (titleScore < 0.68 && !partMapping) return null;
-  if (expectedType && candidate.type && expectedType !== candidate.type) return null;
+  const formatCompatible = !expectedType || !candidate.type || expectedType === candidate.type
+    || (expectedType === "ona" && candidate.type === "tv")
+    || (expectedType === "tv" && candidate.type === "ona");
+  if (!formatCompatible) return null;
   if (expectedYear && candidate.year && expectedYear !== candidate.year) return null;
   const coverage = coverageScore(candidate, expected, media?.status);
   if (expected >= 6 && coverage < 0.8) return null;
-  const score = titleScore * 0.72 + (expectedType && candidate.type === expectedType ? 0.14 : 0.07) + (expectedYear && candidate.year === expectedYear ? 0.1 : 0.04) + coverage * 0.04;
+  const formatWeight = expectedType && candidate.type === expectedType ? 0.14 : (expectedType && candidate.type ? 0.1 : 0.07);
+  const score = titleScore * 0.72 + formatWeight + (expectedYear && candidate.year === expectedYear ? 0.1 : 0.04) + coverage * 0.04;
   return { ...candidate, titleScore, coverage, score, partOrdinal: partMapping ? partOrdinal : 0 };
 }
 

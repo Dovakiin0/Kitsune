@@ -2,7 +2,7 @@ import { getMedia } from '../core/anilist.js';
 import { extractMegaPlayDetails } from "../extractors/megaplay.js";
 import { buildTitleSearchQueries, buildTitles, decodeEntities, titleIdentityScore } from "../core/new-provider-utils.js";
 
-const ANIKOTO = "https://anikototv.to";
+const ANIKOTO = "https://anikototv.bz";
 const MAPPER = "https://mapper.nekostream.site/api/mal";
 const ANIZIP = "https://api.ani.zip/mappings";
 const SPOOF_REF = "https://hianimes.re/";
@@ -88,7 +88,7 @@ async function searchAnikoto(query) {
   const searchHtml = await httpGet(`${ANIKOTO}/filter?keyword=${encodeURIComponent(query)}`, { Referer: `${ANIKOTO}/` });
   const candidates = [];
   
-  const re = /<a\s+class="name d-title"\s+href="https:\/\/anikototv\.to\/watch\/([^"/]+)(?:\/ep-\d+)?"[^>]*data-jp="([^"]*)"[^>]*>([\s\S]*?)<\/a>/g;
+  const re = /<a\s+class="name d-title"\s+href="(?:https?:\/\/anikototv\.[a-z]+)?\/watch\/([^"/]+)(?:\/ep-\d+)?"[^>]*data-jp="([^"]*)"[^>]*>([\s\S]*?)<\/a>/gi;
   let m;
   while ((m = re.exec(searchHtml)) !== null) {
     const slug = m[1];
@@ -98,7 +98,7 @@ async function searchAnikoto(query) {
   }
 
   if (!candidates.length) {
-    const reFallback = /<a\s+href="https:\/\/anikototv\.to\/watch\/([^"/]+)(?:\/ep-\d+)?"[^>]*>([\s\S]*?)<\/a>/g;
+    const reFallback = /<a\s+href="(?:https?:\/\/anikototv\.[a-z]+)?\/watch\/([^"/]+)(?:\/ep-\d+)?"[^>]*>([\s\S]*?)<\/a>/gi;
     while ((m = reFallback.exec(searchHtml)) !== null) {
       candidates.push({ slug: m[1], name: m[1], jp: "" });
     }

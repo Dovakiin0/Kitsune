@@ -19,12 +19,19 @@ function requestHeaders(referer = `${SITE}/`) {
 }
 
 async function wreq(url, options = {}) {
-  return wreqFetch(url, {
-    session: "anipm",
-    browser: BROWSER,
-    os: OS,
-    ...options,
-  });
+  try {
+    const res = await wreqFetch(url, {
+      session: "anipm",
+      browser: BROWSER,
+      os: OS,
+      ...options,
+    });
+    if (res.ok || res.status < 400) return res;
+  } catch {
+    // Fall back to standard fetch if wreq-js is unavailable or fails
+  }
+  const { session: _s, browser: _b, os: _o, warm: _w, ...fetchOpts } = options;
+  return fetch(url, fetchOpts);
 }
 
 async function requestJson(url, referer = `${SITE}/`) {
@@ -196,7 +203,7 @@ function mapSubtitles(items, referer) {
 async function getChannelUrl(series, episode, audio, channel) {
   const url = new URL("/api/anime/settlar/session", SITE);
   url.searchParams.set("selection", series.selection);
-  url.searchParams.set("provider", "anipm");3
+  url.searchParams.set("provider", "anipm");
   url.searchParams.set("ep", String(episode));
   url.searchParams.set("channel", channel);
   url.searchParams.set("telemetry", "0");

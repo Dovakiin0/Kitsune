@@ -58,11 +58,13 @@ async function resolveSeries(anilistId, ctx = {}) {
   }));
 
   // Fast pass: AniList CDN cover URLs embed the AniList ID as bx{id}-*.
-  // If a candidate's cover image already confirms our ID we can skip detail fetches entirely.
+  // Prefer candidates that actually have episodes, and only skip detail fetches
+  // if a cover-image match has playable episodes.
+  const coverMatches = [];
   for (const [id, r] of candidates) {
     const coverId = extractAnilistIdFromCover(r.cover_image);
     if (coverId && coverId === Number(anilistId)) {
-      const data = {
+      coverMatches.push({
         animeId: id,
         title: r.title?.english || r.title?.romaji || id,
         anilistId: Number(anilistId),
@@ -72,13 +74,22 @@ async function resolveSeries(anilistId, ctx = {}) {
         episodesCount: Number.isFinite(r.episodes) ? r.episodes : null,
         matchType: "cover_image",
         matchScore: 1,
-      };
-      cacheSet(cacheKey, data, SHOW_IDENTITY_TTL);
-      return data;
+      });
     }
   }
+  const hasPlayable = (item) => (item.subbed ?? 0) + (item.dubbed ?? 0) > 0 || (item.episodesCount ?? 0) > 0;
+  const playableRank = (a, b) =>
+    ((b.subbed ?? 0) + (b.dubbed ?? 0)) - ((a.subbed ?? 0) + (a.dubbed ?? 0)) ||
+    (b.episodesCount ?? 0) - (a.episodesCount ?? 0) ||
+    b.matchScore - a.matchScore;
 
-  // Fallback: fetch detail pages only for candidates that had no AniList CDN cover
+  coverMatches.sort(playableRank);
+  if (coverMatches[0] && hasPlayable(coverMatches[0])) {
+    cacheSet(cacheKey, coverMatches[0], SHOW_IDENTITY_TTL);
+    return coverMatches[0];
+  }
+
+  // Fallback: fetch detail pages for candidates that had no AniList CDN cover
   // (TMDB / MAL covers don't embed an ID we can read directly).
   const needsDetail = [...candidates.keys()].filter(
     (id) => extractAnilistIdFromCover(candidates.get(id)?.cover_image) === null
@@ -87,9 +98,10 @@ async function resolveSeries(anilistId, ctx = {}) {
     needsDetail.map(async (id) => ({ id, detail: await fetchAnimeDetail(id).catch(() => null) }))
   );
 
+  const detailMatches = [];
   for (const { id, detail } of details) {
     if (detail?.anilist_id && Number(detail.anilist_id) === Number(anilistId)) {
-      const data = {
+      detailMatches.push({
         animeId: id,
         title: detail.title?.english || detail.title?.romaji || candidates.get(id)?.title?.english || id,
         anilistId: Number(anilistId),
@@ -99,31 +111,26 @@ async function resolveSeries(anilistId, ctx = {}) {
         episodesCount: Number.isFinite(detail.episodes) ? detail.episodes : null,
         matchType: "anilist",
         matchScore: 1,
-      };
-      cacheSet(cacheKey, data, SHOW_IDENTITY_TTL);
-      return data;
+      });
+    } else if (malId && detail?.mal_id && Number(detail.mal_id) === Number(malId)) {
+      detailMatches.push({
+        animeId: id,
+        title: detail.title?.english || detail.title?.romaji || id,
+        anilistId: Number(anilistId),
+        malId: Number(detail.mal_id),
+        subbed: Number.isFinite(detail.subbed) ? detail.subbed : null,
+        dubbed: Number.isFinite(detail.dubbed) ? detail.dubbed : null,
+        episodesCount: Number.isFinite(detail.episodes) ? detail.episodes : null,
+        matchType: "mal",
+        matchScore: 0.9,
+      });
     }
   }
 
-  if (malId) {
-    for (const { id, detail } of details) {
-      const detailMal = detail?.mal_id;
-      if (detailMal && Number(detailMal) === Number(malId)) {
-        const data = {
-          animeId: id,
-          title: detail.title?.english || detail.title?.romaji || id,
-          anilistId: Number(anilistId),
-          malId: Number(detailMal),
-          subbed: Number.isFinite(detail.subbed) ? detail.subbed : null,
-          dubbed: Number.isFinite(detail.dubbed) ? detail.dubbed : null,
-          episodesCount: Number.isFinite(detail.episodes) ? detail.episodes : null,
-          matchType: "mal",
-          matchScore: 0.9,
-        };
-        cacheSet(cacheKey, data, SHOW_IDENTITY_TTL);
-        return data;
-      }
-    }
+  const allConfirmed = [...coverMatches, ...detailMatches].sort(playableRank);
+  if (allConfirmed[0]) {
+    cacheSet(cacheKey, allConfirmed[0], SHOW_IDENTITY_TTL);
+    return allConfirmed[0];
   }
 
   throw new Error(`No confirmed reanime match for AniList ${anilistId}`);

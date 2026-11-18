@@ -359,10 +359,15 @@ export function buildTitles(media, anizip) {
 }
 
 export function expectedCount(media, anizip) {
-  const counts = [
-    media?.episodes,
-    ...Object.keys(anizip?.episodes ?? {}).map(Number).filter(Number.isFinite),
-  ].filter((n) => Number.isFinite(n) && n > 0);
+  if (Number.isFinite(media?.episodes) && media.episodes > 0) {
+    return media.episodes;
+  }
+  if (Number.isFinite(anizip?.episodeCount) && anizip.episodeCount > 0) {
+    return anizip.episodeCount;
+  }
+  const counts = Object.keys(anizip?.episodes ?? {})
+    .map(Number)
+    .filter((n) => Number.isFinite(n) && n > 0);
   return counts.length ? Math.max(...counts) : null;
 }
 

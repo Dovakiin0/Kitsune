@@ -25,6 +25,8 @@ RUN npm run build
 FROM base AS runner
 WORKDIR /app
 
+RUN apk add --no-cache curl
+
 LABEL org.opencontainers.image.title="Kitsune" \
   org.opencontainers.image.source="https://github.com/dovakiin0/Kitsune.git" \
   org.opencontainers.image.vendor="kitsunee.moe"

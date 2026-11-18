@@ -17,24 +17,21 @@ const BASE = "https://animenosub.to";
 const UA = "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/149.0.0.0 Safari/537.36";
 
 async function search(query) {
-  const res = await fetch(`${BASE}/wp-admin/admin-ajax.php`, {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/x-www-form-urlencoded; charset=UTF-8",
-      "X-Requested-With": "XMLHttpRequest",
-      "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/149.0.0.0 Safari/537.36",
-      Origin: BASE,
-      Referer: `${BASE}/`,
-    },
-    body: `action=ts_ac_do_search&ts_ac_query=${encodeURIComponent(query)}`,
-  });
-  if (!res.ok) throw new Error(`animenosub search HTTP ${res.status}`);
-  const data = await res.json();
+  const html = await fetchHtml(`${BASE}/?s=${encodeURIComponent(query)}`, { Referer: `${BASE}/` });
+  const listStart = html.indexOf('<div class="listupd">');
+  if (listStart === -1) return [];
+  const sidebarStart = html.indexOf('<div id="sidebar"', listStart);
+  const scoped = html.slice(listStart, sidebarStart > listStart ? sidebarStart : undefined);
   const results = [];
-  for (const item of data?.anime?.[0]?.all ?? []) {
-    const slug = item.post_link?.match(/\/anime\/([^/]+)\/?$/)?.[1];
-    if (!slug) continue;
-    results.push({ slug, text: item.post_title ?? slug.replace(/-/g, " ") });
+  const seen = new Set();
+  for (const m of scoped.matchAll(/<a\b([^>]*href=["']https?:\/\/animenosub\.to\/anime\/([^/"']+)\/?["'][^>]*)>/gi)) {
+    const attrs = m[1];
+    const slug = m[2];
+    if (!slug || seen.has(slug)) continue;
+    seen.add(slug);
+    const titleMatch = attrs.match(/\btitle=["']([^"']+)["']/i);
+    const text = decodeEntities(titleMatch?.[1] ?? slug.replace(/-/g, " "));
+    results.push({ slug, text });
   }
   return results;
 }

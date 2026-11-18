@@ -6,7 +6,8 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "eslint ."
+    "lint": "eslint .",
+    "test:providers": "node --test tests/providers.test.mjs"
   },
   "dependencies": {
     "@radix-ui/react-avatar": "^1.3.1",

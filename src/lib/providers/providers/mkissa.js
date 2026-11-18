@@ -40,6 +40,7 @@ const HEX_TABLE = {
 };
 
 let cryptoConfigCache = null;
+let cryptoConfigInflight = null;
 let episodeQueryCache = null;
 const sessionCookies = new Map();
 const watchMemoryCache = new Map();
@@ -191,8 +192,13 @@ function normalizeCryptoConfig(out) {
 }
 __name(normalizeCryptoConfig, "normalizeCryptoConfig");
 
+function escapeRegex(value) {
+  return String(value).replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+}
+__name(escapeRegex, "escapeRegex");
+
 function functionSource(text, name) {
-  const match = new RegExp(`function\\s+${name}\\s*\\(`).exec(text);
+  const match = new RegExp(`function\\s+${escapeRegex(name)}\\s*\\(`).exec(text);
   if (!match) return null;
   const start = text.indexOf("{", match.index);
   const end = findBalancedBlock(text, start);
@@ -377,16 +383,16 @@ function evalFragmentCryptoChunk(chunk) {
     const params = declarations[configIndex];
     if (!build || !parts || !params) continue;
     const expression = `${build.expression};${parts.expression};${params.expression}`;
-    const names = new Set([...expression.matchAll(/\b([A-Za-z_$][\w$]*)\s*\(/g)].map((entry) => entry[1]));
+    const names = new Set([...expression.matchAll(/(?<![A-Za-z0-9_$])([A-Za-z_$][\w$]*)\s*\(/g)].map((entry) => entry[1]));
     const helpers = [];
     for (let pass = 0; pass < 8; pass++) {
       let changed = false;
       for (const name of [...names]) {
-        if (helpers.some((source) => new RegExp(`function\\s+${name}\\s*\\(`).test(source))) continue;
+        if (helpers.some((source) => new RegExp(`function\\s+${escapeRegex(name)}\\s*\\(`).test(source))) continue;
         const source = functionSource(chunk, name);
         if (!source) continue;
         helpers.push(source);
-        for (const reference of source.matchAll(/\b([A-Za-z_$][\w$]*)\s*\(/g)) {
+        for (const reference of source.matchAll(/(?<![A-Za-z0-9_$])([A-Za-z_$][\w$]*)\s*\(/g)) {
           if (!names.has(reference[1])) {
             names.add(reference[1]);
             changed = true;
@@ -528,55 +534,64 @@ function appEntryUrl(html) {
 __name(appEntryUrl, "appEntryUrl");
 
 async function discoverCryptoConfig(force = false) {
-  try {
-    const entryUrl = new URL(`${REFERER}/`);
-    if (force) entryUrl.searchParams.set("_mkissa", String(Date.now()));
-    const html = await fetchText(entryUrl, {
-      Accept: "text/html,*/*",
-      "Cache-Control": "no-cache",
-      Pragma: "no-cache",
-    });
-    const appUrl = appEntryUrl(html);
-    if (!appUrl) throw new Error("MKissa app entry not found");
-    if (!force && cryptoConfigCache?.appUrl === appUrl) return cryptoConfigCache;
-    const app = await fetchText(appUrl, { Accept: "application/javascript,*/*" });
-    const queue = [appUrl];
-    const seen = new Set();
-    while (queue.length && seen.size < DISCOVERY_LIMIT) {
-      const batch = queue.splice(0, DISCOVERY_CONCURRENCY).filter((url) => {
-        if (seen.has(url)) return false;
-        seen.add(url);
-        return true;
+  if (!force && cryptoConfigInflight) return cryptoConfigInflight;
+  const run = (async () => {
+    try {
+      const entryUrl = new URL(`${REFERER}/`);
+      if (force) entryUrl.searchParams.set("_mkissa", String(Date.now()));
+      const html = await fetchText(entryUrl, {
+        Accept: "text/html,*/*",
+        "Cache-Control": "no-cache",
+        Pragma: "no-cache",
       });
-      const chunks = await Promise.all(batch.map(async (url) => {
-        try {
-          return { url, text: url === appUrl ? app : await fetchText(url, { Accept: "application/javascript,*/*" }) };
-        } catch {
-          return null;
-        }
-      }));
-      for (const item of chunks.filter(Boolean)) {
-        const imported = [
-          ...item.text.matchAll(/(?:import\(|from\s*)["']([^"']+\.js)["']/g),
-          ...item.text.matchAll(/"(\.\.\/(?:chunks|nodes)\/[^"\n]+\.js)"/g)
-        ].map((m) => m[1]).filter((value) => value.startsWith(".") || value.startsWith("/"));
-        for (const value of imported) {
-          const next = new URL(value, item.url).toString();
-          if (!seen.has(next)) queue.push(next);
-        }
-        if (!/client-crypto|x-aa-boot|aaReq|partB/.test(item.text)) continue;
-        const config = evalCryptoChunk(item.text);
-        if (config) {
-          cryptoConfigCache = { ...config, appUrl, sourceUrl: item.url };
-          return cryptoConfigCache;
+      const appUrl = appEntryUrl(html);
+      if (!appUrl) throw new Error("MKissa app entry not found");
+      if (!force && cryptoConfigCache?.appUrl === appUrl) return cryptoConfigCache;
+      const app = await fetchText(appUrl, { Accept: "application/javascript,*/*" });
+      const queue = [appUrl];
+      const seen = new Set();
+      while (queue.length && seen.size < DISCOVERY_LIMIT) {
+        const batch = queue.splice(0, DISCOVERY_CONCURRENCY).filter((url) => {
+          if (seen.has(url)) return false;
+          seen.add(url);
+          return true;
+        });
+        const chunks = await Promise.all(batch.map(async (url) => {
+          try {
+            return { url, text: url === appUrl ? app : await fetchText(url, { Accept: "application/javascript,*/*" }) };
+          } catch {
+            return null;
+          }
+        }));
+        for (const item of chunks.filter(Boolean)) {
+          const imported = [
+            ...item.text.matchAll(/(?:import\(|from\s*)["']([^"']+\.js)["']/g),
+            ...item.text.matchAll(/"(\.\.\/(?:chunks|nodes)\/[^"\n]+\.js)"/g)
+          ].map((m) => m[1]).filter((value) => value.startsWith(".") || value.startsWith("/"));
+          for (const value of imported) {
+            const next = new URL(value, item.url).toString();
+            if (!seen.has(next)) queue.push(next);
+          }
+          if (!/client-crypto|x-aa-boot|aaReq|partB/.test(item.text)) continue;
+          const config = evalCryptoChunk(item.text);
+          if (config) {
+            cryptoConfigCache = { ...config, appUrl, sourceUrl: item.url };
+            return cryptoConfigCache;
+          }
         }
       }
+      throw new Error("MKissa crypto chunk not found");
+    } catch (error) {
+      cryptoConfigCache = null;
+      throw error;
     }
-    throw new Error("MKissa crypto chunk not found");
-  } catch (error) {
-    cryptoConfigCache = null;
-    throw error;
+  })();
+  if (!force) {
+    cryptoConfigInflight = run.finally(() => {
+      cryptoConfigInflight = null;
+    });
   }
+  return run;
 }
 __name(discoverCryptoConfig, "discoverCryptoConfig");
 
@@ -1141,11 +1156,14 @@ async function resolveMkissaId(anilistId, ctx = {}) {
   const resultMap = new Map();
   for (let index = 0; index < queries.length; index += 4) {
     const batches = await Promise.all(queries.slice(index, index + 4).map((query) => searchMkissa(query, "sub").catch(() => [])));
+    let exactIdFound = false;
     for (const results of batches) {
       for (const result of results) {
         if (result?._id && !resultMap.has(result._id)) resultMap.set(result._id, result);
+        if (result?.aniListId && String(result.aniListId) === String(anilistId)) exactIdFound = true;
       }
     }
+    if (exactIdFound) break;
   }
   const allResults = [...resultMap.values()];
   if (!allResults.length) throw new Error(`No MKissa match for "${titlesToTry[0]}"`);

@@ -1,4 +1,5 @@
 import { getMedia } from "../core/anilist.js";
+import { wreqFetch } from "../core/wreq.js";
 import {
   buildTitles,
   buildTitleSearchQueries,
@@ -44,16 +45,29 @@ function decodeToken(cookie) {
 }
 
 async function createSession() {
-  const response = await fetch(`${SITE}/`, {
-    headers: {
-      "User-Agent": UA,
-      Accept: "text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8",
-      "Accept-Language": "en-US,en;q=0.9",
-    },
-  });
-  const html = await response.text();
+  const headers = {
+    "User-Agent": UA,
+    Accept: "text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8",
+    "Accept-Language": "en-US,en;q=0.9",
+  };
+  let response = await fetch(`${SITE}/`, { headers });
+  let html = await response.text();
+  let cookie = sessionCookie(response.headers);
+  if (!response.ok || !cookie) {
+    try {
+      const wreqRes = await wreqFetch(`${SITE}/`, { session: "animeonsen", headers });
+      const wreqHtml = await wreqRes.text();
+      const wreqCookie = sessionCookie(wreqRes.headers);
+      if (wreqRes.ok && wreqCookie) {
+        response = wreqRes;
+        html = wreqHtml;
+        cookie = wreqCookie;
+      }
+    } catch {
+      // Keep original response error reporting
+    }
+  }
   if (!response.ok) throw new Error(`AnimeOnsen homepage HTTP ${response.status}`);
-  const cookie = sessionCookie(response.headers);
   const apiOrigin = metaContent(html, "ao-api-origin");
   const searchOrigin = metaContent(html, "ao-search-origin");
   const searchToken = metaContent(html, "ao-search-token");
